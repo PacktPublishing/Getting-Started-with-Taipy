@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+h2 {
+    color: #00BCD4;
+}
+
+
+/* make table rows smaller */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 8px; 
+}
+
+th, td {
+    padding: 1px 2px; 
+    border: 1px solid #ddd; /* show thin separation */
+    text-align: left;
+}
