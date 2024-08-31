@@ -1,5 +1,3 @@
-# Example 1: "Static" page with text, image and structure
+# Example 2: Multi-page app with a unit converter
 
-This demonstration app is a single page with some static page and structure around elements around it.
-
-We reused this app add more pages and other elements in examples 2 and after. 
+We transformed the first example to add a second page, and to show how to use Callbacks.
