@@ -5,7 +5,7 @@
 -- 1. Create tables
 DROP TABLE IF EXISTS CITIES;
 
-DROP TABLE IF EXISTS COUNTRY;
+DROP TABLE IF EXISTS COUNTRIES;
 
 -- Create the COUNTRY table
 CREATE TABLE
@@ -26,7 +26,7 @@ CREATE TABLE
 
 -- 2. Insert values 
 INSERT INTO
-    COUNTRY (CountryName)
+    COUNTRIES (CountryName)
 VALUES
     ('Japan'),
     ('India'),
