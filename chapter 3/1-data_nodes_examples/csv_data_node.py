@@ -1,7 +1,7 @@
 import taipy as tp
 from taipy import Config, Core, Scope
 
-## CSV ##
+## Configure a CSV Data Node ##
 
 cities_csv_node_config = Config.configure_csv_data_node(
     id="most_populated_cities_csv",
@@ -18,6 +18,6 @@ cities_csv_data_node = tp.create_global_data_node(cities_csv_node_config)
 df_cities = cities_csv_data_node.read()
 
 print("Data from a CSV file:")
-print(df_cities.head())
+print(df_cities.head(10))
 
 core.stop()
