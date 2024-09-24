@@ -53,3 +53,46 @@ def clean_sales_data(sales_csv_file):
     df_sales["Note"] = ""
 
     return df_sales
+
+
+def update_df_sales(df_sales, adjust_inflation=False):
+    """Updates a DataFrame with sales data. It selects the "constant" columns
+    to display values adjusted for inflation, or "nominal" otherwise (default)
+
+    Args:
+        df_sales: The DataFrame containing sales data.
+        adjust_inflation: Whether to adjust for inflation (default: False).
+
+    Returns:
+        A modified DataFrame with renamed columns.
+    """
+
+    df_sales_cp = df_sales.copy()
+
+    nominal_columns = ["FAH_nominal", "FAFH_nominal", "Total_nominal"]
+    contant_columns = ["FAH_constant", "FAFH_constant", "Total_constant"]
+    # For renaming:
+    metric_columns = ["FAH", "FAFH", "Total"]
+
+    if adjust_inflation:  # rename constant, drop nominal
+        df_sales_cp.drop(
+            columns=nominal_columns,
+            inplace=True,
+        )
+        rename_dict = dict(zip(contant_columns, metric_columns))
+
+    else:  # rename nominal, drop constant
+        df_sales_cp.drop(
+            columns=contant_columns,
+            inplace=True,
+        )
+        rename_dict = dict(zip(nominal_columns, metric_columns))
+
+    df_sales_cp.rename(
+        columns=rename_dict,
+        inplace=True,
+    )
+
+    df_sales_cp.reset_index(drop=True, inplace=True)
+
+    return df_sales_cp
