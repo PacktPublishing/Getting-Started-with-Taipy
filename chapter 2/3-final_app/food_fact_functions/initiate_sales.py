@@ -93,6 +93,5 @@ def update_df_sales(df_sales, adjust_inflation=False):
         inplace=True,
     )
 
-    df_sales_cp.reset_index(drop=True, inplace=True)
-
+    print(df_sales_cp.head())
     return df_sales_cp

@@ -2,9 +2,9 @@ import pandas as pd
 import plotly.express as px
 import taipy.gui.builder as tgb
 import us
+from food_fact_functions.add_row_callback import add_row
+from food_fact_functions.initiate_sales import clean_sales_data, update_df_sales
 from sqlalchemy import true
-
-from .initiate_sales import clean_sales_data, update_df_sales
 
 ###########################
 ## Initial values        ##
@@ -61,28 +61,24 @@ def edit_note(state, var_name, payload):
         None
 
 
-def add_row(state, var_name, payload):
-    empty_row = pd.DataFrame(
-        [[None for _ in state.df_sales.columns]], columns=state.df_sales.columns
-    )
-    empty_row["Note"] = "New Index"
-    state.df_sales = pd.concat([empty_row, state.df_sales], axis=0, ignore_index=True)
-
-
 def delete_row(state, var_name, payload):
     index = payload["index"]
     state.df_sales = state.df_sales.drop(index=index)
 
 
 def update_sales(state, var_name, payload):
-    df_sales_copy = update_df_sales(df_sales_original, state.adjust_inflation)
+    print(state.df_sales_original.head())
+    df_sales_copy = update_df_sales(state.df_sales_original, state.adjust_inflation)
 
     filter_condition = pd.Series([True] * len(df_sales_copy))
 
     if state.selected_year != "All":
         filter_condition &= df_sales_copy["Year"] == state.selected_year
 
-    filter_condition &= df_sales_copy["State"].isin(state.selected_states)
+    # We add the "empty" states too, to see the added rows, that don't have any state
+    filter_condition &= df_sales_copy["State"].isin(state.selected_states) | (
+        df_sales_copy["State"].isnull()
+    )
 
     df_sales_copy = df_sales_copy.loc[filter_condition]
 
@@ -101,6 +97,19 @@ def open_state_selector(state):
 
 
 with tgb.Page() as food_fact_page:
+    tgb.text("# Food facts 📊", mode="md", class_name="color-secondary header")
+    tgb.table(
+        data="{df_sales}",
+        height="60vh",
+        filter=True,
+        hover_text="USDA Data ",
+        on_edit=edit_note,
+        on_add=add_row,
+        on_delete=delete_row,
+        class_name="p0 m0",
+        nan_value=0,
+    )
+
     with tgb.pane(open="{open_states}"):
         tgb.text("## Select states", mode="md", class_name="color-secondary")
         tgb.selector(
@@ -111,8 +120,6 @@ with tgb.Page() as food_fact_page:
             multiple=True,
             mode="checkbox",
         )
-
-    tgb.text("# Food facts 📊", mode="md", class_name="color-secondary header")
 
     with tgb.layout("1 1 1 1"):
 
@@ -159,15 +166,3 @@ with tgb.Page() as food_fact_page:
             figure="{fig_states}",
             class_name="p0 m0",
         )
-
-    tgb.table(
-        data="{df_sales}",
-        height="60vh",
-        filter=True,
-        hover_text="USDA Data ",
-        nan_value=0,
-        on_edit=edit_note,
-        on_add=add_row,
-        on_delete=delete_row,
-        class_name="p0 m0",
-    )
