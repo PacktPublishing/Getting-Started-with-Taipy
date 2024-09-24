@@ -1,58 +1,52 @@
 import pandas as pd
 import plotly.express as px
 import taipy.gui.builder as tgb
+import us
+from sqlalchemy import true
 
-
-def on_navigate(state):
-    print("ho")
-
+from .initiate_sales import clean_sales_data, update_df_sales
 
 ###########################
 ## Initial values        ##
 ###########################
-fao_csv_file = "./data/faostat_data.csv"
+
+## First: pre-process the data fro the DataFrame
+sales_csv_file = "./data/state_sales.csv"
+
+df_sales_original = clean_sales_data(sales_csv_file)
+df_sales = update_df_sales(df_sales_original)
 
 
-def create_df_faostat(file_path=fao_csv_file):
-    df_faostat = pd.read_csv(file_path)
-    df_faostat.drop(
-        columns=["Domain Code", "Year Code", "Months Code", "Flag", "Element"],
-        inplace=True,
-    )
-    df_faostat = df_faostat.reset_index(drop=True)
-    return df_faostat
+adjust_inflation = False
 
-
-df_faostat = create_df_faostat()
-
-lov_year = list(df_faostat["Year"].astype(str).unique())
+lov_year = list(df_sales["Year"].astype(str).unique())
 lov_year.append("All")
 selected_year = "All"
 
-keep_estimated_values = True
 
-selected_statistic = "Consumer Prices, Food Indices (2015 = 100)"
-lov_statistics = list(df_faostat["Item"].unique())
-df_faostat = df_faostat[
-    df_faostat["Item"] == "Consumer Prices, Food Indices (2015 = 100)"
-].reset_index(drop=True)
+# To open the pane for states:
+open_states = False
+lov_states = list(df_sales["State"].unique())
+selected_states = lov_states
 
-lov_months = list(df_faostat["Months"].unique())
-months = lov_months
+lov_metrics = ["FAH", "FAFH", "Total"]
+metric = "Total"
 
 
-def create_fig_countries(df_faostat):
-    fig_countries = px.choropleth(
-        df_faostat,
-        locations="Area Code (ISO3)",
-        color="Value",
-        title="Values per country",
-        scope="europe",
+def create_fig_states(df_sales, metric):
+    fig_states = px.choropleth(
+        df_sales,
+        locations="State_Code",
+        locationmode="USA-states",
+        color=metric,
+        title=f"Values per state for {metric} sales",
+        scope="usa",
+        color_continuous_scale=px.colors.sequential.ice_r,
     )
-    return fig_countries
+    return fig_states
 
 
-fig_countries = create_fig_countries(df_faostat)
+fig_states = create_fig_states(df_sales, "Total")
 
 
 ###########################
@@ -60,128 +54,120 @@ fig_countries = create_fig_countries(df_faostat)
 ###########################
 def edit_note(state, var_name, payload):
     if payload["col"] == "Note":
-        df_faostat_new = state.df_faostat.copy()
-        df_faostat_new.loc[payload["index"], payload["col"]] = payload["value"]
-        state.df_faostat = df_faostat_new
+        df_sales_new = state.df_sales.copy()
+        df_sales_new.loc[payload["index"], payload["col"]] = payload["value"]
+        state.df_sales = df_sales_new
     else:
         None
 
 
 def add_row(state, var_name, payload):
     empty_row = pd.DataFrame(
-        [[None for _ in state.df_faostat.columns]], columns=state.df_faostat.columns
+        [[None for _ in state.df_sales.columns]], columns=state.df_sales.columns
     )
-    empty_row["Domain"] = "New Index"
-    state.df_faostat = pd.concat(
-        [empty_row, state.df_faostat], axis=0, ignore_index=True
-    )
+    empty_row["Note"] = "New Index"
+    state.df_sales = pd.concat([empty_row, state.df_sales], axis=0, ignore_index=True)
 
 
 def delete_row(state, var_name, payload):
     index = payload["index"]
-    state.df_faostat = state.df_faostat.drop(index=index)
+    state.df_sales = state.df_sales.drop(index=index)
 
 
-def filter_dataframe(state, var_name, payload):
-    state.df_faostat = create_df_faostat()
+def update_sales(state, var_name, payload):
+    df_sales_copy = update_df_sales(df_sales_original, state.adjust_inflation)
 
-    df_faostat_copy = state.df_faostat.copy().reset_index(drop=True)
-
-    filter_condition = pd.Series([True] * len(df_faostat_copy))
-
-    filter_condition &= df_faostat_copy["Item"] == state.selected_statistic
+    filter_condition = pd.Series([True] * len(df_sales_copy))
 
     if state.selected_year != "All":
-        filter_condition &= df_faostat_copy["Year"] == int(state.selected_year)
-    if not state.keep_estimated_values:
-        filter_condition &= df_faostat_copy["Flag Description"] != "Estimated value"
+        filter_condition &= df_sales_copy["Year"] == state.selected_year
 
-    filter_condition &= df_faostat_copy["Months"].isin(state.months)
+    filter_condition &= df_sales_copy["State"].isin(state.selected_states)
 
-    df_faostat_copy = df_faostat_copy.loc[filter_condition]
+    df_sales_copy = df_sales_copy.loc[filter_condition]
 
-    state.df_faostat = df_faostat_copy
-    state.fig_countries = create_fig_countries(state.df_faostat)
+    state.df_sales = df_sales_copy
+
+    state.fig_states = create_fig_states(state.df_sales, state.metric)
 
 
-def change_chart(state, var_name, payload):
-    print(var_name)
-    print(payload)
+def open_state_selector(state):
+    state.open_states = True
 
 
 ###########################
 ## Page             ##
 ###########################
+
+
 with tgb.Page() as food_fact_page:
+    with tgb.pane(open="{open_states}"):
+        tgb.text("## Select states", mode="md", class_name="color-secondary")
+        tgb.selector(
+            value="{selected_states}",
+            lov="{lov_states}",
+            on_change=update_sales,
+            label="select states",
+            multiple=True,
+            mode="checkbox",
+        )
+
     tgb.text("# Food facts 📊", mode="md", class_name="color-secondary header")
 
-    with tgb.layout("1 1 1 1 1"):
+    with tgb.layout("1 1 1 1"):
+
+        tgb.button(label="select states", on_action=open_state_selector)
 
         tgb.selector(
-            value="{selected_statistic}",
-            lov="{lov_statistics}",
-            mode="radio",
-            on_change=filter_dataframe,
-        )
-        tgb.toggle(
-            value="{keep_estimated_values}",
-            label="Keep estimated values",
-            on_change=filter_dataframe,
-        )
-        tgb.toggle(
             value="{selected_year}",
             lov="{lov_year}",
-            on_change=filter_dataframe,
+            on_change=update_sales,
             label="select year",
-        )
-
-        tgb.selector(
-            value="{months}",
-            lov="{lov_months}",
-            label="Choose month",
-            multiple=True,
-            on_change=filter_dataframe,
             dropdown=True,
         )
 
-        tgb.file_download(
-            content="{fao_csv_file}",
-            label="download dataset",
-            name="fao_dataset_eu_2019-2024.csv",
+        tgb.toggle(value="{metric}", lov=lov_metrics, on_change=update_sales)
+
+        tgb.toggle(
+            value="{adjust_inflation}",
+            label="Adjust for inflation",
+            on_change=update_sales,
         )
 
     with tgb.layout("1 1 1"):
         tgb.chart(
-            data="{df_faostat}",
+            data="{df_sales}",
             type="bar",
-            x="Year",
-            y="Value",
-            title="Value per year",
+            x="State",
+            y="{metric}",
+            title=f"Value per State",
             class_name="p0 m0",
+            rebuild=True,
         )
         tgb.chart(
-            data="{df_faostat}",
+            data="{df_sales}",
             type="heatmap",
-            x="Year",
-            y="Months",
-            z="Value",
-            title="Value per year and month",
+            x="State",
+            y="Year",
+            z="{metric}",
+            title="Value per year and State",
             class_name="p0 m0",
+            rebuild=True,
         )
+
         tgb.chart(
-            figure="{fig_countries}",
+            figure="{fig_states}",
             class_name="p0 m0",
         )
 
-    with tgb.part():
-        tgb.table(
-            data="{df_faostat}",
-            height="60vh",
-            filter=True,
-            hover_text="Fao Data",
-            nan_value=0,
-            on_edit=edit_note,
-            on_add=add_row,
-            on_delete=delete_row,
-            class_name="p0 m0",
-        )
+    tgb.table(
+        data="{df_sales}",
+        height="60vh",
+        filter=True,
+        hover_text="USDA Data ",
+        nan_value=0,
+        on_edit=edit_note,
+        on_add=add_row,
+        on_delete=delete_row,
+        class_name="p0 m0",
+    )
