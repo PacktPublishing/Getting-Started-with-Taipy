@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
-
+@import './table.css';
 body {
     font-family: 'Roboto', sans-serif;
 }
@@ -8,19 +8,3 @@ h2 {
     color: #00BCD4;
 }
 
-
-/* make table rows smaller */
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-th,
-td {
-    padding: 1px 2px;
-    border: 1px solid #ddd;
-    /* show thin separation */
-    text-align: left;
-    font-size: 10px !important;
-}
