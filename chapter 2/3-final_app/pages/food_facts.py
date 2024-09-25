@@ -45,10 +45,7 @@ fig_states = create_fig_states(df_sales, "Total")
 
 
 def update_sales(state, var_name, payload):
-    state.df_sales_original.reset_index(drop=True, inplace=True)
-
     df_sales_copy = update_df_sales(state.df_sales_original, state.adjust_inflation)
-    df_sales_copy.reset_index(drop=True, inplace=True)
 
     filter_condition = pd.Series([True] * len(df_sales_copy))
     if state.selected_year != "All":
