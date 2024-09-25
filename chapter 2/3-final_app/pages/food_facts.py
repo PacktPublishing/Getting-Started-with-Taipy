@@ -3,6 +3,7 @@ import plotly.express as px
 import taipy.gui.builder as tgb
 import us
 from food_fact_functions.add_row_callback import add_row
+from food_fact_functions.delete_row_callback import delete_row
 from food_fact_functions.initiate_sales import clean_sales_data, update_df_sales
 from sqlalchemy import true
 
@@ -61,17 +62,15 @@ def edit_note(state, var_name, payload):
         None
 
 
-def delete_row(state, var_name, payload):
-    index = payload["index"]
-    state.df_sales = state.df_sales.drop(index=index)
-
-
 def update_sales(state, var_name, payload):
-    print(state.df_sales_original.head())
+    state.df_sales_original.reset_index(drop=True, inplace=True)
+
     df_sales_copy = update_df_sales(state.df_sales_original, state.adjust_inflation)
+    df_sales_copy.reset_index(drop=True, inplace=True)
 
     filter_condition = pd.Series([True] * len(df_sales_copy))
-
+    print(df_sales_copy)
+    print(filter_condition)
     if state.selected_year != "All":
         filter_condition &= df_sales_copy["Year"] == state.selected_year
 
