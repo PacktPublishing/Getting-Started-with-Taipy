@@ -8,6 +8,8 @@ from food_fact_functions.delete_row_callback import delete_row
 from food_fact_functions.edit_note_callback import edit_note
 from food_fact_functions.initiate_sales import clean_sales_data, update_df_sales
 from food_fact_functions.open_state_selector_callback import open_state_selector
+from food_fact_functions.update_charts_callback import update_charts
+from food_fact_functions.update_sales_callback import update_sales
 
 ###########################
 ## Initial values        ##
@@ -38,31 +40,6 @@ metric = "Total"
 
 fig_states = create_fig_states(df_sales, "Total")
 
-
-###########################
-## Main Callback         ##
-###########################
-
-
-def update_sales(state, var_name, payload):
-    df_sales_copy = update_df_sales(state.df_sales_original, state.adjust_inflation)
-
-    filter_condition = pd.Series([True] * len(df_sales_copy))
-    if state.selected_year != "All":
-        filter_condition &= df_sales_copy["Year"] == state.selected_year
-
-    # We add the "empty" states too, to see the added rows, that don't have any state
-    filter_condition &= df_sales_copy["State"].isin(state.selected_states) | (
-        df_sales_copy["State"].isnull()
-    )
-
-    df_sales_copy = df_sales_copy.loc[filter_condition]
-
-    state.df_sales = df_sales_copy
-
-    state.fig_states = create_fig_states(state.df_sales, state.metric)
-
-
 ###########################
 ## Page                 ##
 ###########################
@@ -79,7 +56,7 @@ with tgb.Page() as food_fact_page:
             on_change=update_sales,
             label="select states",
             multiple=True,
-            # mode="checkbox",
+            mode="checkbox",
         )
 
     with tgb.layout("1 1 1 1"):
@@ -94,7 +71,7 @@ with tgb.Page() as food_fact_page:
             dropdown=True,
         )
 
-        tgb.toggle(value="{metric}", lov=lov_metrics, on_change=update_sales)
+        tgb.toggle(value="{metric}", lov=lov_metrics, on_change=update_charts)
 
         tgb.toggle(
             value="{adjust_inflation}",
