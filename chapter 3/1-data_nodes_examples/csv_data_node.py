@@ -5,7 +5,7 @@ from taipy import Config, Core, Scope
 
 cities_csv_node_config = Config.configure_csv_data_node(
     id="most_populated_cities_csv",
-    default_path="./data/cities.csv",
+    default_path="../data/cities.csv",
     has_header=True,
     exposed_type="pandas",
     scope=Scope.GLOBAL,

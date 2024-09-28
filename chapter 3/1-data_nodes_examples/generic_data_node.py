@@ -11,7 +11,7 @@ def get_wiki_table(url):
     soup = BeautifulSoup(response.text, "html.parser")
     table = soup.find("table", {"class": "wikitable"})
 
-    df_cities = pd.read_html(str(table))[0]
+    df_cities = pd.read_html(io.StringIO(str(table)))[0]
 
     return df_cities
 

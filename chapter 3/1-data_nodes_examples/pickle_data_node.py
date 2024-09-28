@@ -5,7 +5,7 @@ from taipy import Config, Core, Scope
 
 cities_pickle_node_config = Config.configure_pickle_data_node(
     id="most_populated_cities_pickle",
-    default_path="./data/cities.p",
+    default_path="../data/cities.p",
     scope=Scope.GLOBAL,
 )
 

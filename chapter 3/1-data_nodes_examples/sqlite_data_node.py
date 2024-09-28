@@ -9,7 +9,7 @@ cities_sqlite_table_node_config = Config.configure_sql_table_data_node(
     db_name="cities",
     db_engine="sqlite",
     table_name="CITIES",
-    sqlite_folder_path="data",
+    sqlite_folder_path="../data",
     sqlite_file_extension=".db",
     scope=Scope.GLOBAL,
 )
@@ -46,7 +46,7 @@ cities_sqlite_node_config = Config.configure_sql_data_node(
     db_engine="sqlite",
     read_query=cities_and_countries_query,
     write_query_builder=create_cities,
-    sqlite_folder_path="data",
+    sqlite_folder_path="../data",
     sqlite_file_extension=".db",
     scope=Scope.GLOBAL,
 )

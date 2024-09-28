@@ -7,7 +7,7 @@ from taipy import Config, Core, Scope
 
 cities_json_node_config = Config.configure_json_data_node(
     id="most_populated_cities_json",
-    default_path="./data/cities.json",
+    default_path="../data/cities.json",
     scope=Scope.GLOBAL,
 )
 
