@@ -1,6 +1,6 @@
 import pandas as pd
 import taipy as tp
-from taipy import Config, Core, Scope
+from taipy import Config, Orchestrator, Scope
 
 ## 1.1 Configure a SQL TABLE Data Node ##
 
@@ -54,8 +54,8 @@ cities_postgresql_node_config = Config.configure_sql_data_node(
     scope=Scope.GLOBAL,
 )
 
-core = Core()
-core.run()
+orchestrator = Orchestrator()
+orchestrator.run()
 
 # 2.1 Create a data node from the a config file SQL table
 cities_postgresql_table_data_node = tp.create_global_data_node(

@@ -1,6 +1,6 @@
 import rasterio
 import taipy as tp
-from taipy import Config, Core, Scope
+from taipy import Config, Orchestrator, Scope
 
 
 def read_raster_as_numpy_array(raster_path):
@@ -25,8 +25,8 @@ tokyo_image_node_config = Config.configure_generic_data_node(
     scope=Scope.GLOBAL,
 )
 
-core = Core()
-core.run()
+orchestrator = Orchestrator()
+orchestrator.run()
 
 
 tokyo_image_data_node = tp.create_global_data_node(tokyo_image_node_config)

@@ -1,5 +1,5 @@
 import taipy as tp
-from taipy import Config, Core, Scope
+from taipy import Config, Orchestrator, Scope
 
 ## Configure an In-Memory Data Node ##
 
@@ -10,8 +10,8 @@ tokyo_in_memory_node_config = Config.configure_in_memory_data_node(
     scope=Scope.GLOBAL,
 )
 
-core = Core()
-core.run()
+orchestrator = Orchestrator()
+orchestrator.run()
 
 
 tokyo_in_memory_data_node = tp.create_global_data_node(tokyo_in_memory_node_config)
@@ -22,4 +22,4 @@ print(
 )
 print(tokyo)
 
-core.stop()
+orchestrator.stop()

@@ -1,6 +1,6 @@
 import pandas as pd
 import taipy as tp
-from taipy import Config, Core, Scope
+from taipy import Config, Orchestrator, Scope
 
 ## 1.1 Configure a SQL TABLE Data Node ##
 
@@ -52,8 +52,8 @@ cities_sqlite_node_config = Config.configure_sql_data_node(
 )
 
 
-core = Core()
-core.run()
+orchestrator = Orchestrator()
+orchestrator.run()
 
 # 2.1 Create a data node from the a config file SQL table
 cities_sqlite_table_data_node = tp.create_global_data_node(

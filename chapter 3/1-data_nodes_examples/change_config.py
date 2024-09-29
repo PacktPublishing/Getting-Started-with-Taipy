@@ -17,6 +17,7 @@ cities_config = Config.configure_data_node(
 
 orchestrator = Orchestrator()
 orchestrator.run()
+
 cities_csv_data_node = tp.create_global_data_node(cities_config)
 
 df_cities = cities_csv_data_node.read()

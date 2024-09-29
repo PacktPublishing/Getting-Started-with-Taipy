@@ -1,5 +1,5 @@
 import taipy as tp
-from taipy import Config, Core, Scope
+from taipy import Config, Orchestrator, Scope
 
 ## Input with default node ##
 country_node_config = Config.configure_data_node(
@@ -11,8 +11,8 @@ print(f"The id of the config object is: {country_node_config.id}")
 print(f"We also added a custom argument: {country_node_config.additional_argument}")
 
 
-core = Core()
-core.run()
+orchestrator = Orchestrator()
+orchestrator.run()
 country_data_node_1 = tp.create_global_data_node(country_node_config)
 country_data_node_2 = tp.create_global_data_node(country_node_config)
 
@@ -26,4 +26,4 @@ country_data_node_1.write(12.6)
 not_senegal = country_data_node_1.read()
 print(not_senegal)
 
-core.stop()
+orchestrator.stop()

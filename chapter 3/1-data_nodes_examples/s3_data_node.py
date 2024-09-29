@@ -2,7 +2,7 @@ import io
 
 import pandas as pd
 import taipy as tp
-from taipy import Config, Core, Scope
+from taipy import Config, Orchestrator, Scope
 
 cities_s3_node_config = Config.configure_s3_object_data_node(
     id="most_populated_cities_csv_from_s3",
@@ -13,8 +13,8 @@ cities_s3_node_config = Config.configure_s3_object_data_node(
     scope=Scope.GLOBAL,
 )
 
-core = Core()
-core.run()
+orchestrator = Orchestrator()
+orchestrator.run()
 cities_s3_data_node = tp.create_global_data_node(cities_s3_node_config)
 
 csv_string = cities_s3_data_node.read()

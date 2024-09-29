@@ -1,5 +1,5 @@
 import taipy as tp
-from taipy import Config, Core, Scope
+from taipy import Config, Orchestrator, Scope
 
 ## Configure a parquet file ##
 
@@ -12,8 +12,8 @@ cities_parquet_node_config = Config.configure_parquet_data_node(
     scope=Scope.GLOBAL,
 )
 
-core = Core()
-core.run()
+orchestrator = Orchestrator()
+orchestrator.run()
 cities_parquet_data_node = tp.create_global_data_node(cities_parquet_node_config)
 
 df_cities = cities_parquet_data_node.read()

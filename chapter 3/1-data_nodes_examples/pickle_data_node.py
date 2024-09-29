@@ -1,5 +1,5 @@
 import taipy as tp
-from taipy import Config, Core, Scope
+from taipy import Config, Orchestrator, Scope
 
 ## Configure a Pickle Data Node ##
 
@@ -15,8 +15,8 @@ tokyo_pickle_node_config = Config.configure_pickle_data_node(
     scope=Scope.GLOBAL,
 )
 
-core = Core()
-core.run()
+orchestrator = Orchestrator()
+orchestrator.run()
 cities_pickle_data_node = tp.create_global_data_node(cities_pickle_node_config)
 df_cities = cities_pickle_data_node.read()
 
@@ -31,4 +31,4 @@ print(
 )
 print(tokyo)
 
-core.stop()
+orchestrator.stop()

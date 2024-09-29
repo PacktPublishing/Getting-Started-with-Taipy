@@ -1,5 +1,5 @@
 import taipy as tp
-from taipy import Config, Core, Scope
+from taipy import Config, Orchestrator, Scope
 
 ## Configure a CSV Data Node ##
 
@@ -11,8 +11,8 @@ cities_csv_node_config = Config.configure_csv_data_node(
     scope=Scope.GLOBAL,
 )
 
-core = Core()
-core.run()
+orchestrator = Orchestrator()
+orchestrator.run()
 cities_csv_data_node = tp.create_global_data_node(cities_csv_node_config)
 
 df_cities = cities_csv_data_node.read()
@@ -20,4 +20,4 @@ df_cities = cities_csv_data_node.read()
 print("Data from a CSV file:")
 print(df_cities.head(10))
 
-core.stop()
+orchestrator.stop()
