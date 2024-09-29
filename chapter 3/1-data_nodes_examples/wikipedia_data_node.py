@@ -1,3 +1,5 @@
+import io
+
 import pandas as pd
 import requests
 import taipy as tp
