@@ -1,7 +1,7 @@
 import taipy as tp
 from taipy import Config, Orchestrator, Scope
 
-## Configure a CSV Data Node ##
+## Configure a CSV Data Node, expose as Pandas DataFrame ##
 
 cities_csv_node_pandas_config = Config.configure_csv_data_node(
     id="most_populated_cities_df",
@@ -10,6 +10,8 @@ cities_csv_node_pandas_config = Config.configure_csv_data_node(
     exposed_type="pandas",
     scope=Scope.GLOBAL,
 )
+
+## Reuse the configuration, expose as Numpy array ##
 
 cities_csv_node_numpy_config = Config.configure_data_node_from(
     cities_csv_node_pandas_config,
