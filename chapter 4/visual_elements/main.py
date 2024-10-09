@@ -3,8 +3,8 @@ import taipy.gui.builder as tgb
 from pages.dag import dag
 from pages.job_viewer import job_viewer
 from pages.regular_ui import regular_ui
+from pages.scenario_element import scenario_element
 from pages.scenario_selector import scenario_selector
-from pages.scenario_viewer import scenario_viewer
 from taipy import Gui
 
 with tgb.Page() as root_page:
@@ -16,7 +16,7 @@ auto_mpg_pages = {
     "/": root_page,
     "regular_ui": regular_ui,
     "dag": dag,
-    "scenario_viewer": scenario_viewer,
+    "scenario_element": scenario_element,
     "scenario_selector": scenario_selector,
     "job_viewer": job_viewer,
 }
