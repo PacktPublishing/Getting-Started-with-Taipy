@@ -1,15 +1,17 @@
 import taipy.gui.builder as tgb
 from orchestration import auto_scenario
+from taipy.gui import notify
+
+selected_job = None
 
 
-def print_job_info(state, var_name, value):
-    print("hi")
-    print(var_name)
-
-    print(value)
+def notify_job_info(state, var_name, value):
+    notify(state, message=f"Selected Job: {state.selected_job}")
 
 
 with tgb.Page() as job_selector:
     tgb.text("# Job selector", mode="md")
 
-    tgb.job_selector(show_submitted_id=True)
+    tgb.job_selector(
+        "{selected_job}", show_submitted_id=True, on_change=notify_job_info
+    )
