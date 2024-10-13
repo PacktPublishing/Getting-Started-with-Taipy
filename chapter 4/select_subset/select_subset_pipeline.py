@@ -1,6 +1,4 @@
 # Data comes from https://www.kaggle.com/datasets/uciml/autompg-dataset
-from email.policy import default
-
 import taipy as tp
 from taipy import Config, Orchestrator
 
