@@ -127,7 +127,8 @@ train_auto_pipeline_config = Config.configure_scenario(
 #########################
 
 column_subset_predict_config = Config.configure_pickle_data_node(
-    id="column_subset_predict", default_path="./user_data/subset_list.p"
+    id="column_subset_predict",
+    default_path="./user_data/subset_list.p",
 )
 
 cylinders_node_config = Config.configure_data_node(id="cylinders")
