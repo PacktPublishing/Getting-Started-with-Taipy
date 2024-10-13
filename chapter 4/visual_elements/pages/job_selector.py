@@ -13,5 +13,7 @@ with tgb.Page() as job_selector:
     tgb.text("# Job selector", mode="md")
 
     tgb.job_selector(
-        "{selected_job}", show_submitted_id=True, on_change=notify_job_info
+        "{selected_job}",
+        show_submitted_id=True,
+        on_change=notify_job_info,
     )

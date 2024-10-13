@@ -1,4 +1,3 @@
-import taipy as tp
 import taipy.gui.builder as tgb
 from pages.dag import dag
 from pages.job_selector import job_selector

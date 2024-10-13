@@ -22,7 +22,3 @@ with tgb.Page() as scenario_selector:
         on_change=notify_change,
         on_creation=notify_creation,
     )
-
-    tgb.job_selector(
-        "{selected_job}", show_submitted_id=True, on_change=notify_job_info
-    )
