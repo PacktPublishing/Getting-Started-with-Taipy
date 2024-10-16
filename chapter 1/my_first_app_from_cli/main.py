@@ -8,32 +8,18 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 # an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
-import taipy as tp
 from taipy.gui import Gui
-
-from taipy import Core
 from pages import *
 
 
 pages = {
     "/": root_page,
     "Page_1": Page_1,
-	"Page_2": Page_2
+    "Page_2": Page_2
 }
 
 
 if __name__ == "__main__":
-    core = Core()
-    core.run()
-    # #############################################################################
-    # PLACEHOLDER: Create and submit your scenario here                           #
-    #                                                                             #
-    # Example:                                                                    #
-    # from configuration import scenario_config                                   #
-    # scenario = tp.create_scenario(scenario_config)                              #
-    # scenario.submit()                                                           #
-    # Comment, remove or replace the previous lines with your own use case        #
-    # #############################################################################
 
     gui = Gui(pages=pages)
     gui.run(title="My First Taipy App from the CLI")

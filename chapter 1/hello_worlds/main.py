@@ -10,4 +10,6 @@ hello_mars_markdown = "# Hello Mars!"
 page_to_run = Gui(page=hello_earth_python)
 # page_to_run = Gui(page=hello_mars_markdown)
 
-page_to_run.run(use_reloader=True, dark_mode=False)
+if __name__ == "__main__":
+
+    page_to_run.run(use_reloader=True, dark_mode=False)
