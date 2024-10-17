@@ -1,9 +1,6 @@
 import pandas as pd
 import taipy as tp
 import taipy.gui.builder as tgb
-from orchestration import biggest_cities
-
-df_cities = biggest_cities.read()
 
 
 def edit_row(state, var_name, payload):

@@ -1,5 +1,4 @@
 import taipy.gui.builder as tgb
-from orchestration import biggest_cities
 
 with tgb.Page() as data_node_viewer:
     tgb.text("## Discovering Data Node viewers", mode="md")

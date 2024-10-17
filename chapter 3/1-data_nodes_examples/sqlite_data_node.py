@@ -51,22 +51,22 @@ cities_sqlite_node_config = Config.configure_sql_data_node(
     scope=Scope.GLOBAL,
 )
 
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
 
-orchestrator = Orchestrator()
-orchestrator.run()
+    # 2.1 Create a data node from the a config file SQL table
+    cities_sqlite_table_data_node = tp.create_global_data_node(
+        cities_sqlite_table_node_config
+    )
+    df_cities = cities_sqlite_table_data_node.read()
 
-# 2.1 Create a data node from the a config file SQL table
-cities_sqlite_table_data_node = tp.create_global_data_node(
-    cities_sqlite_table_node_config
-)
-df_cities = cities_sqlite_table_data_node.read()
+    print("Data from a SQLite file table:")
+    print(df_cities.head(10))
 
-print("Data from a SQLite file table:")
-print(df_cities.head(10))
+    # 2.2 Create a data node from the a config file with a SQL query:
+    cities_sqlite_data_node = tp.create_global_data_node(cities_sqlite_node_config)
+    df_cities_with_countries = cities_sqlite_data_node.read()
 
-# 2.2 Create a data node from the a config file with a SQL query:
-cities_sqlite_data_node = tp.create_global_data_node(cities_sqlite_node_config)
-df_cities_with_countries = cities_sqlite_data_node.read()
-
-print("Data from a SQLite file and complex query:")
-print(df_cities_with_countries.head(10))
+    print("Data from a SQLite file and complex query:")
+    print(df_cities_with_countries.head(10))

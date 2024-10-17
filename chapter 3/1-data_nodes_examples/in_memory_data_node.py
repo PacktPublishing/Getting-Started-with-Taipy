@@ -10,16 +10,16 @@ tokyo_in_memory_node_config = Config.configure_in_memory_data_node(
     scope=Scope.GLOBAL,
 )
 
-orchestrator = Orchestrator()
-orchestrator.run()
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
 
+    tokyo_in_memory_data_node = tp.create_global_data_node(tokyo_in_memory_node_config)
+    tokyo = tokyo_in_memory_data_node.read()
+    print(
+        """Data from a declarative object stored in memory
+        (biggest city in the world):"""
+    )
+    print(tokyo)
 
-tokyo_in_memory_data_node = tp.create_global_data_node(tokyo_in_memory_node_config)
-tokyo = tokyo_in_memory_data_node.read()
-print(
-    """Data from a declarative object stored in memory
-      (biggest city in the world):"""
-)
-print(tokyo)
-
-orchestrator.stop()
+    orchestrator.stop()

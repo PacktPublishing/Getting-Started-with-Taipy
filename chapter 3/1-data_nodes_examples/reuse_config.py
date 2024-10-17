@@ -19,17 +19,18 @@ cities_csv_node_numpy_config = Config.configure_data_node_from(
     exposed_type="numpy",
 )
 
-orchestrator = Orchestrator()
-orchestrator.run()
-cities_pandas_data_node = tp.create_global_data_node(cities_csv_node_pandas_config)
-cities_numpy_data_node = tp.create_global_data_node(cities_csv_node_numpy_config)
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
+    cities_pandas_data_node = tp.create_global_data_node(cities_csv_node_pandas_config)
+    cities_numpy_data_node = tp.create_global_data_node(cities_csv_node_numpy_config)
 
-df_cities = cities_pandas_data_node.read()
+    df_cities = cities_pandas_data_node.read()
 
-print("Data as a Pandas DataFrame:")
-print(df_cities.head(10))
+    print("Data as a Pandas DataFrame:")
+    print(df_cities.head(10))
 
-np_cities = cities_numpy_data_node.read()
-print("Data as a Numpy array:")
-print(np_cities)
-orchestrator.stop()
+    np_cities = cities_numpy_data_node.read()
+    print("Data as a Numpy array:")
+    print(np_cities)
+    orchestrator.stop()

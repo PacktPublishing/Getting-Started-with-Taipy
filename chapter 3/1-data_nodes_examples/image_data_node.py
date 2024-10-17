@@ -25,12 +25,12 @@ tokyo_image_node_config = Config.configure_generic_data_node(
     scope=Scope.GLOBAL,
 )
 
-orchestrator = Orchestrator()
-orchestrator.run()
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
 
+    tokyo_image_data_node = tp.create_global_data_node(tokyo_image_node_config)
 
-tokyo_image_data_node = tp.create_global_data_node(tokyo_image_node_config)
+    tokyo_image_raster = tokyo_image_data_node.read()
 
-tokyo_image_raster = tokyo_image_data_node.read()
-
-print(tokyo_image_raster)
+    print(tokyo_image_raster)

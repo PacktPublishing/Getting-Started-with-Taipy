@@ -12,10 +12,11 @@ cities_parquet_node_config = Config.configure_parquet_data_node(
     scope=Scope.GLOBAL,
 )
 
-orchestrator = Orchestrator()
-orchestrator.run()
-cities_parquet_data_node = tp.create_global_data_node(cities_parquet_node_config)
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
+    cities_parquet_data_node = tp.create_global_data_node(cities_parquet_node_config)
 
-df_cities = cities_parquet_data_node.read()
+    df_cities = cities_parquet_data_node.read()
 
-print(df_cities.head(10))
+    print(df_cities.head(10))

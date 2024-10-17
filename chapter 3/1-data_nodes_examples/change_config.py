@@ -14,11 +14,11 @@ cities_config = Config.configure_data_node(
     default_path="../data/cities.csv",
 )
 
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
 
-orchestrator = Orchestrator()
-orchestrator.run()
+    cities_csv_data_node = tp.create_global_data_node(cities_config)
 
-cities_csv_data_node = tp.create_global_data_node(cities_config)
-
-df_cities = cities_csv_data_node.read()
-print(df_cities.head())
+    df_cities = cities_csv_data_node.read()
+    print(df_cities.head())

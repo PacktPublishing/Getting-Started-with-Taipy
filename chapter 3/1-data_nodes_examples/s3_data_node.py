@@ -13,15 +13,16 @@ cities_s3_node_config = Config.configure_s3_object_data_node(
     scope=Scope.GLOBAL,
 )
 
-orchestrator = Orchestrator()
-orchestrator.run()
-cities_s3_data_node = tp.create_global_data_node(cities_s3_node_config)
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
+    cities_s3_data_node = tp.create_global_data_node(cities_s3_node_config)
 
-csv_string = cities_s3_data_node.read()
+    csv_string = cities_s3_data_node.read()
 
-print("Data from a CSV file:")
-print(csv_string)
+    print("Data from a CSV file:")
+    print(csv_string)
 
-# Convert to DataFrame
-df_cities = pd.read_csv(io.StringIO(csv_string))
-print(df_cities.head())
+    # Convert to DataFrame
+    df_cities = pd.read_csv(io.StringIO(csv_string))
+    print(df_cities.head())

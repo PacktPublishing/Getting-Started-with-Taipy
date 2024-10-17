@@ -54,21 +54,24 @@ cities_postgresql_node_config = Config.configure_sql_data_node(
     scope=Scope.GLOBAL,
 )
 
-orchestrator = Orchestrator()
-orchestrator.run()
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
 
-# 2.1 Create a data node from the a config file SQL table
-cities_postgresql_table_data_node = tp.create_global_data_node(
-    cities_postgresql_table_node_config
-)
-df_cities = cities_postgresql_table_data_node.read()
+    # 2.1 Create a data node from the a config file SQL table
+    cities_postgresql_table_data_node = tp.create_global_data_node(
+        cities_postgresql_table_node_config
+    )
+    df_cities = cities_postgresql_table_data_node.read()
 
-print("Data from a postgresql file table:")
-print(df_cities.head(10))
+    print("Data from a postgresql file table:")
+    print(df_cities.head(10))
 
-# 2.2 Create a data node from the a config file with a SQL query:
-cities_postgresql_data_node = tp.create_global_data_node(cities_postgresql_node_config)
-df_cities_with_countries = cities_postgresql_data_node.read()
+    # 2.2 Create a data node from the a config file with a SQL query:
+    cities_postgresql_data_node = tp.create_global_data_node(
+        cities_postgresql_node_config
+    )
+    df_cities_with_countries = cities_postgresql_data_node.read()
 
-print("Data from a postgresql file and complex query:")
-print(df_cities_with_countries.head(10))
+    print("Data from a postgresql file and complex query:")
+    print(df_cities_with_countries.head(10))
