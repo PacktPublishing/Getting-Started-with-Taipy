@@ -109,6 +109,7 @@ with tgb.Page() as food_fact_page:
         data="{df_sales}",
         height="60vh",
         filter=True,
+        editable=True,
         hover_text="USDA Data ",
         on_edit=edit_note,
         on_add=add_row,

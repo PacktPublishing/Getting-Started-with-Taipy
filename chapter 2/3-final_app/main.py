@@ -65,11 +65,12 @@ stylekit = {
 
 taipy_food_gui = Gui(pages=taipy_food_pages, css_file="./css/main.css")
 
-taipy_food_gui.run(
-    use_reloader=True,
-    dark_mode=False,
-    title="Taipy Food 🍜",
-    favicon="./images/favicon_burger.png",
-    watermark="Taipy food",
-    stylekit=stylekit,
-)
+if __name__ == "__main__":
+    taipy_food_gui.run(
+        use_reloader=True,
+        dark_mode=False,
+        title="Taipy Food 🍜",
+        favicon="./images/favicon_burger.png",
+        watermark="Taipy food",
+        stylekit=stylekit,
+    )
