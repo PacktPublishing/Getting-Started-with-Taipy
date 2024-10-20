@@ -1,8 +1,5 @@
 import taipy.gui.builder as tgb
-from orchestration import auto_scenario
 from taipy.gui import notify
-
-selected_scenario = auto_scenario
 
 
 def notify_change(state, var_name, value):

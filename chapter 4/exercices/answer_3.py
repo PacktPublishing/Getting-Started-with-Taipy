@@ -78,13 +78,12 @@ average_scenario_config = Config.configure_scenario(
     task_configs=[make_averages_task_config, make_averages_file_task_config],
 )
 
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
 
-orchestrator = Orchestrator()
-orchestrator.run()
+    averages_scenario = tp.create_scenario(average_scenario_config)
 
-averages_scenario = tp.create_scenario(average_scenario_config)
+    averages_scenario.submit()
 
-averages_scenario.submit()
-
-
-orchestrator.stop()
+    orchestrator.stop()

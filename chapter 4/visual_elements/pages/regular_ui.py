@@ -1,7 +1,6 @@
 import taipy.gui.builder as tgb
-from orchestration import auto_scenario
 
-df_auto = auto_scenario.auto_data.read()
+# df_auto = auto_scenario.auto_data.read()
 
 columns_lov = [
     "cylinders",
@@ -16,14 +15,6 @@ columns_lov = [
 selected_column = columns_lov
 
 
-def change_column(state):
-    auto_scenario.column_subset.write(state.selected_column)
-
-
-def submit_scenario(state):
-    auto_scenario.submit()
-
-
 with tgb.Page() as regular_ui:
     tgb.text("# Regular UI components", mode="md")
 
@@ -33,16 +24,21 @@ with tgb.Page() as regular_ui:
             lov=columns_lov,
             dropdown=True,
             multiple=True,
-            on_change=change_column,
+            on_change=lambda state: state.auto_scenario.column_subset.write(
+                state.selected_column
+            ),
         )
 
-        tgb.button(label="Submit scenario", on_action=submit_scenario)
+        tgb.button(
+            label="Submit scenario",
+            on_action=lambda state: state.auto_scenario.submit(),
+        )
 
     with tgb.layout("1 1"):
         with tgb.part():
             tgb.text("## Data before the transformation:", mode="md")
             tgb.text("Using a Pandas DataFrame", mode="md")
-            tgb.table("{df_auto}")
+            tgb.table("{auto_scenario.auto_data.read()}")
 
         with tgb.part():
             tgb.text("## Data after the transformation:", mode="md")

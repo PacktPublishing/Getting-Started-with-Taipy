@@ -1,5 +1,4 @@
 import taipy.gui.builder as tgb
-from orchestration import predicting_scenario, training_scenario
 
 with tgb.Page() as dag:
 

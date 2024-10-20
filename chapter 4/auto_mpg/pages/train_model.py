@@ -1,23 +1,20 @@
 import taipy.gui.builder as tgb
-from orchestration import training_scenario
 from taipy.gui import notify
-
-df_auto = training_scenario.auto_data.read()
 
 mse = 0
 r2 = 0
 
 
 def change_scenario(state, submission, details):
-    state.mse = training_scenario.mse.read()
-    state.r2 = training_scenario.r2.read()
+    state.mse = state.training_scenario.mse.read()
+    state.r2 = state.training_scenario.r2.read()
     update_showing_selectors(state)
 
     notify(state, message="The Scenario is done running")
 
 
 def change_column(state):
-    training_scenario.column_subset.write(state.selected_columns)
+    state.training_scenario.column_subset.write(state.selected_columns)
 
 
 def update_showing_selectors(state):
@@ -59,7 +56,7 @@ with tgb.Page() as train_model:
     with tgb.layout("1 1"):
         with tgb.part():
             tgb.text("## Auto-mpg Dataset:", mode="md")
-            tgb.table("{df_auto}")
+            tgb.table("{training_scenario.auto_data.read()}")
 
         with tgb.part():
             tgb.text("## Data for training:", mode="md")

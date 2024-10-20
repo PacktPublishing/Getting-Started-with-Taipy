@@ -12,9 +12,10 @@ minimal_scenario_config = Config.configure_scenario(
     "minimal_scenario", task_configs=[minimal_task_config]
 )
 
-orchestrator = Orchestrator()
-orchestrator.run()
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
 
-minimal_scenario = tp.create_scenario(minimal_scenario_config)
+    minimal_scenario = tp.create_scenario(minimal_scenario_config)
 
-minimal_scenario.submit()
+    minimal_scenario.submit()

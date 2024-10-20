@@ -8,7 +8,6 @@ from algorithms.fit_pipeline import (
 from algorithms.predict import create_prediction_dataframe, make_predictions
 from algorithms.select_subset import select_subset
 from taipy import Config
-from traitlets import default
 
 ########################
 ## Configuration Step ##

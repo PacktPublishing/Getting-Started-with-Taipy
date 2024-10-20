@@ -1,5 +1,4 @@
 import taipy.gui.builder as tgb
-from orchestration import predicting_scenario, training_scenario
 from taipy.gui import notify
 
 prediction_cylinders = 1
@@ -15,17 +14,17 @@ predicted_mpg = 0
 
 def predict_mpg(state):
 
-    predicting_scenario.cylinders.write(state.prediction_cylinders)
-    predicting_scenario.displacement.write(state.prediction_displacement)
-    predicting_scenario.horsepower.write(state.prediction_horsepower)
-    predicting_scenario.weight.write(state.prediction_weight)
-    predicting_scenario.acceleration.write(state.prediction_acceleration)
-    predicting_scenario.modelyear.write(state.prediction_model_year)
-    predicting_scenario.origin.write(state.prediction_origin)
+    state.predicting_scenario.cylinders.write(state.prediction_cylinders)
+    state.predicting_scenario.displacement.write(state.prediction_displacement)
+    state.predicting_scenario.horsepower.write(state.prediction_horsepower)
+    state.predicting_scenario.weight.write(state.prediction_weight)
+    state.predicting_scenario.acceleration.write(state.prediction_acceleration)
+    state.predicting_scenario.modelyear.write(state.prediction_model_year)
+    state.predicting_scenario.origin.write(state.prediction_origin)
 
-    predicting_scenario.submit()
+    state.predicting_scenario.submit()
 
-    state.predicted_mpg = predicting_scenario.predicted_mpg.read()
+    state.predicted_mpg = state.predicting_scenario.predicted_mpg.read()
 
 
 with tgb.Page() as make_predictions:

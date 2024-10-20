@@ -3,13 +3,10 @@
 ## And run it with taipy run answer_5.py     ##
 ###############################################
 
-
+import taipy as tp
 import taipy.gui.builder as tgb
-from orchestration import predicting_scenario, training_scenario
-from taipy import Gui
-
-selected_scenario = training_scenario
-selected_job = None
+from configuration.config import predict_config, train_auto_pipeline_config
+from taipy import Gui, Orchestrator
 
 prediction_cylinders = 1
 prediction_displacement = 50
@@ -18,14 +15,6 @@ prediction_weight = 3500
 prediction_acceleration = 10
 prediction_model_year = 75
 prediction_origin = 1
-
-predicting_scenario.cylinders.write(prediction_cylinders)
-predicting_scenario.displacement.write(prediction_displacement)
-predicting_scenario.horsepower.write(prediction_horsepower)
-predicting_scenario.weight.write(prediction_weight)
-predicting_scenario.acceleration.write(prediction_acceleration)
-predicting_scenario.modelyear.write(prediction_model_year)
-predicting_scenario.origin.write(prediction_origin)
 
 predicted_mpg = 0
 
@@ -73,19 +62,19 @@ def change_column(state):
 
 def update_prediction(state, var_name, value):
     if var_name == "prediction_cylinders":
-        predicting_scenario.cylinders.write(state.prediction_cylinders)
+        state.predicting_scenario.cylinders.write(state.prediction_cylinders)
     if var_name == "prediction_displacement":
-        predicting_scenario.displacement.write(state.prediction_displacement)
+        state.predicting_scenario.displacement.write(state.prediction_displacement)
     if var_name == "prediction_horsepower":
-        predicting_scenario.horsepower.write(state.prediction_horsepower)
+        state.predicting_scenario.horsepower.write(state.prediction_horsepower)
     if var_name == "prediction_weight":
-        predicting_scenario.weight.write(state.prediction_weight)
+        state.predicting_scenario.weight.write(state.prediction_weight)
     if var_name == "prediction_acceleration":
-        predicting_scenario.acceleration.write(state.prediction_acceleration)
+        state.predicting_scenario.acceleration.write(state.prediction_acceleration)
     if var_name == "prediction_model_year":
-        predicting_scenario.modelyear.write(state.prediction_model_year)
+        state.predicting_scenario.modelyear.write(state.prediction_model_year)
     if var_name == "prediction_origin":
-        predicting_scenario.origin.write(state.prediction_origin)
+        state.predicting_scenario.origin.write(state.prediction_origin)
 
 
 def change_scenario(state, var_name, value):
@@ -95,10 +84,19 @@ def change_scenario(state, var_name, value):
 def update_mpg(state, submission, details):
     if (
         details["submission_status"] == "COMPLETED"
-        and details["submittable_entity"] == predicting_scenario
+        and details["submittable_entity"] == state.predicting_scenario
     ):
-        state.predicted_mpg = predicting_scenario.predicted_mpg.read()
+        state.predicted_mpg = state.predicting_scenario.predicted_mpg.read()
 
+
+# Monitor orchestration:
+def monitor_scenario(scenario, job):
+    print(f"Running scenario: '{scenario.config_id}' ||| task: '{job.task.config_id}'")
+
+
+#############################
+###         Page          ###
+#############################
 
 with tgb.Page() as orchestration_interface:
     tgb.text("# Orchestration Interface", mode="md")
@@ -195,9 +193,29 @@ with tgb.Page() as orchestration_interface:
 
 auto_mpg_gui = Gui(page=orchestration_interface)
 
+if __name__ == "__main__":
 
-auto_mpg_gui.run(
-    use_reloader=True,
-    dark_mode=False,
-    title="Data Node examples",
-)
+    orchestrator = Orchestrator()
+    orchestrator.run()
+
+    training_scenario = tp.create_scenario(train_auto_pipeline_config)
+    predicting_scenario = tp.create_scenario(predict_config)
+
+    selected_scenario = training_scenario
+    selected_job = None
+
+    tp.subscribe_scenario(monitor_scenario)
+
+    predicting_scenario.cylinders.write(prediction_cylinders)
+    predicting_scenario.displacement.write(prediction_displacement)
+    predicting_scenario.horsepower.write(prediction_horsepower)
+    predicting_scenario.weight.write(prediction_weight)
+    predicting_scenario.acceleration.write(prediction_acceleration)
+    predicting_scenario.modelyear.write(prediction_model_year)
+    predicting_scenario.origin.write(prediction_origin)
+
+    auto_mpg_gui.run(
+        use_reloader=True,
+        dark_mode=False,
+        title="Data Node examples",
+    )

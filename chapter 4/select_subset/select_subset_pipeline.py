@@ -76,18 +76,18 @@ auto_scenario_config = Config.configure_scenario(
     "auto_scenario", task_configs=[filter_df_task_config]
 )
 
+if __name__ == "__main__":
+    orchestrator = Orchestrator()
+    orchestrator.run()
 
-orchestrator = Orchestrator()
-orchestrator.run()
+    auto_scenario = tp.create_scenario(auto_scenario_config)
 
-auto_scenario = tp.create_scenario(auto_scenario_config)
+    # auto_scenario.column_subset.write(["cylinders", "horsepower"])  # override if you want
 
-# auto_scenario.column_subset.write(["cylinders", "horsepower"])  # override if you want
+    auto_scenario.submit()
 
-auto_scenario.submit()
+    df_filtered_auto = auto_scenario.filtered_auto_df.read()
 
-df_filtered_auto = auto_scenario.filtered_auto_df.read()
+    print(df_filtered_auto.head(10))
 
-print(df_filtered_auto.head(10))
-
-orchestrator.stop()
+    orchestrator.stop()
