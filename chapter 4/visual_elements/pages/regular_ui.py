@@ -1,7 +1,5 @@
 import taipy.gui.builder as tgb
 
-# df_auto = auto_scenario.auto_data.read()
-
 columns_lov = [
     "cylinders",
     "displacement",
