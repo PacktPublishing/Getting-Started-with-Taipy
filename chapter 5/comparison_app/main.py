@@ -1,11 +1,9 @@
 import datetime as dt
-from re import S
 
 import pandas as pd
 import taipy as tp
 import taipy.gui.builder as tgb
 from configuration.config_comparison import scenario_config
-from pyparsing import col
 from taipy import Gui, Orchestrator
 
 #################
