@@ -5,6 +5,7 @@ import pandas as pd
 import taipy as tp
 import taipy.gui.builder as tgb
 from configuration.config_comparison import scenario_config
+from pyparsing import col
 from taipy import Gui, Orchestrator
 
 #################
@@ -13,7 +14,7 @@ from taipy import Gui, Orchestrator
 
 margin_1 = 1.0
 margin_2 = 1.0
-comparison_table = None
+comparison_table = pd.DataFrame(columns=["Scenario", "Price"])
 
 #################
 ## functions   ##
