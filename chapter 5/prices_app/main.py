@@ -18,7 +18,7 @@ margin = 1.0
 #################
 
 
-def get_montly_price(scenario_ym, price_file="./data/buying_prices.csv"):
+def get_monthly_price(scenario_ym, price_file="./data/buying_prices.csv"):
     df_prices = pd.read_csv(price_file)
     try:
         price = df_prices.loc[df_prices["month"] == scenario_ym, "price"].iloc[0]
@@ -42,7 +42,7 @@ def update_scenario(state, var_name, value):
 
     scenario_date = state.selected_scenario.cycle.creation_date
     scenario_cycle_ym = f"{scenario_date.month}-{scenario_date.year}"
-    buying_price = get_montly_price(scenario_cycle_ym)
+    buying_price = get_monthly_price(scenario_cycle_ym)
     state.selected_scenario.buying_price_node.write(buying_price)
 
     state.margin = state.selected_scenario.margin_node.read()
@@ -138,7 +138,7 @@ if __name__ == "__main__":
 
     scenario_date = selected_scenario.cycle.creation_date
     scenario_cycle_ym = f"{scenario_date.month}-{scenario_date.year}"
-    buying_price = get_montly_price(scenario_cycle_ym)
+    buying_price = get_monthly_price(scenario_cycle_ym)
     selected_scenario.buying_price_node.write(buying_price)
 
     price_app_gui.run(
