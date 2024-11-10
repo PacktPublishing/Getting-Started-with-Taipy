@@ -9,7 +9,7 @@ def say_hi(person):
 
 node_config_input = Config.configure_data_node(
     id="node_in",
-    default_data="run method",
+    default_data="linux server",
 )
 node_config_output = Config.configure_data_node(
     id="node_out",
