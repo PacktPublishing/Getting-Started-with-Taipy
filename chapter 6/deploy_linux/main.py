@@ -25,13 +25,13 @@ with tgb.Page() as page:
     tgb.text("## {node_message}", mode="md")
 
 
-if __name__ == "__main__":
-    Orchestrator().run()
-    scenario = tp.create_scenario(scenario_config)
-    scenario.submit()
-    node_message = scenario.node_out.read()
-    print(node_message)
+# if __name__ == "__main__":
+Orchestrator().run()
+scenario = tp.create_scenario(scenario_config)
+scenario.submit()
+node_message = scenario.node_out.read()
+print(node_message)
 
-    gui = Gui(page=page)
-    gui.run(debug=False, run_server=False)
-    app_to_deploy = gui.get_flask_app()
+gui = Gui(page=page)
+gui.run(debug=False, run_server=False)
+app_to_deploy = gui.get_flask_app()
