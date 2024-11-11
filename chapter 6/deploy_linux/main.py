@@ -33,4 +33,5 @@ if __name__ == "__main__":
     print(node_message)
 
     gui = Gui(page=page)
-    app_to_deploy = gui.run(debug=False, run_server=False)
+    gui.run(debug=False, run_server=False)
+    app_to_deploy = gui.get_flask_app()
