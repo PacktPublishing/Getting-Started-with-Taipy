@@ -70,7 +70,7 @@ def update_df_sales(df_sales, adjust_inflation=False):
     df_sales_cp = df_sales.copy()
 
     nominal_columns = ["FAH_nominal", "FAFH_nominal", "Total_nominal"]
-    contant_columns = ["FAH_constant", "FAFH_constant", "Total_constant"]
+    constant_columns = ["FAH_constant", "FAFH_constant", "Total_constant"]
     # For renaming:
     metric_columns = ["FAH", "FAFH", "Total"]
 
@@ -79,11 +79,11 @@ def update_df_sales(df_sales, adjust_inflation=False):
             columns=nominal_columns,
             inplace=True,
         )
-        rename_dict = dict(zip(contant_columns, metric_columns))
+        rename_dict = dict(zip(constant_columns, metric_columns))
 
     else:  # rename nominal, drop constant
         df_sales_cp.drop(
-            columns=contant_columns,
+            columns=constant_columns,
             inplace=True,
         )
         rename_dict = dict(zip(nominal_columns, metric_columns))
