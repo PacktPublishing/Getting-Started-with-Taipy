@@ -36,7 +36,7 @@ with tgb.Page() as root_page:
                         "unit_converter",
                         Icon(
                             path="./images/scale_dark.png",
-                            text="Conerverter Page!",
+                            text="Converter Page!",
                         ),
                     ),
                     (
