@@ -86,6 +86,7 @@ with tgb.Page() as food_fact_page:
             x="State",
             y="{metric}",
             title=f"Value per State",
+            class_name="p0 m0",
             rebuild=True,
         )
         tgb.chart(
@@ -95,11 +96,13 @@ with tgb.Page() as food_fact_page:
             y="Year",
             z="{metric}",
             title="Value per year and State",
+            class_name="p0 m0",
             rebuild=True,
         )
 
         tgb.chart(
             figure="{fig_states}",
+            class_name="p0 m0",
         )
 
     tgb.table(
@@ -111,5 +114,6 @@ with tgb.Page() as food_fact_page:
         on_edit=edit_note,
         on_add=add_row,
         on_delete=delete_row,
+        class_name="p0 m0",
         nan_value=0,
     )
