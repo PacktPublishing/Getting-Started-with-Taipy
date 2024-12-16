@@ -7,7 +7,7 @@ from taipy import Config, Core, Scope
 
 cities_parquet_node_config = Config.configure_parquet_data_node(
     id="most_populated_cities_parquet",
-    default_path="data/city_data.parquet",
+    default_path="../data/city_data.parquet",
     engine="pyarrow",  # default
     compression="gzip",  # default is snappy
     exposed_type="pandas",
