@@ -5,6 +5,11 @@ from taipy import Config, Orchestrator, Scope
 from taipy.gui import Gui
 
 #######################################
+### Insert this code in `main.py`'s  ##
+### file from Chapter 2              ##
+#######################################
+
+#######################################
 ### ANSWER 4 STARTS HERE             ##
 #######################################
 sales_csv_file = "./data/state_sales.csv"
@@ -28,7 +33,7 @@ df_sales_original = sales_data_node.read()
 ### ANSWER 4 ENDS HERE               ##
 #######################################
 
-## First: pre-process the data fro the DataFrame
+## First: pre-process the data from the DataFrame
 
 df_sales_original = clean_sales_data(sales_csv_file)
 df_sales = update_df_sales(df_sales_original)
