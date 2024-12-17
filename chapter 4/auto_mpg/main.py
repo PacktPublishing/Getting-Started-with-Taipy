@@ -6,6 +6,11 @@ from pages.make_predictions import make_predictions
 from pages.train_model import train_model
 from taipy import Gui, Orchestrator
 
+###################################
+## Variables and list of values  ##
+## for the app                   ##
+###################################
+
 columns_lov = [
     "cylinders",
     "displacement",
@@ -16,7 +21,6 @@ columns_lov = [
     "origin",
 ]
 selected_columns = columns_lov
-
 
 show_cylinders = True
 show_displacement = True
@@ -32,6 +36,9 @@ def monitor_scenario(scenario, job):
     print(f"Running scenario: '{scenario.config_id}' ||| task: '{job.task.config_id}'")
 
 
+###################################
+## Instantiate Gui               ##
+###################################
 with tgb.Page() as root_page:
     tgb.text("# Auto-mpg app", mode="md")
     tgb.navbar()
@@ -47,11 +54,13 @@ auto_mpg_pages = {
 
 auto_mpg_gui = Gui(pages=auto_mpg_pages)
 
+# Run your Orchestrator and your Gui elements under the main guard:
 if __name__ == "__main__":
 
     orchestrator = Orchestrator()
     orchestrator.run()
 
+    # Always create scenarios AFTER running the Orchestrator
     training_scenario = tp.create_scenario(train_auto_pipeline_config)
     predicting_scenario = tp.create_scenario(predict_config)
 
