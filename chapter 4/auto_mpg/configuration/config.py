@@ -43,7 +43,7 @@ filtered_auto_data_node_config = Config.configure_data_node(id="filtered_auto_df
 X_scaled_node_config = Config.configure_data_node(id="X_scaled")
 y_node_config = Config.configure_data_node(id="y")
 scaler_node_config = Config.configure_pickle_data_node(
-    id="scaler", default_path="./user_data/sclaer.p"
+    id="scaler", default_path="./user_data/scaler.p"
 )
 
 X_train_node_config = Config.configure_data_node(id="X_train")
@@ -162,7 +162,7 @@ aggregate_input_data_task_config = Config.configure_task(
 )
 
 scaler_predict_node_config = Config.configure_pickle_data_node(
-    id="scaler_predict", default_path="./user_data/sclaer.p"
+    id="scaler_predict", default_path="./user_data/scaler.p"
 )
 
 
