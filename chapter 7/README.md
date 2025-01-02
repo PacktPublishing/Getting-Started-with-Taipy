@@ -42,9 +42,11 @@ Here is how the app looks:
 
 ## Data for the App
 
-This application intends to replicate an enterprise situation, with data stored in a Data Warehouse.
+This application intends to replicate an enterprise situation, with data stored in a Data Warehouse. The app's data comes from [this github repository](https://github.com/enarroied/AdventureWorksSimplified). 
 
-The app's data comes from [this github repository](https://github.com/enarroied/AdventureWorksSimplified). 
+Here is a simple representation of the schema:
+
+![](img/schema.svg)
 
 You can check the [dataset's original license](https://github.com/enarroied/AdventureWorksSimplified/blob/master/LICENSE).
 
