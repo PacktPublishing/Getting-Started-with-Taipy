@@ -42,7 +42,7 @@ sales_forecast_pages = {
 }
 
 stylekit = {
-    "color_primary": "#66C2A5",  # metallic medium sea green
+    "color_primary": "#66C2A5",
     "color_secondary": "#A9A9A9",  # metallic dark grey (dark gray)
 }
 
@@ -67,8 +67,9 @@ if __name__ == "__main__":
     gender_forecast = "All"
     generation_forecast = "All"
     product_forecast = "All"
-    selected_scenario = None
+
     # For forecast:
+    selected_scenario = None
     scenario_name = ""
     prediction_number_days = 30
     show_predictions = False

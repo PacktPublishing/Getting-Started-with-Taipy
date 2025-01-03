@@ -121,7 +121,7 @@ with tgb.Page() as forecast_page:
                 "Gen X",
                 "Boomers",
                 "Millenial",
-            ],  # Not enough Silent Gen indivisuals for forecast
+            ],  # Not enough Silent Gen individuals for forecast
             label="Select gender for forecast",
             dropdown=True,
         )
@@ -132,7 +132,7 @@ with tgb.Page() as forecast_page:
             dropdown=True,
         )
         tgb.input(value="{scenario_name}", label="Scenario Name")
-        tgb.number("{prediction_number_days}", min=1, max=365)
+        tgb.number("{prediction_number_days}", label="number of days", min=1, max=365)
         tgb.button(label="Create Scenario", on_action=create_scenario)
         tgb.button(
             label="Update Scenario values",
@@ -177,6 +177,6 @@ with tgb.Page() as forecast_page:
 
     with tgb.layout("2 1"):
         tgb.chart(figure="{forecast_fig}")
-        tgb.table(data="{df_results}", rebuild=True)
+        tgb.table(data="{df_results}", downloadable=True, rebuild=True)
 
     # tgb.scenario_dag(scenario="{selected_scenario}")
