@@ -131,7 +131,7 @@ create_forecast_df_task = Config.configure_task(
     function=create_forecast_dataframe,
 )
 summarize_forecast_task = Config.configure_task(
-    id="create_chart",
+    id="summarize_forecast",
     input=[forecast_df_node_config],
     output=[summary_node_config],
     function=summarize_forecast,

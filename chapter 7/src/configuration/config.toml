@@ -80,14 +80,14 @@ inputs = [ "future_dates:SECTION", "y_future:SECTION", "conf_min:SECTION", "conf
 outputs = [ "forecast_df:SECTION",]
 skippable = "False:bool"
 
-[TASK.create_chart]
+[TASK.summarize_forecast]
 function = "algorithms.forecast_tasks.summarize_forecast:function"
 inputs = [ "forecast_df:SECTION",]
 outputs = [ "summary:SECTION",]
 skippable = "False:bool"
 
 [SCENARIO.forecast_scenario]
-tasks = [ "filter_sales:SECTION", "aggregate_dataframe:SECTION", "fit_and_forecast_future:SECTION", "compute_confidence_intervals:SECTION", "create_forecast_df:SECTION", "create_chart:SECTION",]
+tasks = [ "filter_sales:SECTION", "aggregate_dataframe:SECTION", "fit_and_forecast_future:SECTION", "compute_confidence_intervals:SECTION", "create_forecast_df:SECTION", "summarize_forecast:SECTION",]
 additional_data_nodes = []
 
 [SCENARIO.forecast_scenario.comparators]
