@@ -38,13 +38,14 @@ def change_volume(state, var_name, value):
 
 
 def reset(state, id, payload):
-
-    state.grams = 0
-    state.cups = 0
-    state.ounces = 0
-    state.tablespoons = 0
-    state.teaspoons = 0
-    state.milliliters = 0
+    if id != "reset_volume":
+        state.grams = 0
+        state.ounces = 0
+    if id != "reset_weight":
+        state.cups = 0
+        state.tablespoons = 0
+        state.teaspoons = 0
+        state.milliliters = 0
 
 
 with tgb.Page() as converter_page:  # food_fact_page for food_facts.py
@@ -73,7 +74,10 @@ with tgb.Page() as converter_page:  # food_fact_page for food_facts.py
         with tgb.layout("1 1"):
             tgb.button(
                 label="Reset weight values",
-                on_action=reset,
+                # on_action=reset,
+                on_action=lambda state: [
+                    setattr(state, unit_name, 0) for unit_name in ["grams", "ounces"]
+                ],  # using lambda notation
                 id="reset_weight",
             )
             tgb.button(label="Reset volume values", on_action=reset, id="reset_volume")
