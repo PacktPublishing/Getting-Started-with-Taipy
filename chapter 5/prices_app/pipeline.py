@@ -56,7 +56,7 @@ if __name__ == "__main__":
     )
 
     # If we try the same with markup_node, we'll have an error, because this Data Node doesn't exist
-    # It doesn't exist because we never submitted scenario_desember_2:
+    # It doesn't exist because we never submitted scenario_december_2:
 
     december_2_markup = scenario_december_2.markup_node.read()
     print(f"\nThe value of scenario_december_2's markup_node is {december_2_markup}")
