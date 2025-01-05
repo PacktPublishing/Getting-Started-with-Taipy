@@ -14,8 +14,8 @@ buying_price_node_config = Config.configure_data_node(
     scope=Scope.CYCLE,
 )
 
-margin_node_config = Config.configure_data_node(
-    id="margin_node",
+markup_node_config = Config.configure_data_node(
+    id="markup_node",
     scope=Scope.SCENARIO,
 )
 
@@ -28,7 +28,7 @@ selling_price_node_config = Config.configure_data_node(
 calculate_price_task_config = Config.configure_task(
     id="calculate_price_task",
     function=calculate_price,
-    input=[buying_price_node_config, margin_node_config, vat_data_node_config],
+    input=[buying_price_node_config, markup_node_config, vat_data_node_config],
     output=selling_price_node_config,
 )
 

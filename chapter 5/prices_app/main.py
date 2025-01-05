@@ -10,7 +10,7 @@ from taipy import Gui, Orchestrator
 ## Variables   ##
 #################
 
-margin = 1.0
+markup = 1.0
 
 
 #################
@@ -33,8 +33,8 @@ def get_monthly_price(scenario_ym, price_file="./data/buying_prices.csv"):
 #################
 
 
-def change_margin(state):
-    state.selected_scenario.margin_node.write(state.margin)
+def change_markup(state):
+    state.selected_scenario.markup_node.write(state.markup)
 
 
 def update_scenario(state, var_name, value):
@@ -45,7 +45,7 @@ def update_scenario(state, var_name, value):
     buying_price = get_monthly_price(scenario_cycle_ym)
     state.selected_scenario.buying_price_node.write(buying_price)
 
-    state.margin = state.selected_scenario.margin_node.read()
+    state.markup = state.selected_scenario.markup_node.read()
 
 
 ################
@@ -75,10 +75,10 @@ with tgb.Page() as price_app_page:
                 display_cycles=True,
             )
         with tgb.part():
-            tgb.text("## Margin (Scenario Scope)", mode="md")
-            tgb.slider("{margin}", step=0.01, min=1, max=2, on_change=change_margin)
+            tgb.text("## Markup (Scenario Scope)", mode="md")
+            tgb.slider("{markup}", step=0.01, min=1, max=2, on_change=change_markup)
             tgb.data_node(
-                data_node="{selected_scenario.margin_node}",
+                data_node="{selected_scenario.markup_node}",
                 show_properties=False,
             )
     with tgb.layout("1 1"):
@@ -134,7 +134,7 @@ if __name__ == "__main__":
 
     selected_scenario = scenario_december_1
 
-    selected_scenario.margin_node.write(margin)
+    selected_scenario.markup_node.write(markup)
 
     scenario_date = selected_scenario.cycle.creation_date
     scenario_cycle_ym = f"{scenario_date.month}-{scenario_date.year}"
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     selected_scenario.buying_price_node.write(buying_price)
 
     price_app_gui.run(
-        use_reloader=True,
+        # use_reloader=True,
         dark_mode=False,
         title="Price app",
     )
