@@ -1,8 +1,6 @@
 import datetime as dt
 
-import pandas as pd
 import taipy as tp
-import taipy.gui.builder as tgb
 from configuration.config import scenario_config
 from taipy import Orchestrator
 
@@ -40,7 +38,7 @@ if __name__ == "__main__":
     ##################################
 
     scenario_december_1.vat_node.write(1.2)  # Not necessry because has default data
-    scenario_december_1.margin_node.write(1.5)
+    scenario_december_1.markup_node.write(1.5)
     scenario_december_1.buying_price_node.write(2)
 
     print("\n Scenario submitted:")
@@ -57,11 +55,11 @@ if __name__ == "__main__":
         f"\nThe value of december_buying_price's Data Node is: {december_buying_price}"
     )
 
-    # If we try the same with margin_node, we'll have an error, because this Data Node doesn't exist
+    # If we try the same with markup_node, we'll have an error, because this Data Node doesn't exist
     # It doesn't exist because we never submitted scenario_desember_2:
 
-    december_2_margin = scenario_december_2.margin_node.read()
-    print(f"\nThe value of scenario_december_2's margin_node is {december_2_margin}")
+    december_2_markup = scenario_december_2.markup_node.read()
+    print(f"\nThe value of scenario_december_2's markup_node is {december_2_markup}")
 
     # Also, if we try to access the value of buying_price_node from scenario_january_1 (or _2...)
     # We will get a None value, since they belong to a different Cycle!
