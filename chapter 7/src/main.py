@@ -18,7 +18,7 @@ from configuration.config import (
     sales_product_node_config,
     sales_simplified_node_config,
 )
-from pages.forecast import forecast_page
+from pages.forecast.forecast import forecast_page
 from pages.sales.partial_sales import (
     create_partial_sales_customer,
     create_partial_sales_product,
