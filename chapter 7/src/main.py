@@ -130,4 +130,5 @@ if __name__ == "__main__":
         title="Sales Forecast",
         favicon="./images/favicon.ico",
         stylekit=stylekit,
+        use_arrow=True,
     )
