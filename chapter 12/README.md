@@ -2,11 +2,11 @@
 
 This chapter has several mini-apps that demonstrate each Chapter's concept. Here are the the directories:
 
-* `state`: see how to optimize the use of `State` in your Callbacks.
-* `long_callbacks`: using long running Callbacks in Taipy.
-* `threads`: Setting `threading` manually in Taipy appliations.
+* `state`: How to optimize the use of `State` in your Callbacks.
+* `long_callbacks`: How to use long running Callbacks in Taipy.
+* `threads`: How to set `threading` manually in Taipy appliations.
 * `hold_and_resume`: How to "block" your UI while tasks execute in the back.
-* `partials`: how to use Partials with Taipy.
+* `partials`: How to use Partials with Taipy.
 * `job_execution_mode`: How to use asynchronous executions with the Taipy Orchestrator.
 * `exercices`: Code with the answers to the Chapter's questions.
 
