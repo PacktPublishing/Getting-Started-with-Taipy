@@ -23,8 +23,6 @@ def calculate(input_value, input_factor, input_operation):
     return result
 
 
-import random
-
 jokes = [
     # jokes by Google Gemini
     "Why don't scientists trust atoms? Because they make up everything!",
@@ -89,4 +87,5 @@ with tgb.Page() as operation_app:
     tgb.text("## Current value is: {value}", mode="md")
 
 if __name__ == "__main__":
-    Gui(page=operation_app).run(dark_mode=False, use_reloader=True)
+    gui = Gui(page=operation_app)
+    gui.run(dark_mode=False)  # , use_reloader=True)

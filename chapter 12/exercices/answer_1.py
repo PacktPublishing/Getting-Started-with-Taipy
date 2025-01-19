@@ -82,8 +82,11 @@ with tgb.Page() as test_page:
         y__1="time_with_with",
         y__2="time_without_with",
         yaxis="average running time (ms)",
-        title="Average running time (ms) using with vs not using it, for 1 to 10 variables (50 iterations in a desltop computer, results will vary with hardware)",
+        title="Average running time (ms) using with vs not using it, for 1 to 10 variables (50 iterations in a desktop computer, results will vary with hardware)",
     )
 
 if __name__ == "__main__":
-    Gui(page=test_page).run(use_reloader=True, dark_mode=False)
+    Gui(page=test_page).run(
+        dark_mode=False,
+        # use_reloader=True,
+    )

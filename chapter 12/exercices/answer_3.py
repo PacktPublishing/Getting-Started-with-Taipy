@@ -4,7 +4,7 @@ from threading import Thread
 import requests
 from taipy.gui import Gui
 from taipy.gui import builder as tgb
-from taipy.gui import get_state_id, invoke_callback, notify
+from taipy.gui import get_state_id, invoke_callback
 
 html_text = ""
 time_with_threads = 0
@@ -73,11 +73,11 @@ with tgb.Page() as scrape_page:
         tgb.button("Scrape with threads", on_action=scrape_websites_threads)
         tgb.button("Scrape without threads", on_action=scrape_websites_no_threads)
 
-        tgb.text("Time using Threads: {time_with_threads}")
-        tgb.text("Time without using Threads: {time_without_threads}")
+        tgb.text("## Time using Threads: {time_with_threads}", mode="md")
+        tgb.text("## Time without using Threads: {time_without_threads}", mode="md")
 
     tgb.text("{html_text}")
 
 if __name__ == "__main__":
     gui = Gui(page=scrape_page)
-    gui.run(use_reloader=True, dark_mode=False)
+    gui.run(dark_mode=False)  # , use_reloader=True)
