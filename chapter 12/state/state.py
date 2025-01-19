@@ -54,4 +54,5 @@ with tgb.Page() as test_page:
         tgb.text("#### With 'with': {run_time_with_with}", mode="md")
 
 if __name__ == "__main__":
-    Gui(page=test_page).run(use_reloader=True, dark_mode=False)
+    gui = Gui(page=test_page)
+    gui.run(use_reloader=True, dark_mode=False)

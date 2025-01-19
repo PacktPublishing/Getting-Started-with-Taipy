@@ -37,9 +37,10 @@ def multiply_by_2(state):
 with tgb.Page() as first_long_callback:
     tgb.text("# Our first long running Callback", mode="md")
 
-    tgb.text("Initial value is: {initial_value}")
+    tgb.text("### Value is: {initial_value}", mode="md")
     tgb.button("Multiply by 2", on_action=multiply_by_2)
 
 
 if __name__ == "__main__":
-    Gui(page=first_long_callback).run(use_reloader=True, dark_mode=False)
+    gui = Gui(page=first_long_callback)
+    gui.run(use_reloader=True, dark_mode=False)

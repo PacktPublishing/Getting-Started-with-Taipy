@@ -70,7 +70,7 @@ with tgb.Page() as image_page:
 if __name__ == "__main__":
 
     # Uncomment to run in parallel!
-    Config.configure_job_executions(mode="standalone", max_nb_of_workers=3)
+    # Config.configure_job_executions(mode="standalone", max_nb_of_workers=3)
 
     # Data Nodes
     rows_node_config = Config.configure_data_node("rows_node", default_data=600)
@@ -129,6 +129,7 @@ if __name__ == "__main__":
 
     scenario_image = tp.create_scenario(image_scenario_config)
 
-    Gui(page=image_page).run(
+    gui = Gui(page=image_page)
+    gui.run(
         use_reloader=True,
     )

@@ -6,7 +6,7 @@ from taipy.gui import hold_control, notify, resume_control
 
 
 def callback_with_hold(state):
-    hold_control(state, message= "I'm thinking hard!")
+    hold_control(state, message="I'm thinking hard!")
     notify(state, "i", "Callback started")
     with state as s:
         time.sleep(5)
@@ -20,4 +20,5 @@ with tgb.Page() as hold_and_resume_page:
     tgb.button("I'll take control away from you!", on_action=callback_with_hold)
 
 if __name__ == "__main__":
-    Gui(page=hold_and_resume_page).run(use_reloader=True, dark_mode=False)
+    gui = Gui(page=hold_and_resume_page)
+    gui.run(use_reloader=True, dark_mode=False)
