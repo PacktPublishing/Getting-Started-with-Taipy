@@ -1,5 +1,4 @@
 import pandas as pd
-import taipy as tp
 
 
 def calculate_big_numbers(df_sales):
