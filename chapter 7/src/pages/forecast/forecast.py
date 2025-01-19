@@ -6,93 +6,100 @@ from configuration.config import forecast_scenario_config
 from taipy.gui import notify
 
 
+def write_into_scenario(scenario, state):
+    with state as s:
+        scenario.forecast_target.write(s.forecast_target)
+        scenario.gender_forecast.write(s.gender_forecast)
+        scenario.generation_forecast.write(s.generation_forecast)
+        scenario.product_forecast.write(s.product_forecast)
+        scenario.number_of_days.write(s.prediction_number_days)
+
+
 def update_scenario(state):
-    if state.selected_scenario is not None:
-        state.selected_scenario.forecast_target.write(state.forecast_target)
-        state.selected_scenario.gender_forecast.write(state.gender_forecast)
-        state.selected_scenario.generation_forecast.write(state.generation_forecast)
-        state.selected_scenario.product_forecast.write(state.product_forecast)
-        state.selected_scenario.number_of_days.write(state.prediction_number_days)
-        notify(state, "s", f"{state.selected_scenario.name} has been updated")
-    else:
-        notify(state, "w", f"A Scenario needs to be selected")
-        state.forecast_fig = None
+    with state as s:
+        if s.selected_scenario is not None:
+            write_into_scenario(s.selected_scenario, s)
+            notify(s, "s", f"{s.selected_scenario.name} has been updated")
+        else:
+            notify(s, "w", "A Scenario needs to be selected")
+            s.forecast_fig = None
 
 
 def create_scenario(state):
-    if state.scenario_name == "":
-        notify(state, "w", "The Scenario needs to have a name")
-
-    else:
-        new_scenario = tp.create_scenario(
-            forecast_scenario_config, name=state.scenario_name
-        )
-        new_scenario.forecast_target.write(state.forecast_target)
-        new_scenario.gender_forecast.write(state.gender_forecast)
-        new_scenario.generation_forecast.write(state.generation_forecast)
-        new_scenario.product_forecast.write(state.product_forecast)
-        new_scenario.number_of_days.write(state.prediction_number_days)
-
-        state.selected_scenario = new_scenario
-        state.scenario_name = ""
-        notify(state, "s", "New Scenario created successfully")
+    with state as s:
+        if s.scenario_name == "":
+            notify(s, "w", "The Scenario needs to have a name")
+        else:
+            new_scenario = tp.create_scenario(
+                forecast_scenario_config, name=s.scenario_name
+            )
+            write_into_scenario(new_scenario, s)
+            s.selected_scenario = new_scenario
+            s.scenario_name = ""
+            notify(s, "s", "New Scenario created successfully")
 
 
 def update_chart(state):
-    # read these 2 to ensure having the right data:
-    df_agg = state.selected_scenario.aggregated_dataframe.read()
-    target = state.selected_scenario.forecast_target.read()
-    state.forecast_fig = plot_forecast(
-        df_agg=df_agg, target=target, forecast_df=state.df_results
-    )
+    with state as s:
+        # read these 2 to ensure having the right data:
+        df_agg = s.selected_scenario.aggregated_dataframe.read()
+        target = s.selected_scenario.forecast_target.read()
+        state.forecast_fig = plot_forecast(
+            df_agg=df_agg, target=target, forecast_df=s.df_results
+        )
 
 
 def update_summary(state):
-    summary_dict = state.selected_scenario.summary.read()
-    total_forecast_value = summary_dict["total_forecast"]
-    min_forecast_value = summary_dict["total_conf_min"]
-    max_forecast_value = summary_dict["total_conf_max"]
+    with state as s:
+        summary_dict = s.selected_scenario.summary.read()
+        total_forecast_value = summary_dict["total_forecast"]
+        min_forecast_value = summary_dict["total_conf_min"]
+        max_forecast_value = summary_dict["total_conf_max"]
 
-    state.total_forecast_value = f"{total_forecast_value:,.2f}"
-    state.min_forecast_value = f"{min_forecast_value:,.2f}"
-    state.max_forecast_value = f"{max_forecast_value:,.2f}"
+        s.total_forecast_value = f"{total_forecast_value:,.2f}"
+        s.min_forecast_value = f"{min_forecast_value:,.2f}"
+        s.max_forecast_value = f"{max_forecast_value:,.2f}"
 
 
 def change_scenario(state):
-    state.forecast_target = state.selected_scenario.forecast_target.read()
-    state.gender_forecast = state.selected_scenario.gender_forecast.read()
-    state.generation_forecast = state.selected_scenario.generation_forecast.read()
-    state.product_forecast = state.selected_scenario.product_forecast.read()
-    state.prediction_number_days = state.selected_scenario.number_of_days.read()
+    with state as s:
+        s.forecast_target = s.selected_scenario.forecast_target.read()
+        s.gender_forecast = s.selected_scenario.gender_forecast.read()
+        s.generation_forecast = s.selected_scenario.generation_forecast.read()
+        s.product_forecast = s.selected_scenario.product_forecast.read()
+        s.prediction_number_days = s.selected_scenario.number_of_days.read()
 
     # Scenario part:
-    state.selected_scenario_name = state.selected_scenario.name
+    with state as s:
+        s.selected_scenario_name = s.selected_scenario.name
 
-    # The Scenario can be create but never run before, therefore:
-    if state.selected_scenario.forecast_df.is_ready_for_reading:
-        state.df_results = state.selected_scenario.forecast_df.read()
-        update_chart(state)
-        update_summary(state)
-    else:
-        state.df_results = pd.DataFrame(
-            columns=["date", "forecast", "conf_min", "conf_max"]
-        )  # initial value
-        state.forecast_fig = None
-        state.total_forecast_value = 0
-        state.min_forecast_value = 0
-        state.max_forecast_value = 0
+        # The Scenario can be create but never run before, therefore:
+        if s.selected_scenario.forecast_df.is_ready_for_reading:
+            s.df_results = s.selected_scenario.forecast_df.read()
+            update_chart(s)
+            update_summary(s)
+        else:
+            s.df_results = pd.DataFrame(
+                columns=["date", "forecast", "conf_min", "conf_max"]
+            )  # initial value
+            s.forecast_fig = None
+            s.total_forecast_value = 0
+            s.min_forecast_value = 0
+            s.max_forecast_value = 0
 
-    notify(state, "i", f"New Scenario selected: {state.selected_scenario.name}")
+        notify(s, "i", f"New Scenario selected: {state.selected_scenario.name}")
 
 
 def update_results(state, submission, details):
-    if details["submission_status"] == "COMPLETED":
-        state.show_predictions = True
-        state.df_results = state.selected_scenario.forecast_df.read()
-        state.selected_scenario_name = state.selected_scenario.name
 
-        update_summary(state)
-        update_chart(state)
+    if details["submission_status"] == "COMPLETED":
+        with state as s:
+            s.show_predictions = True
+            s.df_results = s.selected_scenario.forecast_df.read()
+            s.selected_scenario_name = s.selected_scenario.name
+
+            update_summary(s)
+            update_chart(s)
 
 
 with tgb.Page() as forecast_page:
@@ -148,7 +155,9 @@ with tgb.Page() as forecast_page:
             on_change=change_scenario,
         )
         tgb.scenario(
-            scenario="{selected_scenario}", on_submission_change=update_results
+            scenario="{selected_scenario}",
+            on_submission_change=update_results,
+            show_config=True,
         )
 
     # Forecast results

@@ -14,43 +14,44 @@ from pages.sales.partial_sales import (
 
 # Callbacks
 def change_time_charts(state):
-    df_time = state.sales_simplified_node.read()
-    is_all = state.time_break_by == "All"
+    with state as s:
+        df_time = s.sales_simplified_node.read()
+        is_all = s.time_break_by == "All"
 
-    # Grouping and visualization parameter:
-    break_by = None if is_all else state.time_break_by
+        # Grouping and visualization parameter:
+        break_by = None if is_all else s.time_break_by
 
-    # Group and visualize weekday stats
-    state.weekday_stats = group_by_weekday(df_time, extra_col=break_by)
-    state.weekday_fig = create_weekday_chart(
-        state.weekday_stats, y_axis=state.y_axis_time, break_by=break_by
-    )
+        # Group and visualize weekday stats
+        s.weekday_stats = group_by_weekday(df_time, extra_col=break_by)
+        s.weekday_fig = create_weekday_chart(
+            s.weekday_stats, y_axis=s.y_axis_time, break_by=break_by
+        )
 
-    # Group and visualize date stats
-    group_columns = "date" if is_all else ["date", state.time_break_by]
-    state.date_stats = group_by_dimensions_and_facts(
-        df_time, group_columns, orderby="date"
-    )
-    state.date_fig = create_time_scatter(
-        state.date_stats, y_axis=state.y_axis_time, break_by=break_by
-    )
+        # Group and visualize date stats
+        group_columns = "date" if is_all else ["date", s.time_break_by]
+        s.date_stats = group_by_dimensions_and_facts(
+            df_time, group_columns, orderby="date"
+        )
+        s.date_fig = create_time_scatter(
+            s.date_stats, y_axis=s.y_axis_time, break_by=break_by
+        )
 
-    # Create partial sales time
-    create_partial_sales_time(state)
+        # Create partial sales time
+        create_partial_sales_time(s)
 
 
 def change_customer_unit(state):
-    state.customer_heatmap_fig = create_customer_heatmap(
-        state.customer_stats, state.z_axis_customer
-    )
-    create_partial_sales_customer(state)
+    with state as s:
+        s.customer_heatmap_fig = create_customer_heatmap(
+            s.customer_stats, s.z_axis_customer
+        )
+        create_partial_sales_customer(s)
 
 
 def change_product_unit(state):
-    state.product_barchart_fig = create_product_chart(
-        state.product_stats, state.y_axis_product
-    )
-    create_partial_sales_customer(state)
+    with state as s:
+        s.product_barchart_fig = create_product_chart(s.product_stats, s.y_axis_product)
+        create_partial_sales_customer(s)
 
 
 with tgb.Page() as sales_page:
