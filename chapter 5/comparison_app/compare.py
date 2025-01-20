@@ -1,6 +1,5 @@
 import datetime as dt
 
-import pandas as pd
 import taipy as tp
 from configuration.config_comparison import scenario_config
 from taipy import Orchestrator
