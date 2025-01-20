@@ -1,7 +1,3 @@
-import datetime as dt
-
-import pandas as pd
-import taipy as tp
 from algorithms.calculate_price import calculate_price
 from taipy import Config, Frequency, Scope
 
