@@ -20,7 +20,7 @@ from configuration.config import (
 )
 from pages.forecast.forecast import forecast_page
 from pages.sales.partial_sales import (
-    create_partial_sales_customer,
+    # create_partial_sales_customer,
     create_partial_sales_product,
     create_partial_sales_time,
 )
@@ -53,7 +53,7 @@ stylekit = {
 
 def on_init(state):
     create_partial_sales_time(state)
-    create_partial_sales_customer(state)
+    # create_partial_sales_customer(state)
     create_partial_sales_product(state)
 
 
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     # Custom charts
     weekday_fig = create_weekday_chart(weekday_stats, y_axis_time)
     date_fig = create_time_scatter(date_stats, y_axis_time)
-    customer_heatmap_fig = create_customer_heatmap(customer_stats, z_axis_customer)
+    # customer_heatmap_fig  = create_customer_heatmap(customer_stats, z_axis_customer)
     product_barchart_fig = create_product_chart(product_stats, y_axis_product)
 
     # Create app

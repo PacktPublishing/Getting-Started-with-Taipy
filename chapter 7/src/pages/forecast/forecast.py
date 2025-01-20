@@ -138,8 +138,10 @@ with tgb.Page() as forecast_page:
             label="Select product for forecast",
             dropdown=True,
         )
-        tgb.input(value="{scenario_name}", label="Scenario Name")
-        tgb.number("{prediction_number_days}", label="number of days", min=1, max=365)
+        tgb.input(
+            value="{scenario_name}", label="Scenario Name"
+        )  # Not sure why we are not using Scenario Selector here
+        tgb.number("{prediction_number_days}", label="Number of days", min=1, max=365)
         tgb.button(label="Create Scenario", on_action=create_scenario)
         tgb.button(
             label="Update Scenario values",

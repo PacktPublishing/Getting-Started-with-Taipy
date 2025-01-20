@@ -72,6 +72,9 @@ def create_customer_heatmap(df_customer, z_axis):
         - The y-axis represents customer genders.
         - The z-axis aggregates the specified column values.
     """
+    if df_customer.empty or z_axis not in df_customer.columns:
+        # Handle exceptions. Here: empty DataFrame or missing z-axis column
+        return None
     fig = px.density_heatmap(
         df_customer,
         x="generation",

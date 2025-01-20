@@ -7,7 +7,7 @@ from algorithms.create_charts import (
 )
 from algorithms.preprocess import group_by_dimensions_and_facts, group_by_weekday
 from pages.sales.partial_sales import (
-    create_partial_sales_customer,
+    # create_partial_sales_customer,
     create_partial_sales_time,
 )
 
@@ -40,18 +40,18 @@ def change_time_charts(state):
         create_partial_sales_time(s)
 
 
-def change_customer_unit(state):
-    with state as s:
-        s.customer_heatmap_fig = create_customer_heatmap(
-            s.customer_stats, s.z_axis_customer
-        )
-        create_partial_sales_customer(s)
+# def change_customer_unit(state):
+#     with state as s:
+#         # s.customer_heatmap_fig = create_customer_heatmap(
+#         #     s.customer_stats, s.z_axis_customer
+#         # )
+#         create_partial_sales_customer(s)
 
 
 def change_product_unit(state):
     with state as s:
         s.product_barchart_fig = create_product_chart(s.product_stats, s.y_axis_product)
-        create_partial_sales_customer(s)
+        # create_partial_sales_customer(s)
 
 
 with tgb.Page() as sales_page:
@@ -117,10 +117,13 @@ with tgb.Page() as sales_page:
                     value="{z_axis_customer}",
                     lov=["sales", "items"],
                     label="Select units",
-                    on_change=change_customer_unit,
+                    # on_change=change_customer_unit, # This is not useful now because
+                    # the heatmap is bound to the z_axis_customer. See below
                 )
-                tgb.part(
-                    partial="{partial_sales_customer}",
+                tgb.chart(
+                    figure=lambda customer_stats, z_axis_customer: create_customer_heatmap(
+                        customer_stats, z_axis_customer
+                    )
                 )
 
             tgb.table(
