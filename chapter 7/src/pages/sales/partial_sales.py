@@ -9,10 +9,10 @@ def create_partial_sales_time(state):
     state.partial_sales_time.update_content(state, link_part)
 
 
-def create_partial_sales_customer(state):
-    with tgb.Page() as link_part:
-        tgb.chart(figure="{customer_heatmap_fig}")
-    state.partial_sales_customer.update_content(state, link_part)
+# def create_partial_sales_customer(state):
+#     with tgb.Page() as link_part:
+#         tgb.chart(figure="{create_customer_heatmap(customer_stats, z_axis_customer)}")
+#     state.partial_sales_customer.update_content(state, link_part)
 
 
 def create_partial_sales_product(state):

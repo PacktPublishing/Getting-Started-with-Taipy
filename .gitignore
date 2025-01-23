@@ -1,0 +1,4 @@
+
+*.pyc
+/chapter 7/src/.taipy
+/chapter 7/src/data
