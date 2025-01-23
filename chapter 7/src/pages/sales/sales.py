@@ -6,10 +6,6 @@ from algorithms.create_charts import (
     create_weekday_chart,
 )
 from algorithms.preprocess import group_by_dimensions_and_facts, group_by_weekday
-from pages.sales.partial_sales import (
-    # create_partial_sales_customer,
-    create_partial_sales_time,
-)
 
 
 # Callbacks
@@ -35,23 +31,6 @@ def change_time_charts(state):
         s.date_fig = create_time_scatter(
             s.date_stats, y_axis=s.y_axis_time, break_by=break_by
         )
-
-        # Create partial sales time
-        create_partial_sales_time(s)
-
-
-# def change_customer_unit(state):
-#     with state as s:
-#         # s.customer_heatmap_fig = create_customer_heatmap(
-#         #     s.customer_stats, s.z_axis_customer
-#         # )
-#         create_partial_sales_customer(s)
-
-
-def change_product_unit(state):
-    with state as s:
-        s.product_barchart_fig = create_product_chart(s.product_stats, s.y_axis_product)
-        # create_partial_sales_customer(s)
 
 
 with tgb.Page() as sales_page:
@@ -102,9 +81,9 @@ with tgb.Page() as sales_page:
                 label="Select units",
                 on_change=change_time_charts,
             )
-        tgb.part(
-            partial="{partial_sales_time}",
-        )
+            tgb.chart(figure="{weekday_fig}")  # weekday_fig
+
+            tgb.chart(figure="{date_fig}")  # date_fig
 
     with tgb.expandable(
         "Sales by Customer",
@@ -117,8 +96,6 @@ with tgb.Page() as sales_page:
                     value="{z_axis_customer}",
                     lov=["sales", "items"],
                     label="Select units",
-                    # on_change=change_customer_unit, # This is not useful now because
-                    # the heatmap is bound to the z_axis_customer. See below
                 )
                 tgb.chart(
                     figure=lambda customer_stats, z_axis_customer: create_customer_heatmap(
@@ -145,10 +122,11 @@ with tgb.Page() as sales_page:
                     value="{y_axis_product}",
                     lov=["sales", "items"],
                     label="Select units",
-                    on_change=change_product_unit,
                 )
-                tgb.part(
-                    partial="{partial_sales_product}",
+                tgb.chart(
+                    figure=lambda product_stats, y_axis_product: create_product_chart(
+                        product_stats, y_axis_product
+                    )
                 )
 
             tgb.table(
