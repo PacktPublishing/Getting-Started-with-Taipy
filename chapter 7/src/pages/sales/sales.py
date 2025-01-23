@@ -8,7 +8,7 @@ from algorithms.create_charts import (
 from algorithms.preprocess import group_by_dimensions_and_facts, group_by_weekday
 
 
-# Callbacks
+# Callback
 def change_time_charts(state):
     with state as s:
         df_time = s.sales_simplified_node.read()
@@ -81,9 +81,9 @@ with tgb.Page() as sales_page:
                 label="Select units",
                 on_change=change_time_charts,
             )
-            tgb.chart(figure="{weekday_fig}")  # weekday_fig
+            tgb.chart(figure="{weekday_fig}")
 
-            tgb.chart(figure="{date_fig}")  # date_fig
+            tgb.chart(figure="{date_fig}")
 
     with tgb.expandable(
         "Sales by Customer",
