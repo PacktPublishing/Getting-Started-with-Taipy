@@ -1,0 +1,67 @@
+import geopandas as gpd
+import taipy.gui.builder as tgb
+from algorithms.folium_map import FoliumMap, expose_folium_map
+from algorithms.js_charts import JsChartClass, expose_js_chart
+from pages.dynamic_chart import dynamic_chart_page
+from pages.general_info import general_info
+from pages.parishes import parishes_page
+from taipy.gui import Gui
+
+with tgb.Page() as root:
+    tgb.part(page="./iframes/andorra_weather.html", height="55px")
+    tgb.text("# Andorra App", mode="md", class_name="color-primary")
+    tgb.navbar()
+    tgb.content()
+
+    with tgb.expandable("Folium Resources", expanded=False):
+        with tgb.layout("2 1"):
+            tgb.part(
+                page="https://python-visualization.github.io/folium/latest/",
+                height="350px",
+            )
+            tgb.part(page="./iframes/yt_video.html", height="350px")
+
+pages = {
+    "/": root,
+    "general_info": general_info,
+    "parishes": parishes_page,
+    "dynamic_charts": dynamic_chart_page,
+}
+
+if __name__ == "__main__":
+
+    parishes = [
+        "Andorra la Vella",
+        "Canillo",
+        "Encamp",
+        "Escaldes_Engordany",
+        "La Massana",
+        "Ordino",
+        "Sant julia de Loria",
+    ]
+    parish = "Andorra la Vella"
+    parish_page = "https://en.wikipedia.org/wiki/Andorra_la_Vella"
+
+    gdf_accommodations = gpd.read_file("./data/andorra_accommodations.geojson")
+    df_accommodations = gdf_accommodations.drop(columns="geometry")
+    print(df_accommodations.head())
+    gdf_parish_info = gpd.read_file("./data/parish_info.geojson")
+    df_parish_info = gdf_parish_info.drop(columns="geometry")
+
+    show_report = False
+
+    accommodation = "total"
+    accommodation_type = [
+        "total",
+        "hotel",
+        "apartment",
+        "hostel",
+    ]
+
+    Gui.register_content_provider(JsChartClass, expose_js_chart)
+    Gui.register_content_provider(FoliumMap, expose_folium_map)
+
+    gui = Gui(pages=pages)
+    gui.run(
+        title="Andorra App", dark_mode=False, favicon="./img/andorra.png"
+    )  # , use_reloader=True)
