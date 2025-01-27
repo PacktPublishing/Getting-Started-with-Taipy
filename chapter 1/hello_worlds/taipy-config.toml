@@ -1,0 +1,21 @@
+[CORE]
+core_version="3.0"
+
+
+[DATA_NODE.input_planet]
+storage_type = "pickle"
+scope = "SCENARIO:SCOPE"
+
+[DATA_NODE.hello_from_planet]
+storage_type = "pickle"
+scope = "SCENARIO:SCOPE"
+
+[TASK.say_hello]
+inputs = [ "input_planet:SECTION" ]
+outputs = [ "hello_from_planet:SECTION" ]
+function = "say_hello.say_hello:function"
+skippable = "False:bool"
+
+[SCENARIO.hello_scenario]
+additional_data_nodes = [ ]
+tasks = [ "say_hello:SECTION" ]
