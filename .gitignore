@@ -1,0 +1,10 @@
+tests
+tests/*
+.taipy
+.taipy/*
+.vscode
+.vscode/*
+user_data
+user_data/*
+__pycache__
+__pycache__/*
