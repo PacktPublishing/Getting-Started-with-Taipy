@@ -1,0 +1,7 @@
+The average of mpg is: 23.51
+The average of cylinders is: 5.45
+The average of displacement is: 193.43
+The average of weight is: 2970.42
+The average of acceleration is: 15.57
+The average of model year is: 76.01
+The average of origin is: 1.57
