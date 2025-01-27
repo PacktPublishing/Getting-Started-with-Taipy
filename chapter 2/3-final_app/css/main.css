@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+@import './table.css';
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+h2 {
+    color: #00BCD4;
+}
+
