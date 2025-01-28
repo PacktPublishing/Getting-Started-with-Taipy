@@ -44,7 +44,6 @@ if __name__ == "__main__":
 
     gdf_accommodations = gpd.read_file("./data/andorra_accommodations.geojson")
     df_accommodations = gdf_accommodations.drop(columns="geometry")
-    print(df_accommodations.head())
     gdf_parish_info = gpd.read_file("./data/parish_info.geojson")
     df_parish_info = gdf_parish_info.drop(columns="geometry")
 
@@ -63,5 +62,8 @@ if __name__ == "__main__":
 
     gui = Gui(pages=pages)
     gui.run(
-        title="Andorra App", dark_mode=False, favicon="./img/andorra.png"
-    )  # , use_reloader=True)
+        title="Andorra App",
+        dark_mode=False,
+        favicon="./img/andorra.png",
+        use_reloader=True,
+    )
