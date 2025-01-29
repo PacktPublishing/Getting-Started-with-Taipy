@@ -57,6 +57,16 @@ if __name__ == "__main__":
         "hostel",
     ]
 
+    parishes_dict = {
+        "Andorra la Vella": "https://en.wikipedia.org/wiki/Andorra_la_Vella",
+        "Canillo": "https://en.wikipedia.org/wiki/Canillo",
+        "Encamp": "https://en.wikipedia.org/wiki/Encamp",
+        "Escaldes_Engordany": "https://en.wikipedia.org/wiki/Escaldes%E2%80%93Engordany",
+        "La Massana": "https://en.wikipedia.org/wiki/La_Massana",
+        "Ordino": "https://en.wikipedia.org/wiki/Ordino",
+        "Sant julia de Loria": "https://en.wikipedia.org/wiki/Sant_Juli%C3%A0_de_L%C3%B2ria",
+    }
+
     Gui.register_content_provider(JsChartClass, expose_js_chart)
     Gui.register_content_provider(FoliumMap, expose_folium_map)
 
@@ -65,5 +75,5 @@ if __name__ == "__main__":
         title="Andorra App",
         dark_mode=False,
         favicon="./img/andorra.png",
-        use_reloader=True,
+        # use_reloader=True,
     )

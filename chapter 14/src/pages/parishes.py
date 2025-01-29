@@ -3,19 +3,6 @@ from algorithms.create_report import create_pdf_report
 from taipy.gui import invoke_long_callback, notify
 
 
-def get_parish(state):
-    parishes_dict = {
-        "Andorra la Vella": "https://en.wikipedia.org/wiki/Andorra_la_Vella",
-        "Canillo": "https://en.wikipedia.org/wiki/Canillo",
-        "Encamp": "https://en.wikipedia.org/wiki/Encamp",
-        "Escaldes_Engordany": "https://en.wikipedia.org/wiki/Escaldes%E2%80%93Engordany",
-        "La Massana": "https://en.wikipedia.org/wiki/La_Massana",
-        "Ordino": "https://en.wikipedia.org/wiki/Ordino",
-        "Sant julia de Loria": "https://en.wikipedia.org/wiki/Sant_Juli%C3%A0_de_L%C3%B2ria",
-    }
-    state.parish_page = parishes_dict[state.parish]
-
-
 def create_report(state):
     invoke_long_callback(
         state, create_pdf_report, [state.df_parish_info], "./pdfs/report.pdf"
@@ -50,7 +37,6 @@ with tgb.Page() as parishes_page:
                 value="{parish}",
                 lov="{parishes}",
                 dropdown=True,
-                on_change=get_parish,
             )
-            tgb.part(page="{parish_page}", height="350px")
+            tgb.part(page="{parishes_dict.get(parish)}", height="350px")
         tgb.part(content="{FoliumMap(gdf_accommodations)}", height="350px")
