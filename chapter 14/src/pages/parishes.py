@@ -5,7 +5,7 @@ from taipy.gui import invoke_long_callback, notify
 
 def create_report(state):
     invoke_long_callback(
-        state, create_pdf_report, [state.df_parish_info], "./pdfs/report.pdf"
+        state, create_pdf_report, [state.df_parish_info], "./iframes/report.pdf"
     )
 
     state.show_report = True
@@ -29,7 +29,7 @@ with tgb.Page() as parishes_page:
             title="Total accomodation by Parish",
         )
 
-    tgb.part(page="./pdfs/report.pdf", render="{show_report}", height="500px")
+    tgb.part(page="./iframes/report.pdf", render="{show_report}", height="500px")
 
     with tgb.layout("1 1"):
         with tgb.part():

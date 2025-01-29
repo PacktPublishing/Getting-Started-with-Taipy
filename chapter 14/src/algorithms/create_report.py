@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from fpdf import FPDF
 
 
-def create_pdf_report(df, filename="report.pdf"):
+def create_pdf_report(df, filename="./iframes/report.pdf"):
     """Creates a pdf report from the Andorran hotels DataFrame
     using FPDF
     """
@@ -70,11 +70,3 @@ def create_pdf_report(df, filename="report.pdf"):
 
     # Once added to pdf, we remove the chart image
     os.remove(chart_filename)
-
-
-# Function to start the report generation in a new thread
-def start_pdf_generation_in_thread(df, filename="report.pdf"):
-    # Create a thread for the PDF generation
-    thread = threading.Thread(target=create_pdf_report, args=(df, filename))
-    thread.start()
-    return thread
