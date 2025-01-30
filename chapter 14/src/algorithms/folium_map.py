@@ -37,18 +37,15 @@ class FoliumMap:
             "Sant Julia de Loria": "orange",
         }
 
-        # Add markers to the map
-        for _, row in gdf.iterrows():
-            accom_type = row["type"]
-            marker_color = marker_colors.get(
-                accom_type, "gray"
-            )  # Default to gray if type is unknown
-
+        # Add markers to the map - define function to use apply()
+        def add_marker(row):
             folium.Marker(
                 location=[row["latitude"], row["longitude"]],
-                popup=f"<b>{row['name']}</b><br>Type: {accom_type}<br>Street: {row['street']}<br>Website: {row['website']}",
-                icon=folium.Icon(color=marker_color),
+                popup=f"<b>{row['name']}</b><br>Type: {row['type']}<br>Street: {row['street']}<br>Website: {row['website']}",
+                icon=folium.Icon(color=marker_colors.get(row["type"], "gray")),
             ).add_to(marker_cluster)
+
+        gdf.apply(add_marker, axis=1)
 
         return folium_map
 
