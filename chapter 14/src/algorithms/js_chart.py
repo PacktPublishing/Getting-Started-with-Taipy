@@ -49,7 +49,7 @@ class JsChartClass:
             <h1>Total Accommodation by Parish</h1>
             <canvas id="barChart"></canvas>
             <script>
-                // Dynamically injected JSON data from Python
+                // Dynamically injected data from Python
                 const parishData = """
         )
         s.write(str(dict_data))

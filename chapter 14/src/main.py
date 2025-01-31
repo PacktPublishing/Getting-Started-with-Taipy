@@ -1,7 +1,7 @@
 import geopandas as gpd
 import taipy.gui.builder as tgb
 from algorithms.folium_map import FoliumMap, expose_folium_map
-from algorithms.js_charts import JsChartClass, expose_js_chart
+from algorithms.js_chart import JsChartClass, expose_js_chart
 from pages.dynamic_chart import dynamic_chart_page
 from pages.general_info import general_info
 from pages.parishes import parishes_page
@@ -75,5 +75,5 @@ if __name__ == "__main__":
         title="Andorra App",
         dark_mode=False,
         favicon="./img/andorra.png",
-        # use_reloader=True,
+        use_reloader=True,
     )
