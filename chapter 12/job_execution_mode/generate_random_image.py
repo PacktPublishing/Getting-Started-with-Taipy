@@ -5,8 +5,42 @@ import plotly.express as px
 import taipy as tp
 from PIL import Image
 from taipy import Config, Gui
+from taipy.core import Status
 from taipy.core.config import Config
+from taipy.core.notification import (
+    CoreEventConsumerBase,
+    EventEntityType,
+    EventOperation,
+    Notifier,
+)
 from taipy.gui import builder as tgb
+from taipy.gui import notify
+
+
+def notify_color_matrix(state, id_name):
+    color = id_name.split("_")[1]  # example id_name: "create_blue_matrix"
+    if color == "image":
+        notify(state, "s", f"Created Image!")
+
+    else:  # reg, green, blue
+        notify(state, "i", f"Created {color} matrix!")
+
+
+class SpecificCoreConsumer(CoreEventConsumerBase):
+    def __init__(self, gui):
+        self.gui = gui
+        reg_id, queue = Notifier.register(entity_type=EventEntityType.JOB)
+        super().__init__(reg_id, queue)
+
+    def process_event(self, event):
+        if (
+            event.operation == EventOperation.UPDATE
+            and event.entity_type == EventEntityType.JOB
+            and event.attribute_value == Status.COMPLETED
+        ):
+            print(event)
+            id_name = event.metadata.get("task_config_id")
+            self.gui.broadcast_callback(notify_color_matrix, [id_name])
 
 
 def generate_random_matrix(rows, cols):
@@ -54,7 +88,8 @@ def create_imshow_fig_rgb(rgb_image):
 
 
 def generate_image(state):
-    state.scenario_image.submit(wait=True)
+    # state.scenario_image.submit(wait=True)
+    state.scenario_image.submit()
     image_matrix = scenario_image.image_node.read()
 
     state.image = create_imshow_fig_rgb(image_matrix)
@@ -70,7 +105,7 @@ with tgb.Page() as image_page:
 if __name__ == "__main__":
 
     # Uncomment to run in parallel!
-    # Config.configure_job_executions(mode="standalone", max_nb_of_workers=3)
+    Config.configure_job_executions(mode="standalone", max_nb_of_workers=3)
 
     # Data Nodes
     rows_node_config = Config.configure_data_node("rows_node", default_data=600)
@@ -130,6 +165,7 @@ if __name__ == "__main__":
     scenario_image = tp.create_scenario(image_scenario_config)
 
     gui = Gui(page=image_page)
+    SpecificCoreConsumer(gui).start()
     gui.run(
-        use_reloader=True,
+        # use_reloader=True,
     )
