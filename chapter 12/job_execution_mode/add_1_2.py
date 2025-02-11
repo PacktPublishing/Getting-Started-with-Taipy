@@ -2,7 +2,7 @@ import time
 
 import taipy as tp
 from taipy import Config, Gui
-from taipy.core import Status, SubmissionStatus
+from taipy.core import Status
 from taipy.core.notification import (
     CoreEventConsumerBase,
     EventEntityType,
