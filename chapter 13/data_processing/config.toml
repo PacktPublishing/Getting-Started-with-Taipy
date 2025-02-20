@@ -1,0 +1,27 @@
+[TAIPY]
+
+[DATA_NODE.current_date]
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.cache_spark]
+validity_period = "1d0h0m0s:timedelta"
+
+[TASK.download]
+function = "algorithms.download_nyc_tlc.read_s3:function"
+inputs = []
+outputs = [ "current_date:SECTION",]
+skippable = "True:bool"
+
+[TASK.pre_process]
+function = "algorithms.process_nyc_tlc.run_spark_processing:function"
+inputs = [ "current_date:SECTION",]
+outputs = [ "cache_spark:SECTION",]
+skippable = "True:bool"
+
+[SCENARIO.download_files]
+tasks = [ "download:SECTION", "pre_process:SECTION",]
+additional_data_nodes = []
+
+[SCENARIO.download_files.comparators]
+
+[SCENARIO.download_files.sequences]
