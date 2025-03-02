@@ -1,0 +1,21 @@
+warehouse,country,city,latitude,longitude,yearly_cost,yearly_co2_tons
+Warehouse 3,Spain,Logroño,42.4627,-2.4444,850071,441
+Warehouse 10,France,Clermont-Ferrand,45.7772,3.087,901430,568
+Warehouse 11,Germany,Hanover,52.3759,9.732,1003279,531
+Warehouse 18,Italy,Bari,41.1171,16.8719,1022038,528
+Warehouse 1,Portugal,Braga,41.5454,-8.4265,1146105,336
+Warehouse 6,France,Grenoble,45.1885,5.7245,1232975,552
+Warehouse 12,Germany,Dresden,51.0504,13.7373,1483614,401
+Warehouse 19,Italy,Taranto,40.4643,17.247,1592572,480
+Warehouse 13,Germany,Karlsruhe,49.0069,8.4037,1687606,737
+Warehouse 17,Italy,Florence,43.7696,11.2558,1754934,665
+Warehouse 7,France,Caen,49.1829,-0.3707,1839312,731
+Warehouse 15,Germany,Nuremberg,49.4521,11.0767,1868830,382
+Warehouse 9,France,Nantes,47.2184,-1.5536,1971488,469
+Warehouse 20,Poland,Gdańsk,54.352,18.6466,2133166,354
+Warehouse 16,Germany,Magdeburg,52.1317,11.6399,2157918,756
+Warehouse 5,Spain,Toledo,39.8628,-4.0273,2232801,389
+Warehouse 14,Germany,Kiel,54.3233,10.1394,2235314,714
+Warehouse 8,France,Perpignan,42.6973,2.8956,2256649,731
+Warehouse 4,Spain,Salamanca,40.9701,-5.6635,2283738,556
+Warehouse 2,Portugal,Coimbra,40.2033,-8.4103,2342458,476
