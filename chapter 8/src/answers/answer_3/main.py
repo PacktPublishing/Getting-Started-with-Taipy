@@ -1,15 +1,14 @@
 import taipy as tp
 import taipy.gui.builder as tgb
-from taipy.gui import Gui
-
 from configuration.config import warehouse_scenario_config, warehouses_data_node_config
 from create_test_scenarios import create_test_scenarios
 from pages import *
+from taipy.gui import Gui
 
 with tgb.Page() as root_page:
     with tgb.layout("10 1 1"):
         tgb.navbar()
-        tgb.text("# **EuroPipes**", mode="md")
+        tgb.text("# **EuroDuctPipe**", mode="md")
         tgb.image("./img/logo_nbg.png", width="100px")
 
 pages = {
@@ -66,7 +65,7 @@ if __name__ == "__main__":
 
     gui = Gui(pages=pages, css_file="./css/main.css")
     gui.run(
-        title="EuroPipes",
+        title="EuroDuctPipe",
         favicon="./img/favicon.png",
         dark_mode=False,
         stylekit=stylekit,
