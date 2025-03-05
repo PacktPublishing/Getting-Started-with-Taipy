@@ -2,7 +2,7 @@ import datetime as dt
 
 import taipy as tp
 import taipy.gui.builder as tgb
-from configuration.config import warehouse_scenario_config, warehouses_data_node_config
+from configuration.config import warehouse_scenario_config
 from create_test_scenarios import create_test_scenarios
 from pages import *
 from taipy.gui import Gui

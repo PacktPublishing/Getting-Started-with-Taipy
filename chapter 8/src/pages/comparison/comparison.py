@@ -1,5 +1,4 @@
 import taipy.gui.builder as tgb
-
 from pages.scenario.scenario_charts import plot_assignments
 
 scenario_1 = None

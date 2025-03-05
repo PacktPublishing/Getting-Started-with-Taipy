@@ -1,4 +1,3 @@
-import taipy as tp
 import taipy.gui.builder as tgb
 
 with tgb.Page() as admin_page:
