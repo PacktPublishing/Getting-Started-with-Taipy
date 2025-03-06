@@ -90,7 +90,6 @@ def create_imshow_fig_rgb(rgb_image):
 
 
 def generate_image(state):
-    # state.scenario_image.submit(wait=True)
     state.scenario_image.submit()
     image_matrix = scenario_image.image_node.read()
 
