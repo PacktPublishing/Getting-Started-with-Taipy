@@ -91,9 +91,9 @@ def create_imshow_fig_rgb(rgb_image):
 
 def generate_image(state):
     state.scenario_image.submit()
-    image_matrix = scenario_image.image_node.read()
+    # image_matrix = scenario_image.image_node.read()
 
-    state.image = create_imshow_fig_rgb(image_matrix)
+    # state.image = create_imshow_fig_rgb(image_matrix)
 
 
 image = None
