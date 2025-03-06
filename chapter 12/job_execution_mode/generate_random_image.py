@@ -21,6 +21,8 @@ def notify_color_matrix(state, id_name):
     color = id_name.split("_")[1]  # example id_name: "create_blue_matrix"
     if color == "image":
         notify(state, "s", f"Created Image!")
+        image_matrix = scenario_image.image_node.read()
+        state.image = create_imshow_fig_rgb(image_matrix)
 
     else:  # reg, green, blue
         notify(state, "i", f"Created {color} matrix!")
