@@ -82,7 +82,7 @@ def change_settings(state):
             s.co2_per_kilometer,
         )
         s.active_scenario = True
-        notify(s, "s", "Changed Scenario stettings")
+        notify(s, "s", "Changed Scenario settings")
 
 
 def deactivate_scenario(state):
