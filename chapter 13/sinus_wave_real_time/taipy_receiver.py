@@ -5,21 +5,15 @@ import pandas as pd
 import taipy.gui.builder as tgb
 import websockets
 from taipy import Gui
-from taipy.gui import invoke_long_callback
+from taipy.gui import Gui, invoke_long_callback
 
 
-# WebSocket Server
 async def handler(websocket):
-    global buffer_size
-    global sinus_buffer
-    print("Client connected!")
-    current_index = 0
     try:
         async for message in websocket:
             new_value = float(message)
-            sinus_buffer[current_index] = new_value
-            current_index = (current_index + 1) % buffer_size
-            print("update")
+            # Put the new value in the queue for the main thread
+            await data_queue.put(new_value)
 
     except websockets.exceptions.ConnectionClosedError as e:
         print(f"Connection closed with error: {e}")
@@ -43,8 +37,34 @@ def update_sinus(state):
     state.sinus_series = pd.Series(sinus_buffer)
 
 
+def update_real_time(state):
+    global sinus_buffer
+    current_index = 0
+    while True:
+        try:
+            new_value = data_queue.get_nowait()
+            sinus_buffer[current_index] = new_value
+            current_index = (current_index + 1) % buffer_size
+            update_sinus(state)
+            print("update")
+        except asyncio.QueueEmpty:
+            pass  # No new data, continue looping.
+        except Exception as e:
+            print(f"Error in main loop: {e}")
+        import time
+
+        time.sleep(0.001)
+
+
+def update_sinus(state):
+    print("updating")
+    global sinus_buffer
+    state.sinus_series = pd.Series(sinus_buffer)
+
+
 def on_init(state):
-    invoke_long_callback(state, start_listening, [], update_sinus, [], 500)
+    invoke_long_callback(state, start_listening, [])
+    update_real_time(state)
 
 
 with tgb.Page() as sinus_page:
@@ -56,6 +76,7 @@ with tgb.Page() as sinus_page:
 if __name__ == "__main__":
     buffer_size = 150
     sinus_buffer = np.zeros(buffer_size)
+    data_queue = asyncio.Queue()
 
     sinus_series = pd.Series(sinus_buffer)
     gui = Gui(sinus_page)
