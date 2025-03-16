@@ -77,6 +77,12 @@ def process_quake(quake):
     }
 
 
+def get_last_15_minutes(df_earthquakes):
+    df_last_15 = df_earthquakes[df_earthquakes["time"] >= get_latest_minutes(15)]
+    df_last_15 = df_last_15[["time", "mag", "place"]]
+    return df_last_15
+
+
 def update_dataframe(new_data, df, state=None):
     """
     Update the DataFrame with new earthquake records from new_data.
@@ -121,6 +127,9 @@ def update_dataframe(new_data, df, state=None):
 
         if state:  # No state when called from the __main__
             print(f"""inserting...\n{new_rows}""")
+            log_notification(
+                new_rows
+            )  ################################# Add this for Answer_1
             chime.info()  # Sound notification: we have new row
             notify(state, "w", "New earthquakes!")
 
@@ -152,12 +161,36 @@ def on_init(state):
     invoke_long_callback(state, iddle, [], update_earthquake, [], 60_000)
 
 
+def row_class(state, row_number, row):
+    class_name = ""
+    if row["mag"] > 4:
+        class_name += "red-row "
+    if row["time"] > get_latest_minutes(15):
+        class_name += " recent-row"
+    return class_name
+
+
 def update_earthquake(state):
     print("Updating Earthquake")
     earthquakes = get_earthquakes()
 
     state.df_earthquakes = update_dataframe(earthquakes, state.df_earthquakes, state)
     state.last_update = get_now()
+    state.df_last_15 = get_last_15_minutes(
+        state.df_earthquakes
+    )  ############ ADD THIS for Answder 1
+
+    ######## For Answer 1: ##########
+
+
+def log_notification(message, log_file="app_log.txt"):
+    timestamp = get_now()
+    log_entry = f"[{timestamp}] {message}\n"
+    try:
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(log_entry)
+    except Exception as e:
+        print(f"Error writing to log file: {e}")
 
 
 with tgb.Page() as earthquake_page:
@@ -166,9 +199,21 @@ with tgb.Page() as earthquake_page:
         with tgb.part(class_name="card"):
             tgb.text("## Last Update: {last_update}", mode="md")
 
+    with tgb.part(class_name="card"):
+        with tgb.layout("1 3"):
+            tgb.text("### Earthquakes in Last 15 minutes:", mode="md")
+            tgb.table(
+                "{df_last_15}", date_format="yyyy-MM-dd 🕔 HH:mm:ss", rebuild=True
+            )
+
     tgb.chart(figure=lambda df_earthquakes: create_earthquake_map(df_earthquakes))
 
-    tgb.table("{df_earthquakes}", date_format="yyyy-MM-dd 🕔 HH:mm:ss", rebuild=True)
+    tgb.table(
+        "{df_earthquakes}",
+        date_format="yyyy-MM-dd 🕔 HH:mm:ss",
+        rebuild=True,
+        row_class_name=row_class,
+    )
 
 
 if __name__ == "__main__":
@@ -189,9 +234,12 @@ if __name__ == "__main__":
     )
     last_update = get_now()
 
+    df_last_15 = get_last_15_minutes(df_earthquakes)
+    print(df_last_15)
+
     # Start with a bigger DataFrame
     df_earthquakes = update_dataframe(get_earthquakes(limit=50), df_earthquakes)
 
     gui = Gui(page=earthquake_page)
 
-    gui.run(title="Earthquake 🌍 Data", dark_mode=False)  # , use_reloader=True)
+    gui.run(title="Earthquake 🌍 Data", dark_mode=False, use_reloader=True)

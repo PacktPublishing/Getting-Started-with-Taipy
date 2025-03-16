@@ -1,35 +1,47 @@
-import time
+import asyncio
+import json
 from datetime import datetime, timedelta, timezone
 
 import chime  # OPTIONAL
 import pandas as pd
-import requests
 import taipy.gui.builder as tgb
+import websockets
 from charts import create_earthquake_map
 from taipy import Gui
 from taipy.gui import Gui, invoke_long_callback, notify
 
 
-def get_now():
-    now = datetime.now(timezone.utc)
-    formatted_date_time = now.strftime("%d/%m/%Y 🕔 %H:%M:%S")
-    return formatted_date_time
+async def handler(websocket):
+    try:
+        async for message in websocket:
+            await data_queue.put(message)
+
+    except websockets.exceptions.ConnectionClosedError as e:
+        print(f"Connection closed with error: {e}")
+    finally:
+        print("Connection closed!")
 
 
-def get_earthquakes(limit=10):
-    earthquake_url = (
-        f"https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit={limit}"
-    )
-    response = requests.get(earthquake_url)
-    earthquakes = response.json()["features"]
+async def listen():
+    server = await websockets.serve(handler, "localhost", 8765)
+    print("Server is running on ws://localhost:8765")
+    await server.wait_closed()
 
-    return earthquakes
+
+def start_listening():
+    asyncio.run(listen())
 
 
 def get_latest_minutes(minutes):
     now = datetime.now(timezone.utc)
     fiteen_minutes_ago = now - timedelta(minutes=minutes)
     return fiteen_minutes_ago
+
+
+def get_now():
+    now = datetime.now(timezone.utc)
+    formatted_date_time = now.strftime("%d/%m/%Y 🕔 %H:%M:%S")
+    return formatted_date_time
 
 
 def process_quake(quake):
@@ -135,29 +147,31 @@ def update_dataframe(new_data, df, state=None):
     return df
 
 
-def iddle():
-    """
-    An infinite loop
-    """
-
-    while True:
-        time.sleep(100)
-        print("Listening...")
-
-
-def on_init(state):
-    """
-    Start the update loop
-    """
-    invoke_long_callback(state, iddle, [], update_earthquake, [], 60_000)
-
-
-def update_earthquake(state):
+def update_earthquake(state, earthquakes):
     print("Updating Earthquake")
-    earthquakes = get_earthquakes()
 
     state.df_earthquakes = update_dataframe(earthquakes, state.df_earthquakes, state)
     state.last_update = get_now()
+
+
+def update_real_time(state):
+    while True:
+        try:
+            earthquake_data = data_queue.get_nowait()
+            earthquakes = json.loads(earthquake_data.decode("utf-8"))["features"]
+            update_earthquake(state, earthquakes)
+        except asyncio.QueueEmpty:
+            pass  # No new data, continue looping.
+        except Exception as e:
+            print(f"Error in main loop: {e}")
+        import time
+
+        time.sleep(0.001)
+
+
+def on_init(state):
+    invoke_long_callback(state, start_listening, [])
+    update_real_time(state)
 
 
 with tgb.Page() as earthquake_page:
@@ -173,6 +187,7 @@ with tgb.Page() as earthquake_page:
 
 if __name__ == "__main__":
     chime.theme("material")
+    data_queue = asyncio.Queue()
 
     df_earthquakes = pd.DataFrame(
         columns=[
@@ -188,9 +203,6 @@ if __name__ == "__main__":
         ]
     )
     last_update = get_now()
-
-    # Start with a bigger DataFrame
-    df_earthquakes = update_dataframe(get_earthquakes(limit=50), df_earthquakes)
 
     gui = Gui(page=earthquake_page)
 

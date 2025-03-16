@@ -56,12 +56,6 @@ def update_real_time(state):
         time.sleep(0.001)
 
 
-def update_sinus(state):
-    print("updating")
-    global sinus_buffer
-    state.sinus_series = pd.Series(sinus_buffer)
-
-
 def on_init(state):
     invoke_long_callback(state, start_listening, [])
     update_real_time(state)
