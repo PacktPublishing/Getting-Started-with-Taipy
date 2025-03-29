@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Bar Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        canvas {
+            max-width: 80%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Total Accommodation by Parish</h1>
+    <canvas id="barChart"></canvas>
+    <script>
+        // Function to fetch data from a JSON file
+        async function fetchData() {
+            try {
+                const response = await fetch('parish-info.json'); // Path to your JSON file
+                if (!response.ok) throw new Error("Failed to fetch data from the JSON file");
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                return { parish: [], total: [] }; // Fallback empty data
+            }
+        }
+
+        // Function to create and initialize the chart
+        async function createChart() {
+            const data = await fetchData();
+            const ctx = document.getElementById('barChart').getContext('2d');
+
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.parish, // Dynamic parish names
+                    datasets: [{
+                        label: 'Total Accommodations',
+                        data: data.total, // Dynamic totals
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Total Accommodation by Parish' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            return chart;
+        }
+
+        // Function to update the chart dynamically
+        async function updateChart(chart) {
+            const data = await fetchData();
+            chart.data.labels = data.parish;
+            chart.data.datasets[0].data = data.total;
+            chart.update();
+        }
+
+        // Initialize and update the chart periodically
+        (async () => {
+            const chart = await createChart();
+            setInterval(() => updateChart(chart), 10000); // Update every 10 seconds
+        })();
+    </script>
+</body>
+</html>
