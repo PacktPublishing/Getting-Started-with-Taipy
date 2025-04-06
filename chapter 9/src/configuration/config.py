@@ -154,6 +154,10 @@ polygon_data_node_config = Config.configure_data_node(id="polygon")
 ndvi_data_node_config = Config.configure_data_node(id="ndvi")
 reduced_t_ndvi_data_node_config = Config.configure_data_node(id="reduced_t_ndvi")
 
+
+#################################
+### Output Data Nodes         ###
+#################################
 ndvi_tif_as_np_data_node_config = Config.configure_data_node(id="tif_image")
 ndvi_time_series_data_node_config = Config.configure_data_node(
     id="datacube_time_series"
