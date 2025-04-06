@@ -9,7 +9,7 @@ def create_park_info_partial(state):
             category = state.selected_park_dict.get("category")
             area = state.selected_park_dict.get("area_sqm")
             perimeter = state.selected_park_dict.get("perimeter")
-        with tgb.Page() as park_info_partial:
+        with tgb.Page() as park_info:
             tgb.text(
                 f"""## General Information: {state.selected_park}
 
@@ -22,7 +22,7 @@ def create_park_info_partial(state):
             )
 
     elif state.info_display == "map":
-        with tgb.Page() as park_info_partial:
+        with tgb.Page() as park_info:
             tgb.chart(
                 figure=lambda gdf_paris_parks, gdf_paris_parks_centroids, park_id: plot_park_with_centroid(
                     gdf_paris_parks,
@@ -32,9 +32,9 @@ def create_park_info_partial(state):
             )
     else:
         print("wrong partial selection")
-        with tgb.Page() as park_info_partial:
+        with tgb.Page() as park_info:
             tgb.text(
                 "There was a problem generating partial. Contact support.", mode="md"
             )
 
-    state.park_partial.update_content(state, park_info_partial)
+    state.park_partial.update_content(state, park_info)
