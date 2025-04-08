@@ -11,7 +11,7 @@ def plot_park_with_centroid(
         gdf_parks (geopandas.GeoDataFrame): GeoDataFrame containing park polygons.
         gdf_park_centroid (geopandas.GeoDataFrame): GeoDataFrame containing park centroids.
         park_id (str or int): The ID of the park to plot.
-        map_style (str, optional): Mapbox style. Defaults to "open-street-map".
+        map_style (str, optional): Map style. Defaults to "open-street-map".
 
     Returns:
         plotly.graph_objects.Figure: A Plotly map figure, or None if the park is not found.
@@ -27,12 +27,12 @@ def plot_park_with_centroid(
     centroid_point = park_centroid["geometry"].iloc[0]
     center = {"lat": centroid_point.y, "lon": centroid_point.x}
 
-    fig = px.choropleth_mapbox(
+    fig = px.choropleth_map(
         park_polygon,
         geojson=park_polygon.geometry.__geo_interface__,
         locations=park_polygon.index,
         center=center,
-        mapbox_style=map_style,
+        map_style=map_style,
         zoom=15,
         opacity=0.5,
         hover_name="name",
