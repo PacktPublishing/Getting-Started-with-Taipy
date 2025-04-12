@@ -100,7 +100,6 @@ if __name__ == "__main__":
     gui = Gui(pages=pages, css_file="./css/main.css")
 
     park_partial = gui.add_partial(page="")
-    compare_partial = gui.add_partial(page="")
     gui.run(
         title="Paris Parks",
         favicon="./img/tree_icon.png",
