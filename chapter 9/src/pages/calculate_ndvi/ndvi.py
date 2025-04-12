@@ -21,7 +21,7 @@ def update_selectors(state):
 def change_scenario(state):
     print("changing Scenario")
     with state as s:
-        s.selected_np_tif = s.selected_scenario.tif_image.read()
+        s.selected_np_tiff = s.selected_scenario.tiff_image.read()
         s.selected_df_time_series = s.selected_scenario.ndvi_time_series.read()
         s.selected_scenario_name = s.selected_scenario.name
         update_selectors(state)
@@ -116,7 +116,7 @@ with tgb.Page() as ndvi_page:
             tgb.text("### NDVI values", mode="md")
             with tgb.layout("1 1 1"):
                 tgb.metric(
-                    value="{float(selected_np_tif.max())}",
+                    value="{float(selected_np_tiff.max())}",
                     type="linear",
                     min=-1,
                     max=1,
@@ -130,7 +130,7 @@ with tgb.Page() as ndvi_page:
                     bar_color="#12b049",
                 )
                 tgb.metric(
-                    value="{float(selected_np_tif.mean())}",
+                    value="{float(selected_np_tiff.mean())}",
                     type="linear",
                     min=-1,
                     max=1,
@@ -144,7 +144,7 @@ with tgb.Page() as ndvi_page:
                     bar_color="#12b049",
                 )
                 tgb.metric(
-                    value="{np.std(selected_np_tif)}",
+                    value="{np.std(selected_np_tiff)}",
                     type=None,
                     title="Standard Deviation",
                 )
@@ -152,13 +152,13 @@ with tgb.Page() as ndvi_page:
             with tgb.layout("1 1"):
 
                 tgb.chart(
-                    figure=lambda selected_np_tif, selected_scenario_name: plot_ndvi(
-                        selected_np_tif, selected_scenario_name
+                    figure=lambda selected_np_tiff, selected_scenario_name: plot_ndvi(
+                        selected_np_tiff, selected_scenario_name
                     )
                 )
                 tgb.chart(
-                    figure=lambda selected_np_tif, selected_scenario_name: plot_box(
-                        selected_np_tif, selected_scenario_name
+                    figure=lambda selected_np_tiff, selected_scenario_name: plot_box(
+                        selected_np_tiff, selected_scenario_name
                     )
                 )
             tgb.chart(

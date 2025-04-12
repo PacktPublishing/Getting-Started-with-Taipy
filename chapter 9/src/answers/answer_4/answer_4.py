@@ -10,10 +10,10 @@ ndvi_organic = None
 def get_scenario_stats(scenarios):
     names = [scenario.name for scenario in scenarios]
     max_ndvi = [
-        round(float(scenario.tif_image.read().max()), 2) for scenario in scenarios
+        round(float(scenario.tiff_image.read().max()), 2) for scenario in scenarios
     ]
     avg_ndvi = [
-        round(float(scenario.tif_image.read().mean()), 2) for scenario in scenarios
+        round(float(scenario.tiff_image.read().mean()), 2) for scenario in scenarios
     ]
     return names, max_ndvi, avg_ndvi
 

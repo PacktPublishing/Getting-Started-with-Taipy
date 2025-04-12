@@ -1,6 +1,9 @@
 import os
 
 import openeo
+import pandas as pd
+import rasterio
+from scipy.signal import savgol_filter
 
 
 def get_polygon(gdf_paris_parks, id):
@@ -102,7 +105,7 @@ def get_ndvi(polygon, year):
     Args:
     polygon (dict): The spatial extent of the park in geo-interface format.
     park_name (str): The name of the park (not used in processing but for reference).
-    year (int or str): The year for which NDVI data is required.
+    year (int): The year for which NDVI data is required.
 
     Returns:
     openeo.DataCube: The NDVI data cube for the given year and location.
@@ -146,3 +149,74 @@ def get_time_series(ndvi, polygon):
     """
     timeseries = ndvi.aggregate_spatial(geometries=polygon, reducer="median")
     return timeseries
+
+
+def download_ndvi(ndvi, park_name, year):
+    """
+    Downloads an NDVI data cube as TIFF and returns the image data.
+
+    Args:
+        ndvi: NDVI data cube to be downloaded (np Array)
+        park_name (str): Name of the park/location to include in filename
+        year (int): Year of the data to include in filename
+
+    Returns:
+        numpy.ndarray: 2D array containing the NDVI image data
+    """
+    image_name = f"./data/tiff_images/{park_name} - {year}.tiff"
+
+    # Download if file doesn't exist
+    if not os.path.exists(image_name):
+        print(f"Downloading {image_name}...")
+        ndvi.download(image_name)
+        print("Download complete")
+
+    # Load and return the TIFF data
+    with rasterio.open(image_name) as src:
+        return src.read(1)  # Return first band as numpy array
+
+
+def download_time_series(ndvi_timeseries, park_name, year):
+    """
+    Downloads NDVI time series (if needed) and returns processed DataFrame.
+
+    Args:
+        ndvi_timeseries (openeo.DataCube): The time series data to download
+        park_name (str): Name of the park/location for filename
+        year (int): Year of the data for filename
+
+    Returns:
+        pd.DataFrame: Processed time series with:
+                     - DateTime index
+                     - 'ndvi' column
+                     - Sorted chronologically
+                     - Time-interpolated missing values
+    """
+    filename = f"./data/time_series/{park_name} - {year}.csv"
+
+    # Download if needed
+    if not os.path.exists(filename):
+        print(f"Downloading {filename}...")
+        job = ndvi_timeseries.execute_batch(
+            out_format="CSV", title=f"{park_name} - {year}"
+        )
+        job.get_results().download_file(
+            filename
+        )  # Raw file download,- different from Data Node's CSV
+        print("Download complete")
+
+    # Load and process
+    df = pd.read_csv(filename, index_col=0)
+    df.index = pd.to_datetime(df.index)
+    df = df.rename(columns={"band_unnamed": "ndvi"})
+    df = df.drop(columns="feature_index", errors="ignore")
+    df.sort_index(inplace=True)
+    df = df.interpolate(method="time")
+
+    # Apply Savitzky-Golay Smoothing
+    window_length = 5
+    polyorder = 2
+    df["ndvi"] = savgol_filter(df["ndvi"], window_length, polyorder)
+    df["date"] = df.index
+
+    return df

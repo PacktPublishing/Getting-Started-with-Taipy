@@ -10,10 +10,10 @@ def rank_scenarios(state):
 
     scenario_name_list = [scenario.name for scenario in all_scenarios]
     max_ndvi_list = [
-        round(float(scenario.tif_image.read().max()), 2) for scenario in all_scenarios
+        round(float(scenario.tiff_image.read().max()), 2) for scenario in all_scenarios
     ]
     avg_ndvi_list = [
-        round(float(scenario.tif_image.read().mean()), 2) for scenario in all_scenarios
+        round(float(scenario.tiffimage.read().mean()), 2) for scenario in all_scenarios
     ]
 
     df_summary = pd.DataFrame(

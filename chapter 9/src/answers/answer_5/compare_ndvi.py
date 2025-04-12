@@ -17,7 +17,7 @@ def select_scenarios(state):
                     scenario.name
                     for scenario in scenarios_to_compare
                     if scenario.ndvi_time_series.is_valid
-                    and scenario.tif_image.is_valid
+                    and scenario.tiff_image.is_valid
                 ]
                 s.selected_time_series_list = [
                     scenario.ndvi_time_series.read()
@@ -25,9 +25,9 @@ def select_scenarios(state):
                     if scenario.ndvi_time_series.is_valid
                 ]
                 s.selected_arrays = [
-                    scenario.tif_image.read()
+                    scenario.tiff_image.read()
                     for scenario in scenarios_to_compare
-                    if scenario.tif_image.is_valid
+                    if scenario.tiff_image.is_valid
                 ]
             create_comp_partial(state)
 

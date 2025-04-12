@@ -30,7 +30,7 @@ default_data = "2024:int"
 
 [DATA_NODE.reduced_t_ndvi]
 
-[DATA_NODE.tif_image]
+[DATA_NODE.tiff_image]
 
 [DATA_NODE.datacube_time_series]
 
@@ -56,9 +56,9 @@ outputs = [ "reduced_t_ndvi:SECTION",]
 skippable = "False:bool"
 
 [TASK.download_ndvi]
-function = "configuration.config.download_ndvi:function"
+function = "algorithms.algorithms.download_ndvi:function"
 inputs = [ "reduced_t_ndvi:SECTION", "park_name:SECTION", "selected_year:SECTION",]
-outputs = [ "tif_image:SECTION",]
+outputs = [ "tiff_image:SECTION",]
 skippable = "False:bool"
 
 [TASK.get_time_series]
@@ -68,7 +68,7 @@ outputs = [ "datacube_time_series:SECTION",]
 skippable = "False:bool"
 
 [TASK.download_time_series]
-function = "configuration.config.download_time_series:function"
+function = "algorithms.algorithms.download_time_series:function"
 inputs = [ "datacube_time_series:SECTION", "park_name:SECTION", "selected_year:SECTION",]
 outputs = [ "ndvi_time_series:SECTION",]
 skippable = "False:bool"

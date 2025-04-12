@@ -55,7 +55,7 @@ if __name__ == "__main__":
     # Scenario Objects
     selected_scenario = create_test_scenarios(ndvi_scenario_config)
 
-    selected_np_tif = selected_scenario.tif_image.read()
+    selected_np_tiff = selected_scenario.tiff_image.read()
     selected_df_time_series = selected_scenario.ndvi_time_series.read()
 
     selected_scenario_name = selected_scenario.name
