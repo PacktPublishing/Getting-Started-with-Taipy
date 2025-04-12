@@ -13,9 +13,8 @@ show_scenario_selectors = True
 
 def update_selectors(state):
     with state as s:
-        park_name = f"{s.selected_scenario.park_id.read()} - {s.selected_scenario.park_name.read()}"
         s.selected_year = s.selected_scenario.selected_year.read()
-        s.selected_park_ndvi = park_name
+        s.selected_park_ndvi = s.selected_scenario.name
 
 
 def change_scenario(state):
@@ -57,7 +56,7 @@ def create_scenario(state):
     with state as s:
         id = int(s.selected_park_ndvi.split("-")[0].strip())
         park_name = s.selected_park_ndvi.split("-", 1)[1].strip()
-        scenario_name = f"{park_name} - {s.selected_year}"
+        scenario_name = f"{s.selected_park_ndvi} - {s.selected_year}"
 
         existing_scenarios = [scenario.name for scenario in tp.get_scenarios()]
         if scenario_name in existing_scenarios:
@@ -73,7 +72,7 @@ def create_scenario(state):
 
             new_scenario.tags = [f"year: {s.selected_year}", f"park: {park_name}"]
             invoke_long_callback(
-                state, submit_scenario, [new_scenario], update_status, [], 2000
+                s, submit_scenario, [new_scenario], update_status, [], 2000
             )
 
 
