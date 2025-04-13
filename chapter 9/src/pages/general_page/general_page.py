@@ -5,11 +5,11 @@ from pages.general_page.park_partial import create_park_info_partial
 def change_selection(state):
     with state as s:
         if s.selected_park:  # Avoid doing anything if empty string
+            print("Selected: ", s.selected_park)
             park = s.selected_park
-            s.park_id = int(park.split("-")[0])
 
             df_parks_cp = s.df_paris_parks.copy()
-            s.selected_park_row = df_parks_cp[df_parks_cp["id"] == s.park_id]
+            s.selected_park_row = df_parks_cp[df_parks_cp["id_name"] == park]
             s.selected_park_dict = s.selected_park_row.to_dict(orient="records")[0]
             create_park_info_partial(s)
 

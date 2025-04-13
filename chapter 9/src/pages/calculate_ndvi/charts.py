@@ -2,15 +2,15 @@ import pandas as pd
 import plotly.express as px
 
 
-def plot_box(ndvi_array, park_name):
+def plot_box(ndvi_array, id_name):
     """
     Creates violin plot of the NDVI median yearly array.
 
     Args:
     ndvi_array : numpy.ndarray
         Array wuth NDVI values
-    park_name : str
-        Name of the park
+    id_name : str
+        Name and id of the park
 
     Returns:
     violin plot plotly figure
@@ -19,7 +19,7 @@ def plot_box(ndvi_array, park_name):
 
     fig = px.violin(
         y=flattened_data,
-        title=f"NDVI distribution for {park_name}",
+        title=f"NDVI distribution for {id_name}",
         labels={"y": "NDVI"},
         color_discrete_sequence=["#12b049"],
     )

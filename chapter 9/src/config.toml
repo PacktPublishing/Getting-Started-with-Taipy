@@ -20,9 +20,7 @@ read_fct_args = [ "./data/paris_parks.gpkg", "parks_centroids",]
 [DATA_NODE.selected_year]
 default_data = "2024:int"
 
-[DATA_NODE.park_id]
-
-[DATA_NODE.park_name]
+[DATA_NODE.id_name]
 
 [DATA_NODE.polygon]
 
@@ -39,7 +37,7 @@ storage_type = "csv"
 
 [TASK.get_polygon]
 function = "algorithms.algorithms.get_polygon:function"
-inputs = [ "gdf_paris_parks:SECTION", "park_id:SECTION",]
+inputs = [ "gdf_paris_parks:SECTION", "id_name:SECTION",]
 outputs = [ "polygon:SECTION",]
 skippable = "False:bool"
 
@@ -57,7 +55,7 @@ skippable = "False:bool"
 
 [TASK.download_ndvi]
 function = "algorithms.algorithms.download_ndvi:function"
-inputs = [ "reduced_t_ndvi:SECTION", "park_name:SECTION", "selected_year:SECTION",]
+inputs = [ "reduced_t_ndvi:SECTION", "id_name:SECTION", "selected_year:SECTION",]
 outputs = [ "tiff_image:SECTION",]
 skippable = "False:bool"
 
@@ -69,7 +67,7 @@ skippable = "False:bool"
 
 [TASK.download_time_series]
 function = "algorithms.algorithms.download_time_series:function"
-inputs = [ "datacube_time_series:SECTION", "park_name:SECTION", "selected_year:SECTION",]
+inputs = [ "datacube_time_series:SECTION", "id_name:SECTION", "selected_year:SECTION",]
 outputs = [ "ndvi_time_series:SECTION",]
 skippable = "False:bool"
 

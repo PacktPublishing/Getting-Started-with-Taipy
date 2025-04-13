@@ -6,7 +6,7 @@ import rasterio
 from scipy.signal import savgol_filter
 
 
-def get_polygon(gdf_paris_parks, id):
+def get_polygon(gdf_paris_parks, id_name):
     """
     Retrieves the geometry (polygon or multipolygon) of a specific park
     identified by its `id` from the given GeoDataFrame.
@@ -18,7 +18,9 @@ def get_polygon(gdf_paris_parks, id):
     Returns:
         dict: The polygon
     """
-    polygon = gdf_paris_parks[gdf_paris_parks["id"] == id].geometry.__geo_interface__
+    polygon = gdf_paris_parks[
+        gdf_paris_parks["id_name"] == id_name
+    ].geometry.__geo_interface__
     return polygon
 
 
@@ -151,7 +153,7 @@ def get_time_series(ndvi, polygon):
     return timeseries
 
 
-def download_ndvi(ndvi, park_name, year):
+def download_ndvi(ndvi, park_id_name, year):
     """
     Downloads an NDVI data cube as TIFF and returns the image data.
 
@@ -163,7 +165,7 @@ def download_ndvi(ndvi, park_name, year):
     Returns:
         numpy.ndarray: 2D array containing the NDVI image data
     """
-    image_name = f"./data/tiff_images/{park_name} - {year}.tiff"
+    image_name = f"./data/tiff_images/{park_id_name} - {year}.tiff"
 
     # Download if file doesn't exist
     if not os.path.exists(image_name):
@@ -176,7 +178,7 @@ def download_ndvi(ndvi, park_name, year):
         return src.read(1)  # Return first band as numpy array
 
 
-def download_time_series(ndvi_timeseries, park_name, year):
+def download_time_series(ndvi_timeseries, park_id_name, year):
     """
     Downloads NDVI time series (if needed) and returns processed DataFrame.
 
@@ -192,13 +194,13 @@ def download_time_series(ndvi_timeseries, park_name, year):
                      - Sorted chronologically
                      - Time-interpolated missing values
     """
-    filename = f"./data/time_series/{park_name} - {year}.csv"
+    filename = f"./data/time_series/{park_id_name} - {year}.csv"
 
     # Download if needed
     if not os.path.exists(filename):
         print(f"Downloading {filename}...")
         job = ndvi_timeseries.execute_batch(
-            out_format="CSV", title=f"{park_name} - {year}"
+            out_format="CSV", title=f"{park_id_name} - {year}"
         )
         job.get_results().download_file(
             filename

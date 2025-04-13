@@ -24,10 +24,10 @@ def create_park_info_partial(state):
     elif state.info_display == "map":
         with tgb.Page() as park_info:
             tgb.chart(
-                figure=lambda gdf_paris_parks, gdf_paris_parks_centroids, park_id: plot_park_with_centroid(
+                figure=lambda gdf_paris_parks, gdf_paris_parks_centroids, selected_park: plot_park_with_centroid(
                     gdf_paris_parks,
                     gdf_paris_parks_centroids,
-                    park_id,
+                    selected_park if selected_park else None,
                 )
             )
     else:

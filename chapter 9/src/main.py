@@ -70,24 +70,19 @@ if __name__ == "__main__":
     df_categories = df_paris_parks.groupby("category").size().reset_index(name="count")
 
     # Values for selectors
-    park_ids = df_paris_parks[df_paris_parks["is_over_1_000_sqm"] == 1]["id"].to_list()
-    park_names = df_paris_parks[df_paris_parks["is_over_1_000_sqm"] == 1][
-        "name"
-    ].to_list()
     id_name_list = df_paris_parks[df_paris_parks["is_over_1_000_sqm"] == 1][
         "id_name"
     ].to_list()
 
     selected_park = id_name_list[0]
-    park_id = park_ids[0]
     info_display = "general_info"
 
-    selected_park_row = df_paris_parks[df_paris_parks["id"] == park_id]
+    selected_park_row = df_paris_parks[df_paris_parks["id_name"] == selected_park]
     selected_park_dict = selected_park_row.to_dict(orient="records")[0]
 
     # Values for selectors ndvi scenario
     selected_year = selected_scenario.selected_year.read()
-    selected_park_ndvi = id_name_list[0]
+    selected_park_ndvi = selected_scenario.id_name.read()
 
     # Values for comparison app
     select_park_name_comp = None

@@ -55,9 +55,7 @@ gdf_paris_parks_centroids_node_config = Config.configure_generic_data_node(
 selected_year_data_node_config = Config.configure_data_node(
     id="selected_year", default_data=2024
 )
-park_id_data_node_config = Config.configure_data_node(id="park_id")
-
-park_name_data_node_config = Config.configure_data_node(id="park_name")
+id_name_data_node_config = Config.configure_data_node(id="id_name")
 
 #################################
 ### Intermediate Data Nodes   ###
@@ -86,7 +84,7 @@ ndvi_time_series_tabular_data_node_config = Config.configure_csv_data_node(
 get_polygon_task_config = Config.configure_task(
     id="get_polygon",
     function=get_polygon,
-    input=[gdf_paris_parks_node_config, park_id_data_node_config],
+    input=[gdf_paris_parks_node_config, id_name_data_node_config],
     output=polygon_data_node_config,
 )
 
@@ -109,7 +107,7 @@ download_ndvi_task_config = Config.configure_task(
     function=download_ndvi,
     input=[
         reduced_t_ndvi_data_node_config,
-        park_name_data_node_config,
+        id_name_data_node_config,
         selected_year_data_node_config,
     ],
     output=ndvi_tiff_as_np_data_node_config,
@@ -127,7 +125,7 @@ download_time_series_task_config = Config.configure_task(
     function=download_time_series,
     input=[
         ndvi_time_series_data_node_config,
-        park_name_data_node_config,
+        id_name_data_node_config,
         selected_year_data_node_config,
     ],
     output=ndvi_time_series_tabular_data_node_config,

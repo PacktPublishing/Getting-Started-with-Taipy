@@ -14,17 +14,24 @@ show_scenario_selectors = True
 def update_selectors(state):
     with state as s:
         s.selected_year = s.selected_scenario.selected_year.read()
-        s.selected_park_ndvi = s.selected_scenario.name
+        s.selected_park_ndvi = s.selected_scenario.id_name.read()
 
 
 def change_scenario(state):
-    print("changing Scenario")
     with state as s:
-        s.selected_np_tiff = s.selected_scenario.tiff_image.read()
-        s.selected_df_time_series = s.selected_scenario.ndvi_time_series.read()
-        s.selected_scenario_name = s.selected_scenario.name
-        update_selectors(state)
-        notify(s, "i", "Changed Scenario")
+        if (
+            s.selected_scenario.tiff_image.is_valid
+            and s.selected_scenario.ndvi_time_series.is_valid
+        ):
+            print("changing Scenario")
+
+            s.selected_np_tiff = s.selected_scenario.tiff_image.read()
+            s.selected_df_time_series = s.selected_scenario.ndvi_time_series.read()
+            s.selected_scenario_name = s.selected_scenario.name
+            update_selectors(state)
+            notify(s, "i", "Changed Scenario")
+        else:
+            notify(s, "w", "Scenario is incomplete")
 
 
 def submit_scenario(scenario):
@@ -54,8 +61,7 @@ def update_status(state, status, scenario):
 
 def create_scenario(state):
     with state as s:
-        id = int(s.selected_park_ndvi.split("-")[0].strip())
-        park_name = s.selected_park_ndvi.split("-", 1)[1].strip()
+        id_name = s.selected_park_ndvi
         scenario_name = f"{s.selected_park_ndvi} - {s.selected_year}"
 
         existing_scenarios = [scenario.name for scenario in tp.get_scenarios()]
@@ -66,11 +72,10 @@ def create_scenario(state):
             s.show_scenario_selectors = False
             new_scenario = tp.create_scenario(config=ndvi_scenario_config)
             new_scenario.selected_year.write(s.selected_year)
-            new_scenario.park_name.write(park_name)
-            new_scenario.park_id.write(id)
+            new_scenario.id_name.write(id_name)
             new_scenario.name = scenario_name
 
-            new_scenario.tags = [f"year: {s.selected_year}", f"park: {park_name}"]
+            new_scenario.tags = [f"year: {s.selected_year}", f"park: {id_name}"]
             invoke_long_callback(
                 s, submit_scenario, [new_scenario], update_status, [], 2000
             )
@@ -83,7 +88,9 @@ with tgb.Page() as ndvi_page:
     with tgb.layout("1 4", columns__mobile="1"):
         with tgb.part("sidebar"):
             tgb.scenario_selector(
-                "{selected_scenario}", on_change=change_scenario, show_add_button=False
+                "{selected_scenario}",
+                on_change=change_scenario,
+                show_add_button=False,
             )
 
         with tgb.part("main content"):

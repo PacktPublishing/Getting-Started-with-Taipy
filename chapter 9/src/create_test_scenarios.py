@@ -1,30 +1,26 @@
+import pandas as pd
 import taipy as tp
 
 
-def create_test_scenarios(scenario):
-    # First Scenario
-    test_scenario1 = tp.create_scenario(config=scenario)
-    test_scenario1.selected_year.write(2024)
-    test_scenario1.park_name.write("Bois De Vincennes")
-    test_scenario1.park_id.write(1679)  # Bois de Vincennes id
-    test_scenario1.name = "Bois De Vincennes - 2024"
-    test_scenario1.tags = ["year: 2024", "park: Bois De Vincennes", "non-organic"]
-    test_scenario1.submit()
-    # Second Scenario
-    test_scenario2 = tp.create_scenario(scenario)
-    test_scenario2.selected_year.write(2023)
-    test_scenario2.park_name.write("Bois De Vincennes")
-    test_scenario2.park_id.write(1679)  # Bois de Vincennes id
-    test_scenario2.name = "Bois De Vincennes - 2023"
-    test_scenario2.tags = ["year: 2023", "park: Bois De Vincennes", "organic"]
-    test_scenario2.submit()
+def create_and_submit_scenario(id_name, year, scenario_config, df_parks):
+    park_name = df_parks[df_parks["id_name"] == id_name]["id_name"].iloc[0]
 
-    # Third Scenario
-    test_scenario3 = tp.create_scenario(scenario)
-    test_scenario3.selected_year.write(2022)
-    test_scenario3.park_name.write("Bois De Vincennes")
-    test_scenario3.park_id.write(1679)  # Bois de Vincennes id
-    test_scenario3.name = "Bois De Vincennes - 2022"
-    test_scenario3.tags = ["year: 2022", "park: Bois De Vincennes", "organic"]
-    test_scenario3.submit()
-    return test_scenario1
+    scenario_name = f"{id_name} - {year}"
+
+    scenario = tp.create_scenario(config=scenario_config, name=scenario_name)
+    scenario.selected_year.write(year)
+    scenario.id_name.write(park_name)
+    scenario.tags = [f"year: {year}", f"park: {id_name}"]
+    scenario.submit()
+    return scenario
+
+
+def create_test_scenarios(scenario_config, parks_file="./data/paris_parks.csv"):
+    df_parks = pd.read_csv(parks_file)
+    # Bois de Vincennes: 1679
+    vincennes = "1679 - Bois De Vincennes"
+    for year in range(2023, 2024):
+        create_and_submit_scenario(vincennes, year, scenario_config, df_parks)
+
+    # return a specific Scenario for selection
+    return create_and_submit_scenario(vincennes, 2024, scenario_config, df_parks)
