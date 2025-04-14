@@ -23,13 +23,13 @@ def change_scenario(state):
             s.selected_scenario.tiff_image.is_valid
             and s.selected_scenario.ndvi_time_series.is_valid
         ):
-            print("changing Scenario")
+            print(f"changing Scenario: {s.selected_scenario.name}")
 
             s.selected_np_tiff = s.selected_scenario.tiff_image.read()
             s.selected_df_time_series = s.selected_scenario.ndvi_time_series.read()
             s.selected_scenario_name = s.selected_scenario.name
             update_selectors(state)
-            notify(s, "i", "Changed Scenario")
+            notify(s, "i", f"Changed Scenario - {s.selected_scenario.name}")
         else:
             notify(s, "w", "Scenario is incomplete")
 
@@ -61,8 +61,8 @@ def update_status(state, status, scenario):
 
 def create_scenario(state):
     with state as s:
-        id_name = s.selected_park_ndvi
-        scenario_name = f"{s.selected_park_ndvi} - {s.selected_year}"
+        id_name = s.selected_park_ndvi.name
+        scenario_name = f"{id_name} - {s.selected_year}"
 
         existing_scenarios = [scenario.name for scenario in tp.get_scenarios()]
         if scenario_name in existing_scenarios:
