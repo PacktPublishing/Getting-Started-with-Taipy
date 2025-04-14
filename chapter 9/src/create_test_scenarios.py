@@ -15,7 +15,7 @@ def create_and_submit_scenario(id_name, year, scenario_config):
 def create_test_scenarios(scenario_config, parks_file="./data/paris_parks.csv"):
     # Bois de Vincennes: 1679
     vincennes = "1679 - Bois De Vincennes"
-    for year in range(2023, 2024):
+    for year in range(2020, 2024):
         create_and_submit_scenario(vincennes, year, scenario_config)
 
     # return a specific Scenario for selection
