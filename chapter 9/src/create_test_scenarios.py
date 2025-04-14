@@ -3,13 +3,11 @@ import taipy as tp
 
 
 def create_and_submit_scenario(id_name, year, scenario_config, df_parks):
-    park_name = df_parks[df_parks["id_name"] == id_name]["id_name"].iloc[0]
-
     scenario_name = f"{id_name} - {year}"
 
     scenario = tp.create_scenario(config=scenario_config, name=scenario_name)
     scenario.selected_year.write(year)
-    scenario.id_name.write(park_name)
+    scenario.id_name.write(id_name)
     scenario.tags = [f"year: {year}", f"park: {id_name}"]
     scenario.submit()
     return scenario
