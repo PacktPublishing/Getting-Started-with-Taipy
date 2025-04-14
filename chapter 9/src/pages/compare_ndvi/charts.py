@@ -1,19 +1,19 @@
 import pandas as pd
 import plotly.express as px
-from scipy.signal import savgol_filter
 
 
 def plot_ndvi_multi_timeseries(df_list, trace_names, title):
     """
-    Overlay multiple NDVI time series (different years) on the same x-axis (month-day) to compare trends.
+    Overlay multiple NDVI time series (different years) on the same x-axis
+    (month-day) to compare trends.
 
     Args:
         df_list (List[pd.DataFrame]): List of DataFrames (one per year) with NDVI data.
-        trace_names (List[str]): Corresponding names for each DataFrame (e.g., years as strings).
-        title (str): Plot title.
+        trace_names (List[str]): Scenario names.
+        title (str): Plot title (park name).
 
     Returns:
-        plotly.graph_objects.Figure: Overlaid line chart.
+        plotly.Figure: Overlaid line chart.
     """
     if len(df_list) != len(trace_names):
         raise ValueError("df_list and trace_names must have the same length")
@@ -22,7 +22,6 @@ def plot_ndvi_multi_timeseries(df_list, trace_names, title):
     for df, name in zip(df_list, trace_names):
         df = df.copy()
 
-        # Convert date column to datetime format
         df["date"] = pd.to_datetime(df["date"])
 
         # We use 2020 as an arbitrary year for comparison - chart won't show year
@@ -32,13 +31,11 @@ def plot_ndvi_multi_timeseries(df_list, trace_names, title):
         # Add trace name for identification
         df["trace_name"] = name
 
-        # Append to combined list
         combined_dfs.append(df)
 
     # Concatenate all the dataframes into one
     combined_df = pd.concat(combined_dfs)
 
-    # Plot using plotly express
     fig = px.line(
         combined_df,
         x="date_std",
