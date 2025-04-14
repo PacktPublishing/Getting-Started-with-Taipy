@@ -61,7 +61,7 @@ def update_status(state, status, scenario):
 
 def create_scenario(state):
     with state as s:
-        id_name = s.selected_park_ndvi.name
+        id_name = s.selected_park_ndvi
         scenario_name = f"{id_name} - {s.selected_year}"
 
         existing_scenarios = [scenario.name for scenario in tp.get_scenarios()]
