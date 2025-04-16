@@ -1,5 +1,6 @@
 import taipy as tp
 import taipy.gui.builder as tgb
+
 from answers.answer_5.answer_5 import create_comp_partial
 from pages.compare_ndvi.charts import plot_ndvi_multi_timeseries
 
@@ -29,6 +30,11 @@ def select_scenarios(state):
                     for scenario in scenarios_to_compare
                     if scenario.tiff_image.is_valid
                 ]
+                s.figure_ndvi = plot_ndvi_multi_timeseries(
+                    s.selected_time_series_list,
+                    s.scenario_comp_names,
+                    s.select_park_name_comp,
+                )
             create_comp_partial(state)
 
 
