@@ -1,14 +1,14 @@
 import geopandas as gpd
+from taipy import Config, Scope
+
 from algorithms.algorithms import (
+    download_ndvi,
+    download_time_series,
     get_ndvi,
     get_polygon,
     get_time_series,
     reduce_by_time,
-    download_ndvi,
-    download_time_series,
 )
-
-from taipy import Config, Scope
 
 
 def read_gpkg(file, layer):

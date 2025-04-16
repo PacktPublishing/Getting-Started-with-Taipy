@@ -1,4 +1,5 @@
 import taipy.gui.builder as tgb
+
 from pages.general_page.park_partial import create_park_info_partial
 
 

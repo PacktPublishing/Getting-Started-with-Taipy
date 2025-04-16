@@ -1,9 +1,10 @@
 import numpy as np
 import taipy as tp
 import taipy.gui.builder as tgb
+from taipy.gui import invoke_long_callback, notify
+
 from configuration.config import ndvi_scenario_config
 from pages.calculate_ndvi.charts import plot_box, plot_ndvi, plot_ndvi_timeseries
-from taipy.gui import invoke_long_callback, notify
 from update_callbacks import update_compare_selector
 
 # Display variable
