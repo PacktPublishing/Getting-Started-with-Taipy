@@ -16,7 +16,9 @@ def plot_ndvi_multi_timeseries(df_list, trace_names, title):
         plotly.Figure: Overlaid line chart.
     """
     if len(df_list) != len(trace_names):
-        raise ValueError("df_list and trace_names must have the same length")
+        raise ValueError(
+            f"df_list (length: {len(df_list)}) and trace_names (length: {len(trace_names)}) must have the same length"
+        )
 
     combined_dfs = []
     for df, name in zip(df_list, trace_names):
