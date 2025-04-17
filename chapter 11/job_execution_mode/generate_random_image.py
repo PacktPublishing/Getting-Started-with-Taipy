@@ -24,7 +24,7 @@ def notify_color_matrix(state, id_name):
         image_matrix = scenario_image.image_node.read()
         state.image = create_imshow_fig_rgb(image_matrix)
 
-    else:  # reg, green, blue
+    else:  # red, green, blue
         notify(state, "i", f"Created {color} matrix!")
 
 
