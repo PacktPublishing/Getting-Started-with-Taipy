@@ -1,0 +1,73 @@
+[TAIPY]
+
+[DATA_NODE.df_warehouses]
+storage_type = "csv"
+scope = "GLOBAL:SCOPE"
+default_path = "./data/warehouses.csv"
+
+[DATA_NODE.df_customers]
+storage_type = "csv"
+scope = "GLOBAL:SCOPE"
+default_path = "./data/customers.csv"
+
+[DATA_NODE.distance_matrix]
+scope = "GLOBAL:SCOPE"
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.optimization_target]
+default_data = "price"
+
+[DATA_NODE.number_of_warehouses]
+default_data = "any"
+
+[DATA_NODE.country_list]
+default_data = []
+
+[DATA_NODE.no_country_list]
+default_data = []
+
+[DATA_NODE.price_per_km]
+default_data = "4:int"
+
+[DATA_NODE.co2_per_km]
+default_data = "2:int"
+
+[DATA_NODE.df_selected_warehouses]
+storage_type = "csv"
+
+[DATA_NODE.df_assignments]
+storage_type = "csv"
+
+[DATA_NODE.total_price]
+
+[DATA_NODE.total_co2]
+
+[DATA_NODE.total_cost_per_order]
+
+[DATA_NODE.total_co2_per_order]
+
+[TASK.compute_distance_matrix]
+function = "algorithmns.algos.calculate_distance_matrix:function"
+inputs = [ "df_warehouses:SECTION", "df_customers:SECTION",]
+outputs = [ "distance_matrix:SECTION",]
+skippable = "True:bool"
+
+[TASK.pulp_model]
+function = "algorithmns.algos.create_pulp_model:function"
+inputs = [ "df_warehouses:SECTION", "df_customers:SECTION", "distance_matrix:SECTION", "optimization_target:SECTION", "number_of_warehouses:SECTION", "country_list:SECTION", "no_country_list:SECTION", "price_per_km:SECTION", "co2_per_km:SECTION",]
+outputs = [ "df_selected_warehouses:SECTION", "df_assignments:SECTION",]
+skippable = "False:bool"
+
+[TASK.calculate_total_numbers]
+function = "algorithmns.algos.calculate_total_numbers:function"
+inputs = [ "df_selected_warehouses:SECTION",]
+outputs = [ "total_price:SECTION", "total_co2:SECTION", "total_cost_per_order:SECTION", "total_co2_per_order:SECTION",]
+skippable = "False:bool"
+
+[SCENARIO.warehouse_scenario]
+tasks = [ "compute_distance_matrix:SECTION", "pulp_model:SECTION", "calculate_total_numbers:SECTION",]
+additional_data_nodes = []
+
+[SCENARIO.warehouse_scenario.comparators]
+
+[SCENARIO.warehouse_scenario.sequences]
