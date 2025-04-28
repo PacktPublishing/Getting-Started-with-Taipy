@@ -1,0 +1,7 @@
+.red-row>td {
+    color: yellow;
+    background-color: red;
+}
+.recent-row>td {
+    font-weight: bold;
+  }
