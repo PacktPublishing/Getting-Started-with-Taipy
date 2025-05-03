@@ -4,6 +4,9 @@ from langchain_google_genai import (
     ChatGoogleGenerativeAI,
 )  # # ANSWER 1: Import the library!
 from langchain_mistralai.chat_models import ChatMistralAI
+from langchain_ollama import (
+    ChatOllama,
+)  # # ANSWER 1: Try running Local models with Ollama!
 from taipy.gui import Gui
 from taipy.gui import builder as tgb
 from taipy.gui import invoke_long_callback
@@ -17,7 +20,7 @@ def ask_first_question(
     chat(state, "", payload)
 
 
-def change_chat_status(state, id, payload):
+def select_prompt(state, id):
     if id == "prompt_1":
         selected_prompt = state.user_prompt_1.content
     elif id == "prompt_2":
@@ -26,7 +29,13 @@ def change_chat_status(state, id, payload):
         selected_prompt = state.user_prompt_3.content
     elif id == "user_custom_message":
         selected_prompt = state.user_prompt_first_input
+    else:
+        selected_prompt = None
+    return selected_prompt
 
+
+def change_chat_status(state, id, payload):
+    selected_prompt = select_prompt(state, id)
     if id != "" and selected_prompt == "":
         return
 
@@ -68,6 +77,11 @@ def change_model(state):
         elif model_name in ("gemini-1.5-flash", "gemini-1.5-pro"):
             new_bot = ChatGoogleGenerativeAI(
                 model=model_name, temperature=s.temperature
+            )
+        elif model_name in ("smollm2:135m"):
+            new_bot = ChatOllama(
+                model=model_name,  # Replace with your preferred model, but ollama pull it first!
+                temperature=s.temperature,
             )
 
         s.chat_bot = new_bot
@@ -249,6 +263,7 @@ if __name__ == "__main__":
         "The 🤖 TransitBot 🦾 PLUS": "mistral-large-latest",
         "The ⚙️ TransiBot's Cousin": "gemini-1.5-flash-",
         "The ⚙️ TransiBot's Cousin Pro": "gemini-1.5-pro",
+        "The 👾 MiniBot": "smollm2:135m",
     }
     chat_bots = list(models.keys())
 
