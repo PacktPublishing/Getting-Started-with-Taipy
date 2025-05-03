@@ -234,12 +234,11 @@ if __name__ == "__main__":
     users = ["User", bot_name]
     messages = []
 
-    chat_bots = ["The 🤖 TransitBot", "The 🤖 TransitBot 🦾 PLUS"]
-
     models = {
         "The 🤖 TransitBot": "mistral-small",
         "The 🤖 TransitBot 🦾 PLUS": "mistral-large-latest",
     }
+    chat_bots = list(models.keys())
 
     # Variable for partial:
     chat_is_active = False
