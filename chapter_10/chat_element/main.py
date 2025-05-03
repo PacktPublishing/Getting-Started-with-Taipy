@@ -30,8 +30,8 @@ def detect_and_redact_pii(text, replace_chars=True):
     """
 
     pii_patterns = {
-        "email": r"\b[\w.-]+?@\w+?\.\w+?\b",
-        "phone": r"\b\d{3}[-.\s]??\d{3}[-.\s]??\d{4}\b",
+        "email": r"\b[\w.-]+@[\w.-]+\.\w+\b",
+        "phone": r"\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}\b",
         "name": r"\b(?:Mr\.|Ms\.|Mrs\.|Dr\.)\s[A-Z][a-z]+(?:\s[A-Z][a-z]+)?\b",
         "address": r"\d{1,5}\s\w+(?:\s\w+){0,3}\s(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr)\b",
     }
