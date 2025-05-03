@@ -14,7 +14,7 @@ def ask_first_question(
     chat(state, "", payload)
 
 
-def change_chat_status(state, id, payload):
+def select_prompt(state, id):
     if id == "prompt_1":
         selected_prompt = state.user_prompt_1.content
     elif id == "prompt_2":
@@ -23,6 +23,13 @@ def change_chat_status(state, id, payload):
         selected_prompt = state.user_prompt_3.content
     elif id == "user_custom_message":
         selected_prompt = state.user_prompt_first_input
+    else:
+        selected_prompt = None
+    return selected_prompt
+
+
+def change_chat_status(state, id, payload):
+    selected_prompt = select_prompt(state, id)
 
     if id != "" and selected_prompt == "":
         return
