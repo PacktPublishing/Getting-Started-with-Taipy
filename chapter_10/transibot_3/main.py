@@ -18,7 +18,12 @@ def ask_first_question(
     state,
     selected_prompt,
 ):
-    message_history = generate_history_metadata(selected_prompt, users[0], users[1])
+    message_history = generate_history_metadata(
+        selected_prompt,
+        users[0],
+        state.bot_name,
+        state.temperature,
+    )
     history = state.list_history
     history.append(message_history.name)
     state.history_file_name = message_history.filename
@@ -223,8 +228,9 @@ def change_history(state):
     with state as s:
         selected_file_name = f"./history/{s.selected_history}.ndjson"
         s.message_history = load_history(selected_file_name)
-        sender, bot_name = get_users(selected_file_name)
-        s.messages = create_display_list(s.message_history, sender, bot_name)
+        sender, s.bot_name, s.temperature = get_users(selected_file_name)
+        change_model(s)
+        s.messages = create_display_list(s.message_history, sender, s.bot_name)
         if not s.chat_is_active:
             s.chat_is_active = True
             update_chat_partial(s)

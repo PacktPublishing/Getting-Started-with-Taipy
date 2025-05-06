@@ -16,10 +16,15 @@ class HistoryMetadata:
     filename: str
     sender: str
     bot_name: str
+    temperature: float
 
 
 def generate_history_metadata(
-    prompt: str, sender, bot_name, history_dir: str = "./history"
+    prompt: str,
+    sender: str,
+    bot_name: str,
+    temperature: float,
+    history_dir: str = "./history",
 ) -> HistoryMetadata:
     now = dt.datetime.now(dt.timezone.utc)
     current_date = now.date().isoformat()
@@ -37,6 +42,7 @@ def generate_history_metadata(
         filename=filename,
         sender=sender,
         bot_name=bot_name,
+        temperature=temperature,
     )
 
     # First line = metadata
@@ -86,9 +92,10 @@ def get_users(file_path: str) -> tuple[str, str]:
         first_line = f.readline()
         metadata = json.loads(first_line).get("metadata", {})
 
-    sender = metadata.get("sender", "User")
-    bot_name = metadata.get("bot_name", "Bot")
-    return sender, bot_name
+    sender = metadata.get("sender")
+    bot_name = metadata.get("bot_name")
+    temperature = float(metadata.get("temperature"))
+    return sender, bot_name, temperature
 
 
 def create_display_list(
