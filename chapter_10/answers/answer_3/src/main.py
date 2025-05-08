@@ -1,6 +1,6 @@
 from algorithms.chat_algos import init_history, read_prompt
 from langchain_mistralai.chat_models import ChatMistralAI
-from pages.analytics import analytics_page, group_by_tokens, load_history_to_dataframe
+from pages.analytics import analytics_page, load_history_to_dataframe
 from pages.chat_page import *
 from pages.chat_page import chat_page
 from taipy.gui import Gui
