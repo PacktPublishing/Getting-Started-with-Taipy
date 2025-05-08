@@ -1,6 +1,7 @@
 import datetime as dt
 import json
 import os
+import re
 import uuid
 from dataclasses import asdict, dataclass
 from typing import Any
@@ -41,6 +42,21 @@ def get_users(file_path: str) -> tuple[str, str, float]:
     return get_users_from_metadata(metadata)
 
 
+def sanitize_filename(prompt: str, unique_id: str) -> str:
+    # Trim, take first 30 chars, replace spaces with underscores
+    base = prompt.strip()[:30]
+    base = base.replace(" ", "_")
+
+    # Remove all non-alphanumeric or underscore characters
+    base = re.sub(r"[^A-Za-z0-9_]", "", base)
+
+    # Ensure it doesn't start with a digit
+    if base and base[0].isdigit():
+        base = f"f_{base}"
+
+    return f"{base}_{unique_id}"
+
+
 def create_metadata_object(
     prompt: str,
     sender: str,
@@ -53,7 +69,7 @@ def create_metadata_object(
     current_date = now.date().isoformat()
     current_timestamp = now.isoformat()
     unique_id = uuid.uuid4().int
-    name = f"{prompt.strip()[:40]}...({unique_id})"
+    name = sanitize_filename(prompt, unique_id)
 
     os.makedirs(history_dir, exist_ok=True)
     filename = f"{history_dir}/{name}.ndjson"
