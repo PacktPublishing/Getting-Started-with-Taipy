@@ -51,10 +51,6 @@ def parse_file_summary(file_path: str) -> Optional[dict]:
         return None
 
 
-def group_by_tokens(df):
-    return df.groupby(["input_tokens", "output_tokens", "total_tokens"]).sum()
-
-
 def load_history_to_dataframe(history_dir: str) -> pd.DataFrame:
     """Parses all NDJSON files in the given directory and returns a cleaned DataFrame."""
     records = []
