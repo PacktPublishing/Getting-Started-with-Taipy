@@ -3,6 +3,7 @@ import json
 import os
 import uuid
 from dataclasses import asdict, dataclass
+from typing import Any
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
@@ -19,18 +20,41 @@ class HistoryMetadata:
     temperature: float
 
 
-def generate_history_metadata(
+def get_metadata(file_path: str) -> dict[str, Any]:
+    """Reads the metadata line of an NDJSON file."""
+    with open(file_path, "r", encoding="utf-8") as f:
+        first_line = f.readline()
+        return json.loads(first_line).get("metadata")
+
+
+def get_users_from_metadata(metadata: dict[str, Any]) -> tuple[str, str, float]:
+    """Extracts sender, bot_name, and temperature from metadata."""
+    sender = metadata.get("sender")
+    bot_name = metadata.get("bot_name")
+    temperature = float(metadata.get("temperature", 0.0))  # Safe default
+    return sender, bot_name, temperature
+
+
+def get_users(file_path: str) -> tuple[str, str, float]:
+    """Convenience function to get users directly from a file."""
+    metadata = get_metadata(file_path)
+    return get_users_from_metadata(metadata)
+
+
+def create_metadata_object(
     prompt: str,
     sender: str,
     bot_name: str,
     temperature: float,
-    history_dir: str = "./history",
-) -> HistoryMetadata:
+    history_dir: str,
+) -> tuple[HistoryMetadata, str]:
+    """Creates a HistoryMetadata object and corresponding filename."""
     now = dt.datetime.now(dt.timezone.utc)
     current_date = now.date().isoformat()
     current_timestamp = now.isoformat()
     unique_id = uuid.uuid4().int
     name = f"{prompt.strip()[:40]}...({unique_id})"
+
     os.makedirs(history_dir, exist_ok=True)
     filename = f"{history_dir}/{name}.ndjson"
 
@@ -45,10 +69,27 @@ def generate_history_metadata(
         temperature=temperature,
     )
 
-    # First line = metadata
+    return metadata, filename
+
+
+def write_metadata_to_file(metadata: HistoryMetadata, filename: str) -> None:
+    """Writes the metadata as the first line of the NDJSON file."""
     with open(filename, "w", encoding="utf-8") as f:
         f.write(json.dumps({"metadata": asdict(metadata)}) + "\n")
 
+
+def generate_history_metadata(
+    prompt: str,
+    sender: str,
+    bot_name: str,
+    temperature: float,
+    history_dir: str = "./history",
+) -> HistoryMetadata:
+    """Generates and writes HistoryMetadata to an NDJSON file."""
+    metadata, filename = create_metadata_object(
+        prompt, sender, bot_name, temperature, history_dir
+    )
+    write_metadata_to_file(metadata, filename)
     return metadata
 
 
@@ -84,18 +125,6 @@ def load_history(file_path: str):
                 raise ValueError(f"Unsupported message type: {msg_type}")
 
     return messages
-
-
-def get_users(file_path: str) -> tuple[str, str]:
-    """Reads the metadata line of an NDJSON file and extracts sender and bot_name."""
-    with open(file_path, "r", encoding="utf-8") as f:
-        first_line = f.readline()
-        metadata = json.loads(first_line).get("metadata", {})
-
-    sender = metadata.get("sender")
-    bot_name = metadata.get("bot_name")
-    temperature = float(metadata.get("temperature"))
-    return sender, bot_name, temperature
 
 
 def create_display_list(
