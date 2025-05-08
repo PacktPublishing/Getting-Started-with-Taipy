@@ -65,7 +65,6 @@ if __name__ == "__main__":
 
     #### Answer 3 ####
     df_history = load_history_to_dataframe("./history")
-    # df_tokens = group_by_tokens(df_history)
 
     gui = Gui(pages=pages, css_file="./css/main.css")
     chat_partial = gui.add_partial(page="")
