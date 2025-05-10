@@ -1,0 +1,9 @@
+langchain==0.3.24
+langchain-community==0.3.23
+langchain-core==0.3.58
+langchain-google-genai==2.1.4
+langchain-mistralai==0.2.10
+langchain-ollama==0.3.2
+mistralai==1.7.0
+ollama==0.4.8
+taipy==4.0.3
