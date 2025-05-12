@@ -6,11 +6,11 @@
 
 First, you need to create the `parquet` files for the application. The `pre_process` directory has a notebook that simulates a pipeline that creates the files. **You'll need to create the PostgreSQL database (see the "Data for the App" section) if you want this to work! - But you can use the parquet files from the parquet_files directory if you don't want to reproduce this preliminary step.**
 
-The application is in the `src` directory. you need to place all the parquet files in the `data` directory (if you run the `select_data.ipynb` notebook mentioned above, it stores the data in there, if not, you can copy them from `pre_process/parquet_files` into `src/data`).
+The application is in the `src` directory. You need to place all the parquet files in the `data` directory (if you run the `select_data.ipynb` notebook mentioned above, it stores the data in there; if not, you can copy them from `pre_process/parquet_files` into `src/data`).
 
 ### Historical Sales Dashboard
 
-This sales dashboard show all the historical sales and breaks the data by several analytical axis:
+This sales dashboard shows all the historical sales and breaks the data by several analytical axes:
 
 * For the customer dimension: gender, generation.
 * For the product dimension: type (of bike), color, style.
@@ -54,5 +54,5 @@ You can check the [dataset's original license](https://github.com/enarroied/Adve
 
 * Enterprise data is hardly ever this clean and complete.
 * Enterprise data is not always as ideally modelled.
-* This case study did not go into complex buisoness rules.
+* This case study did not go into complex business rules.
 
