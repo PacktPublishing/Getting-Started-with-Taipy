@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 
 # Parameters:
 username = "postgres"
-password = os.getenv("postgres")
+password = os.getenv("PG_PASSWORD")
 host = "localhost"
 port = "5432"
 database = "adventure_works_dw"
