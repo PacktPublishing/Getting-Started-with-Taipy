@@ -129,7 +129,7 @@ with tgb.Page() as forecast_page:
                 "Boomers",
                 "Millenial",
             ],  # Not enough Silent Gen individuals for forecast
-            label="Select gender for forecast",
+            label="Select generation for forecast",
             dropdown=True,
         )
         tgb.selector(
