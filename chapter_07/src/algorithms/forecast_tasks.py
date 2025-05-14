@@ -47,8 +47,16 @@ def create_pipeline():
         steps=[
             (
                 "model",
-                ExponentialSmoothing(trend="add", seasonal="mul", sp=365),
-            )  # Yearly multiplicative seasonality
+                ExponentialSmoothing(
+                    trend="mul",
+                    seasonal="mul",
+                    sp=91,
+                    initialization_method="estimated",
+                    use_boxcox=True,
+                    optimized=True,
+                    method="L-BFGS-B",
+                ),
+            )
         ]
     )
     return pipeline
