@@ -48,7 +48,7 @@ def create_pipeline():
             (
                 "model",
                 ExponentialSmoothing(
-                    trend="mul",
+                    trend="add",
                     seasonal="mul",
                     sp=91,
                     initialization_method="estimated",
