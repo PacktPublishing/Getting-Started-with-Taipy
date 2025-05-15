@@ -1,0 +1,156 @@
+import argparse
+import os
+import sys
+from concurrent.futures import ThreadPoolExecutor
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, dayofweek, hour, unix_timestamp, when
+
+
+def read_nyc_tlc_df(file_path: str, spark):
+    """Reads a Parquet file into a PySpark DataFrame."""
+    if file_path and os.path.exists(file_path):
+        return spark.read.parquet(file_path)
+    print(f"File not found: {file_path}")
+    return None
+
+
+def process_nyc_tlc_df(df):
+    """Processes NYC TLC data for tipping analysis."""
+    df = df.withColumn(
+        "tpep_pickup_datetime", col("tpep_pickup_datetime").cast("timestamp")
+    ).withColumn(
+        "tpep_dropoff_datetime", col("tpep_dropoff_datetime").cast("timestamp")
+    )
+    return (
+        df.filter((col("payment_type") == 1) & (col("total_amount") != 0))
+        .filter((col("airport_fee") >= 0) & (col("congestion_surcharge") >= 0))
+        .fillna(0, subset=["airport_fee", "congestion_surcharge"])
+        .withColumn("airport_fee_binary", when(col("airport_fee") > 0, 1).otherwise(0))
+        .withColumn(
+            "trip_duration",
+            (
+                unix_timestamp("tpep_dropoff_datetime")
+                - unix_timestamp("tpep_pickup_datetime")
+            )
+            / 60,
+        )
+        .withColumn(
+            "trip_speed_mph",
+            when(
+                col("trip_duration") > 0,
+                col("trip_distance") / (col("trip_duration") / 60),
+            ).otherwise(0),
+        )
+        .withColumn("hour_of_day", hour("tpep_pickup_datetime"))
+        .withColumn(
+            "is_weekend", dayofweek("tpep_pickup_datetime").isin([1, 7]).cast("integer")
+        )
+        .withColumn(
+            "is_peak_hour",
+            when(
+                ((col("hour_of_day") >= 7) & (col("hour_of_day") <= 10))
+                | ((col("hour_of_day") >= 17) & (col("hour_of_day") <= 20)),
+                1,
+            ).otherwise(0),
+        )
+        .withColumn(
+            "is_night",
+            when((col("hour_of_day") >= 22) | (col("hour_of_day") < 6), 1).otherwise(0),
+        )
+        .drop("payment_type")
+    )
+
+
+def process_month(spark, month, dataset_name, year, data_folder, output_folder):
+    """Processes a single month of data from existing files."""
+    file_path = os.path.join(data_folder, f"{dataset_name}_{year}-{month:02d}.parquet")
+    df = read_nyc_tlc_df(file_path, spark)
+    if df is None:
+        return f"Failed to process month {month} - file not found"
+
+    processed_df = process_nyc_tlc_df(df)
+    os.makedirs(output_folder, exist_ok=True)
+    output_file = os.path.join(
+        output_folder, f"processed_{dataset_name}_{year}_{month:02d}.parquet"
+    )
+    processed_df.write.mode("overwrite").option(
+        "parquet.enable.summary-metadata", "true"
+    ).option("compression", "snappy").parquet(output_file)
+
+    return f"Processed data saved: {output_file}"
+
+
+def process_all_data(
+    spark,
+    dataset_name: str,
+    year: int,
+    data_folder: str,
+    output_folder: str,
+    months_to_process: list,
+):
+    """Orchestrates processing of all specified months."""
+
+    # months = list(range(1, 13)) # This is no longer required, since we added the list of months
+    months = months_to_process  # We add it like this for demonstration purposes,
+    with ThreadPoolExecutor(max_workers=6) as executor:
+        return list(
+            executor.map(
+                lambda m: process_month(
+                    spark, m, dataset_name, year, data_folder, output_folder
+                ),
+                months,
+            )
+        )
+
+
+if __name__ == "__main__":
+    # Initialize Spark session when run as script
+    spark = (
+        SparkSession.builder.appName("NYC TLC Processing")
+        .config("spark.sql.shuffle.partitions", "400")
+        .config("spark.default.parallelism", "8")
+        .getOrCreate()
+    )
+
+    parser = argparse.ArgumentParser(description="Process NYC TLC trip data.")
+    parser.add_argument(
+        "--dataset",
+        default="yellow_tripdata",
+        help="Dataset name (e.g., yellow_tripdata)",
+    )
+    parser.add_argument(
+        "--year", type=int, required=True, help="Year of data to process (e.g., 2024)"
+    )
+    parser.add_argument(
+        "--data-folder", default="./data", help="Folder with raw Parquet files"
+    )
+    parser.add_argument(
+        "--output-folder", default="./processed", help="Folder to save processed data"
+    )
+    parser.add_argument(
+        "--months",
+        default="1,2,3,4,5,6,7,8,9,10,11,12",  # Default to all months
+        help="Comma-separated list of months to process (e.g., 1,2,3)",
+    )
+
+    args = parser.parse_args()
+
+    # Convert the comma-separated string back to a list of integers
+    months_to_process = list(map(int, args.months.split(",")))
+
+    print(f"Starting processing: {args.dataset} {args.year}")
+    results = process_all_data(
+        spark,
+        args.dataset,
+        args.year,
+        args.data_folder,
+        args.output_folder,
+        months_to_process,
+    )
+
+    for result in results:
+        print(result)
+
+    spark.stop()
+    sys.exit(0)
