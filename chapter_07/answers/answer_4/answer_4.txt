@@ -1,0 +1,115 @@
+##################################################################
+## Answer 4: Add these in the /src/algorithms/forecast_tasks.py ##                                               ##
+## To replace the Exponential Smoothing algorithm with    ########
+## the ThetaForecaster model, just import it and replace  ########
+## the create_pipeline function with the one below.       ########
+##################################################################
+# https://www.sktime.net/en/latest/api_reference/auto_generated/sktime.forecasting.theta.ThetaForecaster.html
+from sktime.forecasting.exp_smoothing import ExponentialSmoothing
+
+
+def create_pipeline():
+    pipeline = ForecastingPipeline(
+        steps=[("model", ThetaForecaster(sp=365))]  # Seasonal period
+    )
+    return pipeline
+
+
+############################################################
+## You can create a function that returns a model         ##
+## depending on a parameter                               ##
+############################################################
+from sktime.forecasting.compose import ForecastingPipeline
+from sktime.forecasting.exp_smoothing import ExponentialSmoothing
+from sktime.forecasting.theta import ThetaForecaster
+
+
+def create_pipeline(model="exponential_smoothing"):
+    """
+    Creates a forecasting pipeline based on the specified model.
+
+    Parameters:
+        model (str): The forecasting model to use. Options:
+                     - "exponential_smoothing" for Exponential Smoothing
+                     - "theta" for ThetaForecaster
+
+    Returns:
+        ForecastingPipeline: Configured forecasting pipeline.
+    """
+    if model == "exponential_smoothing":
+        forecasting_model = ExponentialSmoothing(trend="add", seasonal="mul", sp=365)
+    elif model == "theta_forecaster":
+        forecasting_model = ThetaForecaster(sp=365)
+    else:
+        raise ValueError(
+            f"Unknown model: {model}. Choose 'exponential_smoothing' or 'theta'."
+        )
+
+    pipeline = ForecastingPipeline(steps=[("model", forecasting_model)])
+    return pipeline
+
+
+############################################################
+## Add the model to the fit_and_forecast_future function  ##
+############################################################
+def fit_and_forecast_future(df_agg, target, number_of_days, model):
+    """
+    Fits the forecasting pipeline on the entire data and forecasts future values.
+
+    Parameters:
+        df_agg (pd.DataFrame): Prepared dataframe with a datetime index.
+        target (str): Name of the target column to forecast.
+        number_of_days (int): Number of future days to predict.
+
+    Returns:
+        tuple: (y_future, future_dates) where y_future is the predicted values and future_dates are the dates for predictions.
+    """
+    pipeline = create_pipeline(model)
+    ...  ## The rest of the function is the same
+
+    return y_future, future_dates
+
+
+############################################################
+## Add this Data Node config object and change the task   ##
+## in config.py                                           ##
+############################################################
+model_name_node_config = Config.configure_data_node(
+    id="model_name",
+)
+
+# Add the node tp the task
+fit_and_forecast_future_task = Config.configure_task(
+    id="fit_and_forecast_future",
+    input=[
+        agg_dataframe_node_config,
+        forecast_target_node_config,
+        selected_number_of_days_node_config,
+        model_name_node_config
+    ],
+    output=[y_future_node_config, future_dates_node_config],
+    function=fit_and_forecast_future,
+
+
+############################################################
+## Add this variable to main.py                           ##
+############################################################
+selected_model = "exponential_smoothing"
+
+############################################################
+## Add this selector to forecast.py's Page                ##
+############################################################
+tgb.selector(
+    value="{selected_model}",
+    lov=["exponential_smoothing", "theta_forecaster"],
+    label="Select forecast model",
+    dropdown=True,
+)
+
+############################################################
+## Update the Callbacks to write the Data Node            ##
+## with the model name                                    ##
+## Add this line to update_scenario in forecast.py:       ##                                  ##
+############################################################
+
+state.selected_scenario.model_name.write(state.selected_model)

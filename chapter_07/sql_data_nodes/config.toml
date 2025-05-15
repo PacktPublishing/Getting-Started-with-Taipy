@@ -1,0 +1,112 @@
+[TAIPY]
+
+[DATA_NODE.sales_history]
+storage_type = "sql"
+scope = "GLOBAL:SCOPE"
+db_name = "adventure_works_dw"
+db_engine = "postgresql"
+read_query = "SELECT\n\tfulldatealternatekey AS date,\n\tCASE\n\t\tWHEN daynumberofweek = 1 THEN 'Su'\n\t\tWHEN daynumberofweek = 2 THEN 'Mo'\n\t\tWHEN daynumberofweek = 3 THEN 'Tu'\n\t\tWHEN daynumberofweek = 4 THEN 'We'\n\t\tWHEN daynumberofweek = 5 THEN 'Th'\n\t\tWHEN daynumberofweek = 6 THEN 'Fr'\n\t\tWHEN daynumberofweek = 7 THEN 'Sa'\n\t\tELSE '??'\n\tEND AS day,\n\tproductalternatekey AS product,\n\tCASE \n\t\tWHEN productsubcategorykey = 1 THEN 'Mountain'\n\t\tWHEN productsubcategorykey = 2 THEN 'Road'\n\t\tWHEN productsubcategorykey = 3 THEN 'Touring'\n\t\tELSE 'UNKNOWN'\n\tEND AS type,\n\tenglishproductname AS name,\n\tcolor AS color,\n\ttrim(style) AS style, \n\tcustomeralternatekey AS customer,\n\textract(year from birthdate) AS birth,\n\tCASE WHEN extract(year from birthdate) > 1980 THEN 'Millenial'\n\t\tWHEN extract(year from birthdate) BETWEEN 1966 AND 1980 THEN 'Gen X'\n        WHEN extract(year from birthdate) BETWEEN 1945 AND 1965 THEN 'Boomers'\n        WHEN extract(year from birthdate) < 1945 THEN 'Silent'\n        ELSE 'Unknown'\n    END AS generation,\n\tgender AS gender,\n\tunitprice AS unit_price,\n\torderquantity::int AS items,\n\tunitprice * orderquantity::float AS sales\nFROM\n    factinternetsales\n\tJOIN dimproduct ON dimproduct.productkey = factinternetsales.productkey\n\tJOIN dimdate on  dimdate.datekey = factinternetsales.orderdatekey\n\tJOIN dimcustomer on dimcustomer.customerkey = factinternetsales.customerkey\nWHERE \n\tproductsubcategorykey IN (1, 2, 3)"
+write_query_builder = "configuration.config.dont_write_anything:function"
+db_username = "postgres"
+db_password = "eric"
+db_host = "localhost"
+db_port = "5432"
+exposed_type = "pandas"
+
+[DATA_NODE.sales_customer]
+storage_type = "sql"
+scope = "GLOBAL:SCOPE"
+db_name = "adventure_works_dw"
+db_engine = "postgresql"
+read_query = "SELECT\n    d.fulldatealternatekey AS date,\n    SUM(fis.unitprice * fis.orderquantity)::float AS sales,\n    COUNT(fis.orderquantity)::int AS items\nFROM\n    factinternetsales fis\n    JOIN dimproduct p ON p.productkey = fis.productkey\n    JOIN dimdate d ON d.datekey = fis.orderdatekey\n    JOIN dimcustomer c ON c.customerkey = fis.customerkey\nWHERE\n    p.productsubcategorykey IN (1, 2, 3)\nGROUP BY\n    d.fulldatealternatekey\nORDER BY\n    d.fulldatealternatekey;\n\n"
+write_query_builder = "configuration.config.dont_write_anything:function"
+db_username = "postgres"
+db_password = "eric"
+db_host = "localhost"
+db_port = "5432"
+exposed_type = "pandas"
+db_driver = ""
+sqlite_file_extension = ".db"
+
+[DATA_NODE.sales_simplified]
+storage_type = "sql"
+scope = "GLOBAL:SCOPE"
+db_name = "adventure_works_dw"
+db_engine = "postgresql"
+read_query = "SELECT\n    d.fulldatealternatekey AS date,\n    CASE\n        WHEN d.daynumberofweek = 1 THEN 'Su'\n        WHEN d.daynumberofweek = 2 THEN 'Mo'\n        WHEN d.daynumberofweek = 3 THEN 'Tu'\n        WHEN d.daynumberofweek = 4 THEN 'We'\n        WHEN d.daynumberofweek = 5 THEN 'Th'\n        WHEN d.daynumberofweek = 6 THEN 'Fr'\n        WHEN d.daynumberofweek = 7 THEN 'Sa'\n        ELSE '??'\n    END AS day,\n    CASE \n        WHEN p.productsubcategorykey = 1 THEN 'Mountain'\n        WHEN p.productsubcategorykey = 2 THEN 'Road'\n        WHEN p.productsubcategorykey = 3 THEN 'Touring'\n        ELSE 'UNKNOWN'\n    END AS type,\n    p.englishproductname AS name,\n    p.color AS color,\n    TRIM(p.style) AS style,\n    CASE \n        WHEN EXTRACT(YEAR FROM c.birthdate) > 1980 THEN 'Millenial'\n        WHEN EXTRACT(YEAR FROM c.birthdate) BETWEEN 1966 AND 1980 THEN 'Gen X'\n        WHEN EXTRACT(YEAR FROM c.birthdate) BETWEEN 1945 AND 1965 THEN 'Boomers'\n        WHEN EXTRACT(YEAR FROM c.birthdate) < 1945 THEN 'Silent'\n        ELSE 'Unknown'\n    END AS generation,\n    c.gender AS gender,\n    fis.unitprice AS unit_price,\n    SUM(fis.unitprice * fis.orderquantity)::float AS sales,\n    COUNT(fis.orderquantity)::int AS items\nFROM\n    factinternetsales fis\n    JOIN dimproduct p ON p.productkey = fis.productkey\n    JOIN dimdate d ON d.datekey = fis.orderdatekey\n    JOIN dimcustomer c ON c.customerkey = fis.customerkey\nWHERE\n    p.productsubcategorykey IN (1, 2, 3)\nGROUP BY\n    d.fulldatealternatekey,\n    d.daynumberofweek,\n    p.productsubcategorykey,\n    p.englishproductname,\n    p.color,\n    p.style,\n    EXTRACT(YEAR FROM c.birthdate),\n    c.gender,\n    fis.unitprice\nORDER BY\n    d.fulldatealternatekey;\n"
+write_query_builder = "configuration.config.dont_write_anything:function"
+db_username = "postgres"
+db_password = "eric"
+db_host = "localhost"
+db_port = "5432"
+exposed_type = "pandas"
+
+[DATA_NODE.forecast_target]
+
+[DATA_NODE.gender_forecast]
+
+[DATA_NODE.generation_forecast]
+
+[DATA_NODE.product_forecast]
+
+[DATA_NODE.filtered_dataframe]
+
+[DATA_NODE.aggregated_dataframe]
+
+[DATA_NODE.number_of_days]
+
+[DATA_NODE.y_future]
+
+[DATA_NODE.future_dates]
+
+[DATA_NODE.conf_min]
+
+[DATA_NODE.conf_max]
+
+[DATA_NODE.forecast_df]
+
+[DATA_NODE.summary]
+
+[TASK.filter_sales]
+function = "algorithms.forecast_tasks.filter_dataframe:function"
+inputs = [ "sales_simplified:SECTION", "gender_forecast:SECTION", "generation_forecast:SECTION", "product_forecast:SECTION",]
+outputs = [ "filtered_dataframe:SECTION",]
+skippable = "False:bool"
+
+[TASK.aggregate_dataframe]
+function = "algorithms.forecast_tasks.prepare_data:function"
+inputs = [ "filtered_dataframe:SECTION", "forecast_target:SECTION",]
+outputs = [ "aggregated_dataframe:SECTION",]
+skippable = "False:bool"
+
+[TASK.fit_and_forecast_future]
+function = "algorithms.forecast_tasks.fit_and_forecast_future:function"
+inputs = [ "aggregated_dataframe:SECTION", "forecast_target:SECTION", "number_of_days:SECTION",]
+outputs = [ "y_future:SECTION", "future_dates:SECTION",]
+skippable = "False:bool"
+
+[TASK.compute_confidence_intervals]
+function = "algorithms.forecast_tasks.compute_confidence_intervals:function"
+inputs = [ "y_future:SECTION",]
+outputs = [ "conf_min:SECTION", "conf_max:SECTION",]
+skippable = "False:bool"
+
+[TASK.create_forecast_df]
+function = "algorithms.forecast_tasks.create_forecast_dataframe:function"
+inputs = [ "future_dates:SECTION", "y_future:SECTION", "conf_min:SECTION", "conf_max:SECTION",]
+outputs = [ "forecast_df:SECTION",]
+skippable = "False:bool"
+
+[TASK.summarize_forecast]
+function = "algorithms.forecast_tasks.summarize_forecast:function"
+inputs = [ "forecast_df:SECTION",]
+outputs = [ "summary:SECTION",]
+skippable = "False:bool"
+
+[SCENARIO.forecast_scenario]
+tasks = [ "filter_sales:SECTION", "aggregate_dataframe:SECTION", "fit_and_forecast_future:SECTION", "compute_confidence_intervals:SECTION", "create_forecast_df:SECTION", "summarize_forecast:SECTION",]
+additional_data_nodes = []
+
+[SCENARIO.forecast_scenario.comparators]
+
+[SCENARIO.forecast_scenario.sequences]

@@ -1,0 +1,95 @@
+[TAIPY]
+
+[DATA_NODE.sales]
+storage_type = "parquet"
+scope = "GLOBAL:SCOPE"
+default_path = "data/sales.parquet"
+exposed_type = "pandas"
+
+[DATA_NODE.sales_customer]
+storage_type = "parquet"
+scope = "GLOBAL:SCOPE"
+default_path = "data/sales_by_customer.parquet"
+exposed_type = "pandas"
+
+[DATA_NODE.sales_product]
+storage_type = "parquet"
+scope = "GLOBAL:SCOPE"
+default_path = "data/sales_by_product.parquet"
+exposed_type = "pandas"
+
+[DATA_NODE.sales_simplified]
+storage_type = "parquet"
+scope = "GLOBAL:SCOPE"
+default_path = "data/sales_simplified.parquet"
+exposed_type = "pandas"
+
+[DATA_NODE.forecast_target]
+
+[DATA_NODE.gender_forecast]
+
+[DATA_NODE.generation_forecast]
+
+[DATA_NODE.product_forecast]
+
+[DATA_NODE.filtered_dataframe]
+
+[DATA_NODE.aggregated_dataframe]
+
+[DATA_NODE.number_of_days]
+
+[DATA_NODE.y_future]
+
+[DATA_NODE.future_dates]
+
+[DATA_NODE.conf_min]
+
+[DATA_NODE.conf_max]
+
+[DATA_NODE.forecast_df]
+
+[DATA_NODE.summary]
+
+[TASK.filter_sales]
+function = "algorithms.forecast_tasks.filter_dataframe:function"
+inputs = [ "sales_simplified:SECTION", "gender_forecast:SECTION", "generation_forecast:SECTION", "product_forecast:SECTION",]
+outputs = [ "filtered_dataframe:SECTION",]
+skippable = "False:bool"
+
+[TASK.aggregate_dataframe]
+function = "algorithms.forecast_tasks.prepare_data:function"
+inputs = [ "filtered_dataframe:SECTION", "forecast_target:SECTION",]
+outputs = [ "aggregated_dataframe:SECTION",]
+skippable = "False:bool"
+
+[TASK.fit_and_forecast_future]
+function = "algorithms.forecast_tasks.fit_and_forecast_future:function"
+inputs = [ "aggregated_dataframe:SECTION", "forecast_target:SECTION", "number_of_days:SECTION",]
+outputs = [ "y_future:SECTION", "future_dates:SECTION",]
+skippable = "False:bool"
+
+[TASK.compute_confidence_intervals]
+function = "algorithms.forecast_tasks.compute_confidence_intervals:function"
+inputs = [ "y_future:SECTION",]
+outputs = [ "conf_min:SECTION", "conf_max:SECTION",]
+skippable = "False:bool"
+
+[TASK.create_forecast_df]
+function = "algorithms.forecast_tasks.create_forecast_dataframe:function"
+inputs = [ "future_dates:SECTION", "y_future:SECTION", "conf_min:SECTION", "conf_max:SECTION",]
+outputs = [ "forecast_df:SECTION",]
+skippable = "False:bool"
+
+[TASK.summarize_forecast]
+function = "algorithms.forecast_tasks.summarize_forecast:function"
+inputs = [ "forecast_df:SECTION",]
+outputs = [ "summary:SECTION",]
+skippable = "False:bool"
+
+[SCENARIO.forecast_scenario]
+tasks = [ "filter_sales:SECTION", "aggregate_dataframe:SECTION", "fit_and_forecast_future:SECTION", "compute_confidence_intervals:SECTION", "create_forecast_df:SECTION", "summarize_forecast:SECTION",]
+additional_data_nodes = []
+
+[SCENARIO.forecast_scenario.comparators]
+
+[SCENARIO.forecast_scenario.sequences]
