@@ -1,9 +1,9 @@
-############################################################
-## Answer 4                                               ##
-## To replace the Exponential Smoothing algorithm with    ##
-## the ThetaForecaster model, just import it and replace  ##
-## the create_pipeline function with the one below.       ##
-############################################################
+##################################################################
+## Answer 4: Add these in the /src/algorithms/forecast_tasks.py ##                                               ##
+## To replace the Exponential Smoothing algorithm with    ########
+## the ThetaForecaster model, just import it and replace  ########
+## the create_pipeline function with the one below.       ########
+##################################################################
 # https://www.sktime.net/en/latest/api_reference/auto_generated/sktime.forecasting.theta.ThetaForecaster.html
 from sktime.forecasting.exp_smoothing import ExponentialSmoothing
 
