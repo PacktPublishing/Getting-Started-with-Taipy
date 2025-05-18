@@ -14,7 +14,6 @@ def on_change(state, var, val):
 
 
 if __name__ == "__main__":
-    app_h1 = "# Converter Application"
     usd_to_eur_rate = 0.9
     eur_to_usd_rate = 1 / usd_to_eur_rate
 
