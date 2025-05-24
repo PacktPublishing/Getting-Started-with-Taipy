@@ -9,6 +9,7 @@ def create_report(state):
     )
 
     state.show_report = True
+    state.refresh("show_report")
     notify(state, "i", "The pdf report is ready!")
 
 
