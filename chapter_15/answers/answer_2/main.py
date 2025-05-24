@@ -23,7 +23,6 @@ def add_to_dataframe(state):
             list_to_append, columns=["selected_item", "description", "price"]
         )
         s.df_items = pd.concat([s.df_items, new_row], ignore_index=True)
-        print(s.df_items.head())
     # After updating the DataFrame:
     with state as s:
         clear_variable(s)
@@ -58,4 +57,4 @@ if __name__ == "__main__":
     df_items = pd.DataFrame(columns=["selected_item", "description", "price"])
     price = 0
     page = Page("main.xprjson")
-    Gui(page).run()  # design=True, title="form app", use_reloader=True)
+    Gui(page).run(design=True, title="form app", use_reloader=True)
