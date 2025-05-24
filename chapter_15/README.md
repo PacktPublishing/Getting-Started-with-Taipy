@@ -2,6 +2,10 @@
 
 In this chapter, we discover how to use Taipy Designer.
 
+## Installation
+
+The installation process is covered in the book, you need to create a new environment and `pip install .` the file sent by Taipy's team. This will also install Taipy. For this reason, we don't provide a `requirements.txt`. The app also uses GeoPandas and Matplotlib, you'll need to install them as well.
+
 ## Unit converter app
 
 We start creating a unit converter app, the goal is to discover the basic workflows of Taipy Designer:
