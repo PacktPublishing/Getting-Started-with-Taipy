@@ -3,14 +3,16 @@ from algorithms.create_report import create_pdf_report
 from taipy.gui import invoke_long_callback, notify
 
 
+def update_pdf_part(state, is_finished):
+    if is_finished:
+        state.show_report = True
+        notify(state, "i", "The pdf report is ready!")
+
+
 def create_report(state):
     invoke_long_callback(
-        state, create_pdf_report, [state.df_parish_info], "./iframes/report.pdf"
+        state, create_pdf_report, [state.df_parish_info], update_pdf_part
     )
-
-    state.show_report = True
-    state.refresh("show_report")
-    notify(state, "i", "The pdf report is ready!")
 
 
 with tgb.Page() as parishes_page:
