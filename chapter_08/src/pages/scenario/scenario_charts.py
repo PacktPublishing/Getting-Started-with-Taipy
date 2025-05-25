@@ -3,7 +3,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-def plot_assignments(df_assignments):
+def _prepare_data(df_assignments):
     # Extract unique warehouses and customers
     df_warehouses_unique = df_assignments[
         ["warehouse", "warehouse_lat", "warehouse_lon"]
@@ -22,7 +22,10 @@ def plot_assignments(df_assignments):
     df_customers_unique["type"] = "Customer"
 
     data = pd.concat([df_warehouses_unique, df_customers_unique], ignore_index=True)
+    return data
 
+
+def _add_columns_to_data(data):
     # Prepare hover name and size
     data["hover_name"] = data.apply(
         lambda row: (
@@ -33,6 +36,12 @@ def plot_assignments(df_assignments):
         axis=1,
     )
     data["size"] = data["type"].map({"Warehouse": 22, "Customer": 5})
+    return data
+
+
+def plot_assignments(df_assignments):
+    data = _prepare_data(df_assignments)
+    data = _add_columns_to_data(data)
 
     # Create the base figure with markers
     fig = px.scatter_map(
