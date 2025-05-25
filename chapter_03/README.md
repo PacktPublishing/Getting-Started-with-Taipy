@@ -4,6 +4,12 @@
 
 When you use Taipy's `Orchestrator` class, it create a `.taipy` directory, with cached information about your Taipy Scenario objects (such as Data Nodes). When you run different programs that create Data Nodes of different types from within the same directory (such as `1-data_node_examples`), you may encounter issues. **Deleting the `.taipy` folder sometimes fixes those issues**.
 
+## Data Node visual elements
+
+This chapter presents Data Node visual elements. We don't dive into them, but you can see how they look before we integrate them with Scenario Management.
+
+![](./img/app.gif)
+
 
 ## Data sources
 
