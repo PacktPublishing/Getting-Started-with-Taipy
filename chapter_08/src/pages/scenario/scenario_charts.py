@@ -35,7 +35,7 @@ def plot_assignments(df_assignments):
     data["size"] = data["type"].map({"Warehouse": 22, "Customer": 5})
 
     # Create the base figure with markers
-    fig = px.scatter_mapbox(
+    fig = px.scatter_map(
         data,
         lat="lat",
         lon="lon",
@@ -50,7 +50,7 @@ def plot_assignments(df_assignments):
             "name": False,
             "size": False,
         },
-        mapbox_style="carto-positron",
+        map_style="carto-positron",
         zoom=3,
         center={"lat": 50, "lon": 10},  # Center on Europe
         size_max=10,
@@ -65,7 +65,7 @@ def plot_assignments(df_assignments):
 
     # Add lines to the figure
     fig.add_trace(
-        go.Scattermapbox(
+        go.Scattermap(
             lon=lons,
             lat=lats,
             mode="lines",

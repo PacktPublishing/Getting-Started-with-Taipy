@@ -29,7 +29,7 @@ def plot_customers_warehouses(df_customers, df_warehouses):
     data["size"] = data["type"].map({"Customer": 5, "Warehouse": 22})
 
     # Create the map
-    fig = px.scatter_mapbox(
+    fig = px.scatter_map(
         data,
         lat="latitude",
         lon="longitude",
@@ -42,7 +42,7 @@ def plot_customers_warehouses(df_customers, df_warehouses):
             "latitude": False,
             "longitude": False,
         },
-        mapbox_style="carto-positron",
+        map_style="carto-positron",
         zoom=3,
         center={"lat": 50, "lon": 10},  # Center on Europe
         size_max=10,
