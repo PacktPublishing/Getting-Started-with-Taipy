@@ -23,7 +23,7 @@ Here is how the Scenario's pipeline looks:
 
 ## Data
 
-To create our datasets, we asked Chat GPT to generate some JSON structures, with European cities and coordinates. We also added some random amounts for the operation costs and facility CO2e emissions, and we used `faker` to create the company names. You can find the notebook to create the data in [create_data.ipynb](create_data.ipynb), and the datasets in [the app's data directory](./src/data). Also note that you can generate new versions of the dataset to play around with the app and get different results. 
+To create our datasets, we asked Chat GPT to generate some JSON structures, with European cities and coordinates. We also added some random amounts for the operation costs and facility CO2e emissions, and we used `faker` to create the company names. You can find the notebook to create the data in [create_data.ipynb](create_data.ipynb), and the datasets in [the app's data directory](./src/data). You can also generate new versions of the dataset to play around with the app and get different results. 
 
 ### Dataset descriptions
 
