@@ -7,6 +7,7 @@ from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_ollama import (
     ChatOllama,
 )  # # ANSWER 1: Try running Local models with Ollama!
+
 from taipy.gui import Gui
 from taipy.gui import builder as tgb
 from taipy.gui import invoke_long_callback
@@ -187,7 +188,8 @@ def update_chat_partial(state):
 
 def chat(state, var_name: str, payload: dict):
     state.chat_element_active = False
-    (_, _, user_message, sender_id) = payload.get("args", [])
+    chat_arguments = payload.get("args", [])
+    (_, _, user_message, sender_id) = chat_arguments[:4]
     if user_message == "":
         return
     with state as s:

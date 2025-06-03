@@ -67,7 +67,8 @@ def respond(state, message):
 def chat(state, var_name: str, payload: dict):
     messages = state.messages
     # Retrieve the callback parameters
-    (_, _, user_message, sender_id) = payload.get("args", [])
+    chat_arguments = payload.get("args", [])
+    (_, _, user_message, sender_id) = chat_arguments[:4]
 
     # Add the input content as a sent message
     messages.append((f"{len(messages)}", user_message, sender_id))

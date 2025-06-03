@@ -8,6 +8,7 @@ from algorithms.chat_algos import (
 )
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_mistralai.chat_models import ChatMistralAI
+
 from taipy.gui import builder as tgb
 
 
@@ -194,7 +195,8 @@ def clear_current_chat(state):
 
 def chat(state, var_name: str, payload: dict):
     state.chat_element_active = False
-    (_, _, user_message, sender_id) = payload.get("args", [])
+    chat_arguments = payload.get("args", [])
+    (_, _, user_message, sender_id) = chat_arguments[:4]
     if user_message == "":
         return
     with state as s:

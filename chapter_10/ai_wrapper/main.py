@@ -1,5 +1,6 @@
 from langchain_core.messages import HumanMessage
 from langchain_mistralai.chat_models import ChatMistralAI
+
 from taipy.gui import Gui
 from taipy.gui import builder as tgb
 
@@ -12,7 +13,8 @@ def talk_to_bot(input_message, history, chat):
 
 
 def chat(state, var_name: str, payload: dict):
-    (_, _, user_message, sender_id) = payload.get("args", [])
+    chat_arguments = payload.get("args", [])
+    (_, _, user_message, sender_id) = chat_arguments[:4]
     messages = state.messages
     message_history = state.message_history
 
