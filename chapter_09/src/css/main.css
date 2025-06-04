@@ -1,0 +1,30 @@
+strong, b {
+    font-weight: bold; /* This is equivalent to 700 */
+    color: #12b049
+    ;
+}
+
+.css-75cauk .sidebar{
+    height: auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    padding: 1px 2px;
+    border: 1px solid #12b049
+    ;
+    /* show thin separation */
+    font-size: 12px !important;
+}
+th {
+    background-color: #eee !important; /* Light background color */
+    font-weight: bold;
+}
+.col-number {
+    text-align: right !important;
+}

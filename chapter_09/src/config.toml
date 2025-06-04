@@ -1,0 +1,80 @@
+[TAIPY]
+
+[DATA_NODE.gdf_paris_parks]
+storage_type = "generic"
+scope = "GLOBAL:SCOPE"
+read_fct = "configuration.config.read_gpkg:function"
+read_fct_args = [ "./data/paris_parks.gpkg", "parks_polygons",]
+
+[DATA_NODE.df_paris_parks]
+storage_type = "csv"
+scope = "GLOBAL:SCOPE"
+default_path = "./data/paris_parks.csv"
+
+[DATA_NODE.gdf_paris_parks_centroids]
+storage_type = "generic"
+scope = "GLOBAL:SCOPE"
+read_fct = "configuration.config.read_gpkg:function"
+read_fct_args = [ "./data/paris_parks.gpkg", "parks_centroids",]
+
+[DATA_NODE.selected_year]
+default_data = "2024:int"
+
+[DATA_NODE.id_name]
+
+[DATA_NODE.polygon]
+
+[DATA_NODE.ndvi]
+
+[DATA_NODE.reduced_t_ndvi]
+
+[DATA_NODE.tiff_image]
+
+[DATA_NODE.datacube_time_series]
+
+[DATA_NODE.ndvi_time_series]
+storage_type = "csv"
+
+[TASK.get_polygon]
+function = "algorithms.algorithms.get_polygon:function"
+inputs = [ "gdf_paris_parks:SECTION", "id_name:SECTION",]
+outputs = [ "polygon:SECTION",]
+skippable = "False:bool"
+
+[TASK.get_ndvi]
+function = "algorithms.algorithms.get_ndvi:function"
+inputs = [ "polygon:SECTION", "selected_year:SECTION",]
+outputs = [ "ndvi:SECTION",]
+skippable = "False:bool"
+
+[TASK.reduce_by_time]
+function = "algorithms.algorithms.reduce_by_time:function"
+inputs = [ "ndvi:SECTION",]
+outputs = [ "reduced_t_ndvi:SECTION",]
+skippable = "False:bool"
+
+[TASK.download_ndvi]
+function = "algorithms.algorithms.download_ndvi:function"
+inputs = [ "reduced_t_ndvi:SECTION", "id_name:SECTION", "selected_year:SECTION",]
+outputs = [ "tiff_image:SECTION",]
+skippable = "False:bool"
+
+[TASK.get_time_series]
+function = "algorithms.algorithms.get_time_series:function"
+inputs = [ "ndvi:SECTION", "polygon:SECTION",]
+outputs = [ "datacube_time_series:SECTION",]
+skippable = "False:bool"
+
+[TASK.download_time_series]
+function = "algorithms.algorithms.download_time_series:function"
+inputs = [ "datacube_time_series:SECTION", "id_name:SECTION", "selected_year:SECTION",]
+outputs = [ "ndvi_time_series:SECTION",]
+skippable = "False:bool"
+
+[SCENARIO.ndvi_scenario]
+tasks = [ "get_polygon:SECTION", "get_ndvi:SECTION", "reduce_by_time:SECTION", "download_ndvi:SECTION", "get_time_series:SECTION", "download_time_series:SECTION",]
+additional_data_nodes = []
+
+[SCENARIO.ndvi_scenario.comparators]
+
+[SCENARIO.ndvi_scenario.sequences]
