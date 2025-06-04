@@ -1,9 +1,12 @@
 from algorithms.chat_algos_history import init_history
 from algorithms.read_prompt import read_prompt
+from configuration.config import conversation_scenario
 from langchain_mistralai.chat_models import ChatMistralAI
 from pages.analytics import analytics_page
 from pages.chat_page import *
 from pages.chat_page import chat_page
+
+import taipy as tp
 from taipy import Orchestrator  # ## For Answer 4
 from taipy.gui import Gui
 from taipy.gui import builder as tgb
@@ -12,6 +15,12 @@ from taipy.gui import builder as tgb
 def on_init(state):
     update_chat_partial(state)
     state.list_history = init_history("./history")
+    if len(tp.get_scenarios()) == 0:
+        state.selected_scenario = tp.create_scenario(
+            conversation_scenario
+        )  # create a dummy Scenario is no Scenario exists yet
+    else:
+        state.selected_scenario = tp.get_scenarios()[0]
 
 
 with tgb.Page() as root:

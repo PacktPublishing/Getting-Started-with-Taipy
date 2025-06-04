@@ -247,7 +247,11 @@ def read_prompt(file_name, type):
 
 
 with tgb.Page() as chat_page:
-    with tgb.pane(open="{open_pane}", on_close=lambda s: s.assign("open_pane", False)):
+    with tgb.pane(
+        open="{open_pane}",
+        on_close=lambda s: s.assign("open_pane", False),
+        width="45vw",
+    ):
         tgb.selector(
             value="{selected_history}",
             lov="{list_history}",
