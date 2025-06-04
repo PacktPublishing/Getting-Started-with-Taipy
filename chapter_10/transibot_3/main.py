@@ -256,7 +256,11 @@ def on_init(state):
 with tgb.Page() as chat_page:
     tgb.text("# **AI Transit Assistant**", mode="md")
     tgb.html("hr")
-    with tgb.pane(open="{open_pane}", on_close=lambda s: s.assign("open_pane", False)):
+    with tgb.pane(
+        open="{open_pane}",
+        on_close=lambda s: s.assign("open_pane", False),
+        width="45vw",
+    ):
         tgb.selector(
             value="{selected_history}",
             lov="{list_history}",
