@@ -15,6 +15,12 @@ from taipy.gui import builder as tgb
 def on_init(state):
     update_chat_partial(state)
     state.list_history = init_history("./history")
+    if len(tp.get_scenarios()) == 0:
+        state.selected_scenario = tp.create_scenario(
+            conversation_scenario
+        )  # create a dummy Scenario is no Scenario exists yet
+    else:
+        state.selected_scenario = tp.get_scenarios()[0]
 
 
 with tgb.Page() as root:
