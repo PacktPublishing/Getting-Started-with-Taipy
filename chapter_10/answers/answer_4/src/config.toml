@@ -1,0 +1,43 @@
+[TAIPY]
+
+[DATA_NODE.conversation_history]
+
+[DATA_NODE.conversation_dict]
+
+[DATA_NODE.key_parameters]
+
+[DATA_NODE.conversation_to_summarize]
+
+[DATA_NODE.summarized_conversation]
+
+[TASK.get_conversation]
+function = "algorithms.scenario_functions.load_conversation:function"
+inputs = [ "conversation_history:SECTION",]
+outputs = [ "conversation_dict:SECTION",]
+skippable = "False:bool"
+
+[TASK.get_key_parameters]
+function = "algorithms.scenario_functions.extract_key_parameters:function"
+inputs = [ "conversation_dict:SECTION",]
+outputs = [ "key_parameters:SECTION",]
+skippable = "False:bool"
+
+[TASK.build_summary_prompt]
+function = "algorithms.scenario_functions.build_prompt_from_conversation:function"
+inputs = [ "conversation_dict:SECTION",]
+outputs = [ "conversation_to_summarize:SECTION",]
+skippable = "False:bool"
+
+[TASK.summarize]
+function = "algorithms.scenario_functions.ask_for_summary:function"
+inputs = [ "conversation_to_summarize:SECTION",]
+outputs = [ "summarized_conversation:SECTION",]
+skippable = "True:bool"
+
+[SCENARIO.conversation_scenario]
+tasks = [ "get_conversation:SECTION", "get_key_parameters:SECTION", "build_summary_prompt:SECTION", "summarize:SECTION",]
+additional_data_nodes = []
+
+[SCENARIO.conversation_scenario.comparators]
+
+[SCENARIO.conversation_scenario.sequences]
