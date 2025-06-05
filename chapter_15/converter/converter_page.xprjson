@@ -1,0 +1,206 @@
+{
+	"meta": {
+		"version": "2.992.8836",
+		"fileFormatVersion": "0.3",
+		"date": "2025-05-18T09:36:43.327+02:00",
+		"name": "converter_page",
+		"description": "",
+		"groupName": "",
+		"tags": [],
+		"schedulerLogOff": true
+	},
+	"data": {
+		"datanodes": []
+	},
+	"libraries": {
+		"pyodideStandard": [],
+		"pyodideMicropip": []
+	},
+	"scaling": {
+		"widthPx": 1524,
+		"heightPx": 631,
+		"scrollWidthPx": 1524,
+		"scrollHeightPx": 631,
+		"widthVw": 85.71428571428571,
+		"heightVh": 76.02409638554217,
+		"scrollWidthVw": 85.71428571428571,
+		"scrollHeightVh": 76.02409638554217,
+		"scalingMethod": "scaleTwh",
+		"media": "large",
+		"colDims": null
+	},
+	"device": {
+		"cols": {
+			"valueRow": "none",
+			"valueCol": "1",
+			"maxCells": 0,
+			"maxCols": 0,
+			"classType": ""
+		},
+		"droppers": {},
+		"backgroundColor": "var(--widget-color-0)",
+		"inheritThemeBackgroundColor": false,
+		"theme": "blue"
+	},
+	"dashboard": {
+		"annotationLabelA": {
+			"layout": {
+				"top": "2.77108vh",
+				"left": "3.99325vw",
+				"height": "5.06024vh",
+				"width": "18.7289vw",
+				"minHeight": "5px",
+				"minWidth": "5px",
+				"z-index": "1"
+			},
+			"container": {
+				"instanceId": "annotationLabelA",
+				"modelJsonId": "annotationLabel"
+			},
+			"modelParameters": {
+				"text": "Converter App",
+				"enableActuator": false,
+				"fontsize": 2,
+				"backgroundColor": "rgba(0, 0, 0, 0)",
+				"textColor": "var(--widget-label-color)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"textAlign": "left",
+				"textBold": false,
+				"textUnderline": false,
+				"textItalic": false,
+				"displayBorder": false,
+				"borderColor": "var(--widget-border-color)",
+				"borderWidth": "2px",
+				"centerVertically": true,
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {}
+		},
+		"flatUiHorizontalSliderA": {
+			"layout": {
+				"top": "18.8755vh",
+				"left": "8.09899vw",
+				"height": "5.06024vh",
+				"width": "24.0157vw",
+				"minHeight": "24px",
+				"minWidth": "200px",
+				"z-index": "2"
+			},
+			"container": {
+				"instanceId": "flatUiHorizontalSliderA",
+				"modelJsonId": "flatUiHorizontalSlider"
+			},
+			"modelParameters": {
+				"label": "USD/EUR",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 1,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"rangeActuator": false,
+				"min": 0.001,
+				"max": 2,
+				"step": 0.001,
+				"displayValue": true,
+				"validationOnFocusOut": true,
+				"valueFontSize": 0.5,
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueBorderColor": "var(--widget-border-color)",
+				"labelWidthProportion": "20%",
+				"sliderWidthProportion": "60%",
+				"valueWidthProportion": "20%",
+				"sliderRangeColor": "var(--widget-range-color)",
+				"sliderSegmentColor": "var(--widget-segment-color)",
+				"sliderHandleDefaultColor": "var(--widget-handle-default-color)",
+				"sliderHandleHoverColor": "var(--widget-handle-hover-color)",
+				"sliderHandleActiveColor": "var(--widget-handle-active-color)",
+				"valueColor": "var(--widget-color)",
+				"unit": "unitText",
+				"displayUnit": false,
+				"unitFontSize": 0.5,
+				"showWidget": true,
+				"enableWidget": true,
+				"textColor": "var(--widget-label-color)",
+				"borderColor": "var(--widget-border-color)",
+				"backgroundColor": "var(--widget-input-color)"
+			},
+			"modelHiddenParams": {
+				"value": 0
+			}
+		},
+		"flatUiValueDisplayA": {
+			"layout": {
+				"top": "19.2771vh",
+				"left": "41.0011vw",
+				"height": "5.06024vh",
+				"width": "19.0101vw",
+				"minHeight": "24px",
+				"minWidth": "150px",
+				"z-index": "3"
+			},
+			"container": {
+				"instanceId": "flatUiValueDisplayA",
+				"modelJsonId": "flatUiValueDisplay"
+			},
+			"modelParameters": {
+				"label": "EUR/USD",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 1,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"labelTextAlign": "left",
+				"valueWidthProportion": "70%",
+				"valueFontSize": 0.5,
+				"valueColor": "var(--widget-input-text)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueTextAlign": "left",
+				"displayBorder": true,
+				"borderColor": "var(--widget-border-color)",
+				"backgroundColor": "var(--widget-input-color)",
+				"unit": "unitText",
+				"displayUnit": false,
+				"unitFontSize": 0.5,
+				"decimalDigits": 3,
+				"borderWidth": "2px",
+				"showWidget": true,
+				"enableWidget": true,
+				"valueBorderColor": "var(--widget-border-color)",
+				"sliderRangeColor": "var(--widget-range-color)",
+				"sliderSegmentColor": "var(--widget-segment-color)",
+				"sliderHandleDefaultColor": "var(--widget-handle-default-color)",
+				"sliderHandleHoverColor": "var(--widget-handle-hover-color)",
+				"sliderHandleActiveColor": "var(--widget-handle-active-color)",
+				"textColor": "var(--widget-label-color)"
+			},
+			"modelHiddenParams": {
+				"value": ""
+			}
+		}
+	},
+	"connections": {
+		"annotationLabelA": {},
+		"flatUiHorizontalSliderA": {
+			"value": {
+				"name": "value",
+				"dataNode": "usd_to_eur_rate",
+				"dataFields": []
+			}
+		},
+		"flatUiValueDisplayA": {
+			"value": {
+				"name": "value",
+				"dataNode": "eur_to_usd_rate",
+				"dataFields": []
+			}
+		}
+	},
+	"exportOptions": "ajustToTargetWindow",
+	"pages": {
+		"pageNames": [],
+		"defaultPage": {}
+	},
+	"checkExportOptions": true,
+	"navBarNotification": false
+}

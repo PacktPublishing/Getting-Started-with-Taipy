@@ -1,0 +1,426 @@
+{
+	"meta": {
+		"version": "2.992.8836",
+		"fileFormatVersion": "0.3",
+		"date": "2025-05-18T10:36:07.876+02:00",
+		"name": "converter_page",
+		"description": "",
+		"groupName": "",
+		"tags": [],
+		"schedulerLogOff": true
+	},
+	"data": {
+		"datanodes": []
+	},
+	"libraries": {
+		"pyodideStandard": [],
+		"pyodideMicropip": []
+	},
+	"scaling": {
+		"widthPx": 1943,
+		"heightPx": 866,
+		"scrollWidthPx": 1943,
+		"scrollHeightPx": 866,
+		"widthVw": 88.43878015475649,
+		"heightVh": 67.02786377708978,
+		"scrollWidthVw": 88.43878015475649,
+		"scrollHeightVh": 67.02786377708978,
+		"scalingMethod": "scaleTwh",
+		"media": "large",
+		"colDims": null
+	},
+	"device": {
+		"cols": {
+			"valueRow": "none",
+			"valueCol": "1",
+			"maxCells": 0,
+			"maxCols": 0,
+			"classType": ""
+		},
+		"droppers": {},
+		"backgroundColor": "var(--widget-color-0)",
+		"inheritThemeBackgroundColor": false,
+		"theme": "blue"
+	},
+	"dashboard": {
+		"annotationLabelA": {
+			"layout": {
+				"top": "1.54799vh",
+				"left": "2.731vw",
+				"height": "5.41796vh",
+				"width": "19.3446vw",
+				"minHeight": "5px",
+				"minWidth": "5px",
+				"z-index": "1"
+			},
+			"container": {
+				"instanceId": "annotationLabelA",
+				"modelJsonId": "annotationLabel"
+			},
+			"modelParameters": {
+				"text": "Converter App",
+				"enableActuator": false,
+				"fontsize": 2,
+				"backgroundColor": "rgba(0, 0, 0, 0)",
+				"textColor": "var(--widget-label-color)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"textAlign": "left",
+				"textBold": false,
+				"textUnderline": false,
+				"textItalic": false,
+				"displayBorder": false,
+				"borderColor": "var(--widget-border-color)",
+				"borderWidth": "2px",
+				"centerVertically": true,
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {}
+		},
+		"flatUiHorizontalSliderA": {
+			"layout": {
+				"top": "17.0279vh",
+				"left": "8.19299vw",
+				"height": "4.48916vh",
+				"width": "24.761vw",
+				"minHeight": "24px",
+				"minWidth": "200px",
+				"z-index": "2"
+			},
+			"container": {
+				"instanceId": "flatUiHorizontalSliderA",
+				"modelJsonId": "flatUiHorizontalSlider"
+			},
+			"modelParameters": {
+				"label": "USD/EUR",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 1,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"rangeActuator": false,
+				"min": 0.001,
+				"max": 2,
+				"step": 0.001,
+				"displayValue": true,
+				"validationOnFocusOut": true,
+				"valueFontSize": 0.5,
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueBorderColor": "var(--widget-border-color)",
+				"labelWidthProportion": "20%",
+				"sliderWidthProportion": "60%",
+				"valueWidthProportion": "20%",
+				"sliderRangeColor": "var(--widget-range-color)",
+				"sliderSegmentColor": "var(--widget-segment-color)",
+				"sliderHandleDefaultColor": "var(--widget-handle-default-color)",
+				"sliderHandleHoverColor": "var(--widget-handle-hover-color)",
+				"sliderHandleActiveColor": "var(--widget-handle-active-color)",
+				"valueColor": "var(--widget-color)",
+				"unit": "unitText",
+				"displayUnit": false,
+				"unitFontSize": 0.5,
+				"showWidget": true,
+				"enableWidget": true,
+				"textColor": "var(--widget-label-color)",
+				"borderColor": "var(--widget-border-color)",
+				"backgroundColor": "var(--widget-input-color)"
+			},
+			"modelHiddenParams": {
+				"value": 0
+			}
+		},
+		"flatUiValueDisplayA": {
+			"layout": {
+				"top": "17.0279vh",
+				"left": "50.9786vw",
+				"height": "4.48916vh",
+				"width": "19.6177vw",
+				"minHeight": "24px",
+				"minWidth": "150px",
+				"z-index": "3"
+			},
+			"container": {
+				"instanceId": "flatUiValueDisplayA",
+				"modelJsonId": "flatUiValueDisplay"
+			},
+			"modelParameters": {
+				"label": "EUR/USD",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 1,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"labelTextAlign": "left",
+				"valueWidthProportion": "70%",
+				"valueFontSize": 0.5,
+				"valueColor": "var(--widget-input-text)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueTextAlign": "left",
+				"displayBorder": true,
+				"borderColor": "var(--widget-border-color)",
+				"backgroundColor": "var(--widget-input-color)",
+				"unit": "unitText",
+				"displayUnit": false,
+				"unitFontSize": 0.5,
+				"decimalDigits": 3,
+				"borderWidth": "2px",
+				"showWidget": true,
+				"enableWidget": true,
+				"valueBorderColor": "var(--widget-border-color)",
+				"sliderRangeColor": "var(--widget-range-color)",
+				"sliderSegmentColor": "var(--widget-segment-color)",
+				"sliderHandleDefaultColor": "var(--widget-handle-default-color)",
+				"sliderHandleHoverColor": "var(--widget-handle-hover-color)",
+				"sliderHandleActiveColor": "var(--widget-handle-active-color)",
+				"textColor": "var(--widget-label-color)"
+			},
+			"modelHiddenParams": {
+				"value": ""
+			}
+		},
+		"flatUiNumericInputA": {
+			"layout": {
+				"top": "32.5077vh",
+				"left": "8.19299vw",
+				"height": "5.03096vh",
+				"width": "18.9804vw",
+				"minHeight": "24px",
+				"minWidth": "150px",
+				"z-index": "4"
+			},
+			"container": {
+				"instanceId": "flatUiNumericInputA",
+				"modelJsonId": "flatUiNumericInput"
+			},
+			"modelParameters": {
+				"label": "Enter Amount",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 1,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"step": 0.01,
+				"labelTextAlign": "left",
+				"labelTextPosition": "left",
+				"valueWidthProportion": "70%",
+				"validationButton": false,
+				"validationBtnDefaultColor": "var(--widget-button-primary-color)",
+				"validationBtnActiveColor": "var(--widget-button-active-color)",
+				"validationBtnHoverColor": "var(--widget-button-hover-color)",
+				"validationOnFocusOut": true,
+				"valueFontSize": 1,
+				"valueColor": "var(--widget-input-text)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueTextAlign": "left",
+				"displayBorder": true,
+				"borderColor": "var(--widget-border-color)",
+				"backgroundColor": "var(--widget-input-color)",
+				"unit": "unitText",
+				"displayUnit": false,
+				"unitFontSize": 0.5,
+				"borderWidth": "2px",
+				"showWidget": true,
+				"enableWidget": true,
+				"valueBorderColor": "var(--widget-border-color)",
+				"sliderRangeColor": "var(--widget-range-color)",
+				"sliderSegmentColor": "var(--widget-segment-color)",
+				"sliderHandleDefaultColor": "var(--widget-handle-default-color)",
+				"sliderHandleHoverColor": "var(--widget-handle-hover-color)",
+				"sliderHandleActiveColor": "var(--widget-handle-active-color)",
+				"textColor": "var(--widget-label-color)",
+				"selectValueFontFamily": "var(--widget-font-family)",
+				"selectedValueColor": "var(--widget-select-option-highlighted-text)",
+				"selectedItemDefaultColor": "var(--widget-select-option-highlighted-color)",
+				"selectedItemHoverColor": "var(--widget-select-option-highlighted-color)"
+			},
+			"modelHiddenParams": {
+				"value": ""
+			}
+		},
+		"flatUiSelectA": {
+			"layout": {
+				"top": "38.6997vh",
+				"left": "8.19299vw",
+				"height": "5.03096vh",
+				"width": "18.9804vw",
+				"minHeight": "27px",
+				"minWidth": "40px",
+				"z-index": "5"
+			},
+			"container": {
+				"instanceId": "flatUiSelectA",
+				"modelJsonId": "flatUiSelect"
+			},
+			"modelParameters": {
+				"label": "Unit",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 1,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"selectWidthProportion": "70%",
+				"isNumber": false,
+				"isBoolean": false,
+				"selectValueFontFamily": "var(--widget-font-family)",
+				"selectValueFontSize": 0.5,
+				"selectedValueColor": "var(--widget-select-option-highlighted-text)",
+				"selectedItemDefaultColor": "var(--widget-select-option-highlighted-color)",
+				"selectedItemHoverColor": "var(--widget-select-option-highlighted-color)",
+				"isKeyValuePairs": false,
+				"showWidget": true,
+				"enableWidget": true,
+				"validationBtnDefaultColor": "var(--widget-button-primary-color)",
+				"validationBtnActiveColor": "var(--widget-button-active-color)",
+				"validationBtnHoverColor": "var(--widget-button-hover-color)",
+				"valueColor": "var(--widget-input-text)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"borderColor": "var(--widget-border-color)",
+				"backgroundColor": "var(--widget-input-color)",
+				"valueBorderColor": "var(--widget-border-color)",
+				"sliderRangeColor": "var(--widget-range-color)",
+				"sliderSegmentColor": "var(--widget-segment-color)",
+				"sliderHandleDefaultColor": "var(--widget-handle-default-color)",
+				"sliderHandleHoverColor": "var(--widget-handle-hover-color)",
+				"sliderHandleActiveColor": "var(--widget-handle-active-color)",
+				"textColor": "var(--widget-label-color)"
+			},
+			"modelHiddenParams": {
+				"keys": [],
+				"values": [],
+				"selectedValue": ""
+			}
+		},
+		"annotationLabelB": {
+			"layout": {
+				"top": "24.7678vh",
+				"left": "2.731vw",
+				"height": "5.03096vh",
+				"width": "28.4934vw",
+				"minHeight": "5px",
+				"minWidth": "5px",
+				"z-index": "6"
+			},
+			"container": {
+				"instanceId": "annotationLabelB",
+				"modelJsonId": "annotationLabel"
+			},
+			"modelParameters": {
+				"text": "Convert your currency",
+				"enableActuator": false,
+				"fontsize": 2,
+				"backgroundColor": "rgba(0, 0, 0, 0)",
+				"textColor": "var(--widget-label-color)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"textAlign": "left",
+				"textBold": false,
+				"textUnderline": false,
+				"textItalic": false,
+				"displayBorder": false,
+				"borderColor": "var(--widget-border-color)",
+				"borderWidth": "2px",
+				"centerVertically": true,
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {}
+		},
+		"flatUiValueDisplayB": {
+			"layout": {
+				"top": "35.6037vh",
+				"left": "50.9786vw",
+				"height": "5.03096vh",
+				"width": "18.9804vw",
+				"minHeight": "24px",
+				"minWidth": "150px",
+				"z-index": "7"
+			},
+			"container": {
+				"instanceId": "flatUiValueDisplayB",
+				"modelJsonId": "flatUiValueDisplay"
+			},
+			"modelParameters": {
+				"label": "Converted Value",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 1,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"labelTextAlign": "left",
+				"valueWidthProportion": "70%",
+				"valueFontSize": 1,
+				"valueColor": "var(--widget-input-text)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueTextAlign": "left",
+				"displayBorder": true,
+				"borderColor": "var(--widget-border-color)",
+				"backgroundColor": "var(--widget-input-color)",
+				"unit": "unitText",
+				"displayUnit": false,
+				"unitFontSize": 1,
+				"decimalDigits": 2,
+				"borderWidth": "2px",
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {
+				"value": ""
+			}
+		}
+	},
+	"connections": {
+		"annotationLabelA": {},
+		"flatUiHorizontalSliderA": {
+			"value": {
+				"name": "value",
+				"dataNode": "usd_to_eur_rate",
+				"dataFields": []
+			}
+		},
+		"flatUiValueDisplayA": {
+			"value": {
+				"name": "value",
+				"dataNode": "eur_to_usd_rate",
+				"dataFields": []
+			}
+		},
+		"flatUiNumericInputA": {
+			"value": {
+				"name": "value",
+				"dataNode": "value_to_convert",
+				"dataFields": []
+			}
+		},
+		"flatUiSelectA": {
+			"keys": {
+				"name": "keys",
+				"dataNode": "units",
+				"dataFields": []
+			},
+			"values": {
+				"name": "values",
+				"dataNode": "None",
+				"dataFields": []
+			},
+			"selectedValue": {
+				"name": "selectedValue",
+				"dataNode": "unit",
+				"dataFields": []
+			}
+		},
+		"annotationLabelB": {},
+		"flatUiValueDisplayB": {
+			"value": {
+				"name": "value",
+				"dataNode": "converted_value",
+				"dataFields": []
+			}
+		}
+	},
+	"exportOptions": "ajustToTargetWindow",
+	"pages": {
+		"pageNames": [],
+		"defaultPage": {}
+	},
+	"checkExportOptions": true,
+	"navBarNotification": false
+}

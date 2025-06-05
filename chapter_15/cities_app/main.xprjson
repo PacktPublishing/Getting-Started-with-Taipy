@@ -1,0 +1,444 @@
+{
+	"meta": {
+		"version": "2.992.8836",
+		"fileFormatVersion": "0.3",
+		"date": "2025-05-21T22:06:55.012+02:00",
+		"name": "main",
+		"description": "",
+		"groupName": "",
+		"tags": [],
+		"schedulerLogOff": true
+	},
+	"data": {
+		"datanodes": []
+	},
+	"libraries": {
+		"pyodideStandard": [],
+		"pyodideMicropip": []
+	},
+	"scaling": {
+		"widthPx": 2218,
+		"heightPx": 948,
+		"scrollWidthPx": 2218,
+		"scrollHeightPx": 948,
+		"widthVw": 89.72491909385113,
+		"heightVh": 65.24432209222299,
+		"scrollWidthVw": 89.72491909385113,
+		"scrollHeightVh": 65.24432209222299,
+		"scalingMethod": "scaleTwh",
+		"media": "large",
+		"colDims": null
+	},
+	"device": {
+		"cols": {
+			"valueRow": "none",
+			"valueCol": "1",
+			"maxCells": 0,
+			"maxCols": 0,
+			"classType": ""
+		},
+		"droppers": {},
+		"backgroundColor": "var(--widget-color-0)",
+		"inheritThemeBackgroundColor": true,
+		"theme": "blue"
+	},
+	"dashboard": {
+		"matplotlibA": {
+			"layout": {
+				"top": "14.0177vh",
+				"left": "2.01113vw",
+				"height": "21.925vh",
+				"width": "44.1534vw",
+				"minHeight": "32px",
+				"minWidth": "50px",
+				"z-index": "1"
+			},
+			"container": {
+				"instanceId": "matplotlibA",
+				"modelJsonId": "matplotlib"
+			},
+			"modelParameters": {
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {
+				"fig": {
+					"type": "png",
+					"content": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+				}
+			}
+		},
+		"openStreetMapsA": {
+			"layout": {
+				"top": "38.5409vh",
+				"left": "1.94175vw",
+				"height": "30.8328vh",
+				"width": "44.2152vw",
+				"minHeight": "20px",
+				"minWidth": "20px",
+				"z-index": "2"
+			},
+			"container": {
+				"instanceId": "openStreetMapsA",
+				"modelJsonId": "openStreetMaps"
+			},
+			"modelParameters": {
+				"geoJson": {
+					"numberOfLayers": 1
+				},
+				"choropleth": {
+					"numberOfLayers": 0
+				},
+				"heatMap": {
+					"numberOfLayers": 0,
+					"sampledDisplay": false,
+					"densityHeatMap": false
+				},
+				"lineHeatMap": {
+					"numberOfLayers": 0
+				},
+				"imageOverlay": {
+					"numberOfLayers": 0
+				},
+				"svgOverlay": {
+					"numberOfLayers": 0
+				},
+				"defaultCenter": {
+					"latitude": 48.872063,
+					"longitude": 2.331773,
+					"zoom": 2
+				},
+				"offlineSupport": false,
+				"tileServer": "MapboxStreets",
+				"drawingFeatures": true,
+				"drawingFeaturesOptions": {
+					"point": false,
+					"line": false,
+					"polygon": true,
+					"rectangle": true,
+					"modal": false
+				},
+				"captureClickEvent": false,
+				"markerCluster": false,
+				"showWidget": true,
+				"enableWidget": true,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"selectValueFontFamily": "var(--widget-font-family)",
+				"selectedValueColor": "var(--widget-select-option-highlighted-text)",
+				"selectedItemDefaultColor": "var(--widget-select-option-highlighted-color)",
+				"selectedItemHoverColor": "var(--widget-select-option-highlighted-color)",
+				"valueColor": "var(--widget-table-value-color)",
+				"valueFontFamily": "var(--widget-font-family)"
+			},
+			"modelHiddenParams": {
+				"geoJson": {
+					"geoJsonLayers": [],
+					"geoJsonBounds": []
+				},
+				"choropleth": {
+					"choroplethLayers": [],
+					"choroplethBounds": []
+				},
+				"lineHeatMap": {
+					"lineHeatMapLayers": [],
+					"lineHeatMapBounds": []
+				},
+				"heatMap": {
+					"heatMapData": [],
+					"heatMapBuffer": []
+				},
+				"imageOverlay": {
+					"imageData": []
+				},
+				"svgOverlay": {
+					"svgData": [],
+					"svgElements": []
+				},
+				"legends": [],
+				"colors": [
+					"#800080",
+					"#FF00FF",
+					"#000080",
+					"#0000FF",
+					"#008080",
+					"#00FFFF",
+					"#FFFF00",
+					"#800000",
+					"#6666ff",
+					"#cc6699",
+					"#66ff66",
+					"#666699",
+					"#996633",
+					"#ff0000",
+					"#669999",
+					"#ffff99"
+				],
+				"currentTileServer": ""
+			}
+		},
+		"flatUiSelectA": {
+			"layout": {
+				"top": "8.01008vh",
+				"left": "1.85877vw",
+				"height": "4.31312vh",
+				"width": "44.0925vw",
+				"minHeight": "27px",
+				"minWidth": "40px",
+				"z-index": "3"
+			},
+			"container": {
+				"instanceId": "flatUiSelectA",
+				"modelJsonId": "flatUiSelect"
+			},
+			"modelParameters": {
+				"label": "Selected Country",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 0.5,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"selectWidthProportion": "70%",
+				"isNumber": false,
+				"isBoolean": false,
+				"selectValueFontFamily": "var(--widget-font-family)",
+				"selectValueFontSize": 0.5,
+				"selectedValueColor": "var(--widget-select-option-highlighted-text)",
+				"selectedItemDefaultColor": "var(--widget-select-option-highlighted-color)",
+				"selectedItemHoverColor": "var(--widget-select-option-highlighted-color)",
+				"isKeyValuePairs": false,
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {
+				"keys": [],
+				"values": [],
+				"selectedValue": ""
+			}
+		},
+		"flatUiEditableTableA": {
+			"layout": {
+				"top": "19.5104vh",
+				"left": "47.9986vw",
+				"height": "54.1255vh",
+				"width": "40.3509vw",
+				"minHeight": "79px",
+				"minWidth": "88px",
+				"z-index": "4"
+			},
+			"container": {
+				"instanceId": "flatUiEditableTableA",
+				"modelJsonId": "flatUiEditableTable"
+			},
+			"modelParameters": {
+				"headerLine": true,
+				"indexColumn": false,
+				"showIndex": false,
+				"tableValueFontSize": 0.5,
+				"striped": true,
+				"valueColor": "var(--widget-table-value-color)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueAlign": "left",
+				"bordered": true,
+				"noBorder": false,
+				"editableCols": "*",
+				"backgroundColor": {
+					"primary": "var(--widget-color-0)",
+					"secondary": "var(--widget-table-striped-odd)"
+				},
+				"paginationMinNbr": 10,
+				"paginationOptions": "[10, 50, 100, 500]",
+				"paginationDefaultValue": 10,
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {
+				"value": null,
+				"isDataFrame": false
+			}
+		},
+		"annotationLabelA": {
+			"layout": {
+				"top": "0.688231vh",
+				"left": "1.85877vw",
+				"height": "4.98063vh",
+				"width": "44.2753vw",
+				"minHeight": "5px",
+				"minWidth": "5px",
+				"z-index": "5"
+			},
+			"container": {
+				"instanceId": "annotationLabelA",
+				"modelJsonId": "annotationLabel"
+			},
+			"modelParameters": {
+				"text": "World Cities",
+				"enableActuator": false,
+				"fontsize": 2,
+				"backgroundColor": "rgba(0, 0, 0, 0)",
+				"textColor": "var(--widget-label-color)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"textAlign": "left",
+				"textBold": false,
+				"textUnderline": false,
+				"textItalic": false,
+				"displayBorder": false,
+				"borderColor": "var(--widget-border-color)",
+				"borderWidth": "2px",
+				"centerVertically": true,
+				"showWidget": true,
+				"enableWidget": true,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"selectValueFontFamily": "var(--widget-font-family)",
+				"selectedValueColor": "var(--widget-select-option-highlighted-text)",
+				"selectedItemDefaultColor": "var(--widget-select-option-highlighted-color)",
+				"selectedItemHoverColor": "var(--widget-select-option-highlighted-color)",
+				"valueColor": "var(--widget-table-value-color)"
+			},
+			"modelHiddenParams": {}
+		},
+		"scoringFullCircularGaugeA": {
+			"layout": {
+				"top": "0.688231vh",
+				"left": "50.6134vw",
+				"height": "17.8173vh",
+				"width": "12.4934vw",
+				"minHeight": "20px",
+				"minWidth": "20px",
+				"z-index": "6"
+			},
+			"container": {
+				"instanceId": "scoringFullCircularGaugeA",
+				"modelJsonId": "scoringFullCircularGauge"
+			},
+			"modelParameters": {
+				"label": "Percent of Total",
+				"inheritLabelFromData": false,
+				"min": 0,
+				"max": 100,
+				"unit": "",
+				"valueColor": "var(--widget-color)",
+				"thick": 10,
+				"thicknessColor": "var(--widget-range-color)",
+				"duration": 1500,
+				"thicknessBackgroundColor": "var(--widget-segment-color)",
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {
+				"value": 75
+			}
+		},
+		"kpiCardA": {
+			"layout": {
+				"top": "2.25925vh",
+				"left": "75.1736vw",
+				"height": "16.4823vh",
+				"width": "12.9504vw",
+				"minHeight": "32px",
+				"minWidth": "64px",
+				"z-index": "7"
+			},
+			"container": {
+				"instanceId": "kpiCardA",
+				"modelJsonId": "kpiCard"
+			},
+			"modelParameters": {
+				"label": "Population for Selection",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 0.5,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"valuePosition": "bottom",
+				"valueFontSize": 2,
+				"valueColor": "var(--widget-color)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"decimalDigits": 3,
+				"unit": "unitText",
+				"displayUnit": false,
+				"unitFontSize": 0.5,
+				"unitColor": "var(--widget-label-color)",
+				"borderShadow": false,
+				"showWidget": true,
+				"enableWidget": true,
+				"thicknessColor": "var(--widget-range-color)",
+				"thicknessBackgroundColor": "var(--widget-segment-color)"
+			},
+			"modelHiddenParams": {
+				"value": "--"
+			}
+		}
+	},
+	"connections": {
+		"matplotlibA": {
+			"fig": {
+				"name": "fig",
+				"dataNode": "top_10_fig",
+				"dataFields": []
+			}
+		},
+		"openStreetMapsA": {
+			"selectedGeoJson": {
+				"name": "selectedGeoJson",
+				"dataNode": "df_capitals",
+				"dataFields": [
+					"data",
+					"capital"
+				]
+			},
+			"geoJson1": {
+				"name": "geoJson1",
+				"dataNode": "leaflet",
+				"dataFields": []
+			}
+		},
+		"flatUiSelectA": {
+			"keys": {
+				"name": "keys",
+				"dataNode": "list_country_selection",
+				"dataFields": []
+			},
+			"values": {
+				"name": "values",
+				"dataNode": "None",
+				"dataFields": []
+			},
+			"selectedValue": {
+				"name": "selectedValue",
+				"dataNode": "selected_country",
+				"dataFields": []
+			}
+		},
+		"flatUiEditableTableA": {
+			"value": {
+				"name": "value",
+				"dataNode": "df_cities_display",
+				"dataFields": []
+			}
+		},
+		"annotationLabelA": {},
+		"scoringFullCircularGaugeA": {
+			"value": {
+				"name": "value",
+				"dataNode": "percent_world_cities",
+				"dataFields": []
+			}
+		},
+		"kpiCardA": {
+			"value": {
+				"name": "value",
+				"dataNode": "selected_cities_pop",
+				"dataFields": []
+			}
+		}
+	},
+	"exportOptions": "ajustToTargetWindow",
+	"pages": {
+		"pageNames": [],
+		"defaultPage": {}
+	},
+	"checkExportOptions": true,
+	"navBarNotification": false
+}
