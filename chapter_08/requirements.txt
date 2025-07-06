@@ -1,3 +1,4 @@
 geopandas==1.0.1
+plotly==6.0.1
 pulp==3.2.1
 taipy==4.1.0
