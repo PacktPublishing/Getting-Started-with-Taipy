@@ -6,4 +6,4 @@ langchain-mistralai==0.2.10
 langchain-ollama==0.3.2
 mistralai==1.7.0
 ollama==0.4.8
-taipy==4.0.3
+taipy==4.1.0
