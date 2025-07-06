@@ -31,4 +31,4 @@ The chapter also covers Taipy's CLI tool. [You can check the official documentat
 
 The directories `my_first_app_from_cli` and `my_first_scenatrion_from_cli` are 2 Taipy applications structures that come out straight out of `taipy create`.
 
-Taipy CLI creates a `requirements.txt` file, but it doesn't specify the version, we recommend adding it as well (for example change `taipy` with `taipy==4.0.3` or whatever version you are running). Since this is a minimal example, we left the outcome as is.
+Taipy CLI creates a `requirements.txt` file, but it doesn't specify the version, we recommend adding it as well (for example change `taipy` with `taipy==4.1.0` or whatever version you are running). Since this is a minimal example, we left the outcome as is.
