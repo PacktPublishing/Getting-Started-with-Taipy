@@ -1,2 +1,2 @@
 scikit-learn==1.6.1
-taipy==4.0.3
+taipy==4.1.0
