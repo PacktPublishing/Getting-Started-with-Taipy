@@ -6,8 +6,6 @@
 
 import taipy as tp
 import taipy.gui.builder as tgb
-from taipy.gui import Gui
-
 from answers.answer_4.answer_4 import answer_4_page
 from configuration.config import (
     df_paris_parks_node_config,
@@ -21,6 +19,7 @@ from pages.compare_ndvi.compare_ndvi import compare_page
 from pages.general_page.charts import plot_park_with_centroid
 from pages.general_page.general_page import general_page
 from pages.general_page.park_partial import create_park_info_partial
+from taipy.gui import Gui
 from update_callbacks import update_compare_selector
 
 with tgb.Page() as root_page:

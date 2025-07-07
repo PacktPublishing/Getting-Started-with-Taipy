@@ -1,9 +1,10 @@
 import geopandas as gpd
 import matplotlib
-
-matplotlib.use("Agg")  # IMPORTANT: Use a non-interactive backend to render in a GUI
 import matplotlib.pyplot as plt
 import pandas as pd
+import plotly.express as px
+
+matplotlib.use("Agg")  # IMPORTANT: Use a non-interactive backend to render in a GUI
 
 
 def clean_arrange_data(df_cities):
@@ -49,7 +50,7 @@ def clean_arrange_data(df_cities):
 
 
 def plot_top_10_cities(top_10):
-    print("plotting topt 10")
+    print("plotting top 10")
     cities = top_10["city_ascii"]
     populations = top_10["population"]
     countries = top_10["country"]
@@ -91,6 +92,25 @@ def plot_top_10_cities(top_10):
     )
 
     plt.tight_layout()
+    return fig
+
+
+def make_plotly(top_10):
+    print("plotting top 10")
+    fig = px.bar(
+        top_10,
+        x="city_ascii",
+        y="population",
+        color="country",
+        title="Top 10 Cities by Population",
+        labels={"city_ascii": "City", "population": "Population"},
+    )
+    fig.update_layout(
+        xaxis_tickangle=-45,
+        title_font_size=16,
+        xaxis_title_font_size=12,
+        yaxis_title_font_size=12,
+    )
     return fig
 
 
