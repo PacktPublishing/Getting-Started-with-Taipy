@@ -47,6 +47,7 @@ if __name__ == "__main__":
     selected_country = "All"
 
     top_10_fig = plot_top_10_cities(df_cities_display)
+    plotly_fig = make_plotly(df_cities_display)
     # Leaflet maps need geojsonformat - we use GeoPandas to transform our data
     leaflet = make_map(df_cities_display)
     selected_cities_pop = df_cities_display["population"].sum()

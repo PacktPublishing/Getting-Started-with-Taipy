@@ -7,7 +7,6 @@ from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_ollama import (
     ChatOllama,
 )  # # ANSWER 1: Try running Local models with Ollama!
-
 from taipy.gui import Gui
 from taipy.gui import builder as tgb
 from taipy.gui import invoke_long_callback

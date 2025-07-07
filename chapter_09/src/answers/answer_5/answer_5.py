@@ -1,5 +1,4 @@
 import taipy.gui.builder as tgb
-
 from pages.calculate_ndvi.charts import plot_ndvi
 
 

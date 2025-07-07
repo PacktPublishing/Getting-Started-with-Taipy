@@ -1,5 +1,4 @@
 import pandas as pd
-
 import taipy.gui.builder as tgb
 
 summary = ""

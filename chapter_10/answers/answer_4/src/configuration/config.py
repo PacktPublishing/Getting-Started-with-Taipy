@@ -4,7 +4,6 @@ from algorithms.scenario_functions import (
     extract_key_parameters,
     load_conversation,
 )
-
 from taipy import Config
 
 #####################

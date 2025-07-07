@@ -1,6 +1,5 @@
 import taipy as tp
 import taipy.gui.builder as tgb
-
 from pages.compare_ndvi.charts import plot_ndvi_multi_timeseries
 
 figure_ndvi = None

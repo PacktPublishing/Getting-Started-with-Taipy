@@ -6,8 +6,6 @@
 
 import taipy as tp
 import taipy.gui.builder as tgb
-from taipy.gui import Gui
-
 from answers.answer_5.answer_5 import create_comp_partial  # Add this for answer 5
 from answers.answer_5.compare_ndvi import compare_page  # Change this this for answer 5
 from configuration.config import (
@@ -18,12 +16,13 @@ from configuration.config import (
 )
 from create_test_scenarios import create_test_scenarios
 from pages.calculate_ndvi.charts import (
-    plot_ndvi,  # Import this for answer 5 - we need it for on_init
-)
+    plot_ndvi,
+)  # Import this for answer 5 - we need it for on_init
 from pages.calculate_ndvi.ndvi import ndvi_page
 from pages.general_page.charts import plot_park_with_centroid
 from pages.general_page.general_page import general_page
 from pages.general_page.park_partial import create_park_info_partial
+from taipy.gui import Gui
 from update_callbacks import update_compare_selector
 
 with tgb.Page() as root_page:

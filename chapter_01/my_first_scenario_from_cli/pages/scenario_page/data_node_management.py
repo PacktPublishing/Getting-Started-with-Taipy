@@ -9,6 +9,7 @@
 # an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
 
+
 # build partial content for a specific data node
 def build_dn_partial(dn, dn_label):
     partial_content = "<|part|render={selected_scenario}|\n\n"
@@ -24,7 +25,8 @@ def build_dn_partial(dn, dn_label):
 
     # Automatic data node content
     partial_content += (
-        "<|{selected_scenario.data_nodes['" + dn.config_id + "']}|data_node|scenario={" "selected_scenario}|>\n\n "
+        "<|{selected_scenario.data_nodes['" + dn.config_id + "']}|data_node|scenario={"
+        "selected_scenario}|>\n\n "
     )
 
     # ##################################################################################################################

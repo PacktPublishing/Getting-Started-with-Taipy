@@ -1,3 +1,4 @@
+import taipy as tp
 from algorithms.chat_algos_history import init_history
 from algorithms.read_prompt import read_prompt
 from configuration.config import conversation_scenario
@@ -5,8 +6,6 @@ from langchain_mistralai.chat_models import ChatMistralAI
 from pages.analytics import analytics_page
 from pages.chat_page import *
 from pages.chat_page import chat_page
-
-import taipy as tp
 from taipy import Orchestrator  # ## For Answer 4
 from taipy.gui import Gui
 from taipy.gui import builder as tgb

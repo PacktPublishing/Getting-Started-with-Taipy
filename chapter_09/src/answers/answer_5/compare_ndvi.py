@@ -1,6 +1,5 @@
 import taipy as tp
 import taipy.gui.builder as tgb
-
 from answers.answer_5.answer_5 import create_comp_partial
 from pages.compare_ndvi.charts import plot_ndvi_multi_timeseries
 

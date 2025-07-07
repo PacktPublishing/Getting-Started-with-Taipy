@@ -1,5 +1,4 @@
 import taipy.gui.builder as tgb
-
 from pages.general_page.charts import plot_park_with_centroid
 
 
