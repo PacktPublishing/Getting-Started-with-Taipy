@@ -1,4 +1,5 @@
 from algorithms.calculate_price import calculate_price
+
 from taipy import Config, Frequency, Scope
 
 vat_data_node_config = Config.configure_data_node(
@@ -11,8 +12,7 @@ buying_price_node_config = Config.configure_data_node(
 )
 
 markup_node_config = Config.configure_data_node(
-    id="markup_node",
-    scope=Scope.SCENARIO,
+    id="markup_node", scope=Scope.SCENARIO, default_data=1
 )
 
 selling_price_node_config = Config.configure_data_node(
