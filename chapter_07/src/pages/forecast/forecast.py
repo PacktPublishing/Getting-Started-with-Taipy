@@ -1,8 +1,9 @@
 import pandas as pd
-import taipy as tp
-import taipy.gui.builder as tgb
 from algorithms.create_charts import plot_forecast
 from configuration.config import forecast_scenario_config
+
+import taipy as tp
+import taipy.gui.builder as tgb
 from taipy.gui import notify
 
 
@@ -12,7 +13,9 @@ def write_into_scenario(scenario, state):
         scenario.gender_forecast.write(s.gender_forecast)
         scenario.generation_forecast.write(s.generation_forecast)
         scenario.product_forecast.write(s.product_forecast)
-        scenario.number_of_days.write(s.prediction_number_days)
+        scenario.number_of_days.write(
+            int(s.prediction_number_days)
+        )  # The `number` visual element outputs floats, `periods` must be int.
 
 
 def update_scenario(state):
