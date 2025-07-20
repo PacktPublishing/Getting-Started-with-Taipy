@@ -34,8 +34,8 @@ def change_scenario(state):
         s.optimize = s.selected_scenario.optimization_target.read()
         s.number_of_warehouses = s.selected_scenario.number_of_warehouses.read()
         s.country_list = s.selected_scenario.country_list.read()
-        s.price_per_kilometer = s.selected_scenario.price_per_km.read()
-        s.co2_per_kilometer = s.selected_scenario.co2_per_km.read()
+        s.price_per_km = s.selected_scenario.price_per_km.read()
+        s.co2_per_km = s.selected_scenario.co2_per_km.read()
 
         refresh_results_of_scenario(s)
 
@@ -56,15 +56,15 @@ def add_tags_to_scenario(
     number_of_warehouses,
     country_list,
     no_country_list,  # Add this for Answer 3
-    price_per_kilometer,
-    co2_per_kilometer,
+    price_per_km,
+    co2_per_km,
 ):
 
     tags = [
         f"Optimization target: {optimize}",
         f"Number of warehouses {number_of_warehouses}",
-        f"Price per Km: {price_per_kilometer}",
-        f"CO2 per Km: {co2_per_kilometer}",
+        f"Price per Km: {price_per_km}",
+        f"CO2 per Km: {co2_per_km}",
     ]
 
     if len(country_list) > 0:
@@ -125,16 +125,16 @@ def change_settings(state):
         s.selected_scenario.no_country_list.write(
             s.no_country_list
         )  ######## Add this for answer 3
-        s.selected_scenario.price_per_km.write(s.price_per_kilometer)
-        s.selected_scenario.co2_per_km.write(s.co2_per_kilometer)
+        s.selected_scenario.price_per_km.write(s.price_per_km)
+        s.selected_scenario.co2_per_km.write(s.co2_per_km)
         s.selected_scenario = add_tags_to_scenario(
             s.selected_scenario,
             s.optimize,
             s.number_of_warehouses,
             s.country_list,
             s.no_country_list,  ############# Add this for answer 3
-            s.price_per_kilometer,
-            s.co2_per_kilometer,
+            s.price_per_km,
+            s.co2_per_km,
         )
         s.active_scenario = True
         notify(s, "s", "Changed Scenario stettings")
@@ -197,15 +197,15 @@ with tgb.Page() as scenario_page:
                     dropdown=True,
                 )
                 tgb.number(
-                    "{price_per_kilometer}",
-                    label="price per Km",
+                    "{price_per_km}",
+                    label="price per km",
                     min=1,
                     max=10,
                     step=0.1,
                 )
                 tgb.number(
-                    "{co2_per_kilometer}",
-                    label="CO2e (Kg) per kilometer",
+                    "{co2_per_km}",
+                    label="CO2e (Kg) per km",
                     min=1,
                     max=10,
                     step=0.1,

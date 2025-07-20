@@ -34,7 +34,7 @@ def change_scenario(state):
         s.optimize = s.selected_scenario.optimization_target.read()
         s.number_of_warehouses = s.selected_scenario.number_of_warehouses.read()
         s.country_list = s.selected_scenario.country_list.read()
-        s.co2_per_kilometer = s.selected_scenario.co2_per_km.read()
+        s.co2_per_km = s.selected_scenario.co2_per_km.read()
 
         refresh_results_of_scenario(s)
 
@@ -54,14 +54,14 @@ def add_tags_to_scenario(
     optimize,
     number_of_warehouses,
     country_list,
-    co2_per_kilometer,
+    co2_per_km,
 ):
 
     tags = [
         f"Optimization target: {optimize}",
         f"Number of warehouses {number_of_warehouses}",
         f"Price per Km: {scenario.price_per_km.read()}",  # Change this to read from the data node
-        f"CO2 per Km: {co2_per_kilometer}",
+        f"CO2 per Km: {co2_per_km}",
     ]
 
     if len(country_list) > 0:
@@ -82,15 +82,15 @@ def change_settings(state):
         s.selected_scenario.optimization_target.write(s.optimize)
         s.selected_scenario.number_of_warehouses.write(s.number_of_warehouses)
         s.selected_scenario.country_list.write(s.country_list)
-        s.selected_scenario.price_per_km.write(s.price_per_kilometer)
-        s.selected_scenario.co2_per_km.write(s.co2_per_kilometer)
+        s.selected_scenario.price_per_km.write(s.price_per_km)
+        s.selected_scenario.co2_per_km.write(s.co2_per_km)
         s.selected_scenario = add_tags_to_scenario(
             s.selected_scenario,
             s.optimize,
             s.number_of_warehouses,
             s.country_list,
-            s.price_per_kilometer,
-            s.co2_per_kilometer,
+            s.price_per_km,
+            s.co2_per_km,
         )
         s.active_scenario = True
         notify(s, "s", "Changed Scenario settings")
@@ -125,8 +125,8 @@ with tgb.Page() as scenario_page:
 - **Number of warehouses**: the number of warehouses to select, must be between 1 and 10. If "any", then the applicatioons selects the optimal warehouses with no more than 10.
 - **Fix warehouses**: enable the ability to fix warehouses,
 - **Countries to Include**: If selected, the application will assign **at least** one warehouse to each selected country. The application won't let you select more copuntries than warehouses.
-- **Price per kilometer**: Total cost per kilometer between a warehouse and a customer. Includes all costs (gas, truck maintainance, wages...) for trips back and forth.
-- **CO2 per kilometer**: Total CO2e emissions for transporation of goods between warehouse and customer, for trips back and forth.
+- **Price per km**: Total cost per kilometer between a warehouse and a customer. Includes all costs (gas, truck maintainance, wages...) for trips back and forth.
+- **CO2 per km**: Total CO2e emissions for transporation of goods between warehouse and customer, for trips back and forth.
         
         """,
                     mode="md",
@@ -147,8 +147,8 @@ with tgb.Page() as scenario_page:
                     dropdown=True,
                 )
                 tgb.number(
-                    "{co2_per_kilometer}",
-                    label="CO2e (Kg) per kilometer",
+                    "{co2_per_km}",
+                    label="CO2e (Kg) per km",
                     min=1,
                     max=10,
                     step=0.1,

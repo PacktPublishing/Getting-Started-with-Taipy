@@ -2,21 +2,6 @@ import datetime as dt
 
 import taipy as tp
 
-kilometer_prices = {
-    "1-2025": 3.95,
-    "2-2025": 4,
-    "3-2025": 4,
-    "4-2025": 4.08,
-    "5-2025": 4.08,
-    "6-2025": 4.3,
-    "7-2025": 4.5,
-    "8-2025": 4.5,
-    "9-2025": 4.5,
-    "10-2025": 4.6,
-    "11-2025": 4.4,
-    "12-2025": 4.5,
-}
-
 
 def create_test_scenarios(scenario):
     # First Scenario

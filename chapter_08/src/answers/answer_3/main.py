@@ -1,8 +1,9 @@
-import taipy as tp
-import taipy.gui.builder as tgb
 from configuration.config import warehouse_scenario_config
 from create_test_scenarios import create_test_scenarios
 from pages import *
+
+import taipy as tp
+import taipy.gui.builder as tgb
 from taipy.gui import Gui
 
 with tgb.Page() as root_page:
@@ -46,8 +47,8 @@ if __name__ == "__main__":
     total_cost_per_order = selected_scenario.total_cost_per_order.read()
     total_co2_per_order = selected_scenario.total_co2_per_order.read()
 
-    price_per_kilometer = 4
-    co2_per_kilometer = 2
+    price_per_km = 4
+    co2_per_km = 2
     optimize = "price"
     country_list = []
     no_country_list = []  ################### Add this for answer 3
