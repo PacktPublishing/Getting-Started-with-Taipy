@@ -1,10 +1,8 @@
 import datetime as dt
 
-from algorithmns.algos import (
-    calculate_distance_matrix,
-    calculate_total_numbers,
-    create_pulp_model,
-)
+from algorithmns.algos import calculate_total_numbers, create_pulp_model
+from algorithmns.distances import calculate_distance_matrix
+
 from taipy import Config, Scope
 
 ###################################
