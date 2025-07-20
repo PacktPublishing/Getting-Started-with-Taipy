@@ -202,6 +202,7 @@ with tgb.Page() as scenario_page:
                     threshold=2_000,
                     format=" €",
                     title="Avg cost/order",
+                    type="circular",  # default
                     hover_text="Estimated average transportation cost per truck shipping.",
                     class_name="mb2 mt2 pb1",
                 )
@@ -211,6 +212,7 @@ with tgb.Page() as scenario_page:
                     threshold=1_000,
                     format=" Kg",
                     title="Avg CO2e emissions/order",
+                    type="circular",  # default
                     hover_text="Estimated average CO2e emissions per truck shipping.",
                     class_name="mb2 mt2 pb1",
                 )
