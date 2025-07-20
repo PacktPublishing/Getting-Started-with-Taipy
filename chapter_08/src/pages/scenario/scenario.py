@@ -137,7 +137,7 @@ with tgb.Page() as scenario_page:
                     "{number_of_warehouses}",
                     lov=["any", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                     dropdown=True,
-                    label="Numbre of warehouses",
+                    label="Number of warehouses",
                 )
                 tgb.selector(
                     "{country_list}",
