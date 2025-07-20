@@ -5,15 +5,28 @@ from .scenario_charts import plot_assignments, plot_customer_by_warehouse
 
 
 def refresh_results_of_scenario(state):
+    """This function use getattr and setattr to avoid long repetitions
+    in the if/else statement"""
+    bound_variables_to_write = [
+        "df_selected_warehouses",
+        "df_assignments",
+        "total_price",
+        "total_co2",
+        "total_cost_per_order",
+        "total_co2_per_order",
+    ]
     with state as s:
         s.df_selected_warehouses_dn = s.selected_scenario.df_selected_warehouses
-        s.df_selected_warehouses = s.selected_scenario.df_selected_warehouses.read()
-        s.df_assignments = s.selected_scenario.df_assignments.read()
-
-        s.total_price = s.selected_scenario.total_price.read()
-        s.total_co2 = s.selected_scenario.total_co2.read()
-        s.total_cost_per_order = s.selected_scenario.total_cost_per_order.read()
-        s.total_co2_per_order = s.selected_scenario.total_co2_per_order.read()
+        if s.selected_scenario.total_price.is_ready_for_reading:
+            for bound_variable in bound_variables_to_write:
+                setattr(
+                    s,
+                    bound_variable,
+                    getattr(s.selected_scenario, bound_variable).read(),
+                )
+        else:
+            for bound_variable in bound_variables_to_write:
+                setattr(s, bound_variable, None)
 
 
 def change_scenario(state):
@@ -21,19 +34,20 @@ def change_scenario(state):
         s.optimize = s.selected_scenario.optimization_target.read()
         s.number_of_warehouses = s.selected_scenario.number_of_warehouses.read()
         s.country_list = s.selected_scenario.country_list.read()
-        s.price_per_kilometer = s.selected_scenario.price_per_km.read()
-        s.co2_per_kilometer = s.selected_scenario.co2_per_km.read()
+        s.price_per_km = s.selected_scenario.price_per_km.read()
+        s.co2_per_km = s.selected_scenario.co2_per_km.read()
 
         refresh_results_of_scenario(s)
 
 
 def submission_changed(state, submittable, details):
-    if details["submission_status"] == "COMPLETED":
-        print("Submission completed")
-        refresh_results_of_scenario(state)
-        notify(state, "s", "Submission completed")
-    elif details["submission_status"] == "FAILED":
-        notify(state, "error", "Submission failed")
+    with state as s:
+        if details["submission_status"] == "COMPLETED":
+            print("Submission completed")
+            refresh_results_of_scenario(s)
+            notify(s, "s", "Submission completed")
+        elif details["submission_status"] == "FAILED":
+            notify(s, "error", "Submission failed")
 
 
 def add_tags_to_scenario(
@@ -42,15 +56,15 @@ def add_tags_to_scenario(
     number_of_warehouses,
     country_list,
     no_country_list,  # Add this for Answer 3
-    price_per_kilometer,
-    co2_per_kilometer,
+    price_per_km,
+    co2_per_km,
 ):
 
     tags = [
         f"Optimization target: {optimize}",
         f"Number of warehouses {number_of_warehouses}",
-        f"Price per Km: {price_per_kilometer}",
-        f"CO2 per Km: {co2_per_kilometer}",
+        f"Price per Km: {price_per_km}",
+        f"CO2 per Km: {co2_per_km}",
     ]
 
     if len(country_list) > 0:
@@ -111,16 +125,16 @@ def change_settings(state):
         s.selected_scenario.no_country_list.write(
             s.no_country_list
         )  ######## Add this for answer 3
-        s.selected_scenario.price_per_km.write(s.price_per_kilometer)
-        s.selected_scenario.co2_per_km.write(s.co2_per_kilometer)
+        s.selected_scenario.price_per_km.write(s.price_per_km)
+        s.selected_scenario.co2_per_km.write(s.co2_per_km)
         s.selected_scenario = add_tags_to_scenario(
             s.selected_scenario,
             s.optimize,
             s.number_of_warehouses,
             s.country_list,
             s.no_country_list,  ############# Add this for answer 3
-            s.price_per_kilometer,
-            s.co2_per_kilometer,
+            s.price_per_km,
+            s.co2_per_km,
         )
         s.active_scenario = True
         notify(s, "s", "Changed Scenario stettings")
@@ -183,15 +197,15 @@ with tgb.Page() as scenario_page:
                     dropdown=True,
                 )
                 tgb.number(
-                    "{price_per_kilometer}",
-                    label="price per Km",
+                    "{price_per_km}",
+                    label="price per km",
                     min=1,
                     max=10,
                     step=0.1,
                 )
                 tgb.number(
-                    "{co2_per_kilometer}",
-                    label="CO2e (Kg) per kilometer",
+                    "{co2_per_km}",
+                    label="CO2e (Kg) per km",
                     min=1,
                     max=10,
                     step=0.1,

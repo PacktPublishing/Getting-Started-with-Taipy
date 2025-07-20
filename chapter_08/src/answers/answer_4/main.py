@@ -1,10 +1,11 @@
 import datetime as dt
 
-import taipy as tp
-import taipy.gui.builder as tgb
 from configuration.config import warehouse_scenario_config
 from create_test_scenarios import create_test_scenarios
 from pages import *
+
+import taipy as tp
+import taipy.gui.builder as tgb
 from taipy.gui import Gui
 
 with tgb.Page() as root_page:
@@ -25,7 +26,7 @@ stylekit = {"color_primary": "#003399"}
 
 
 if __name__ == "__main__":
-    kilometer_prices = {
+    km_prices = {
         "1-2025": 3.95,
         "2-2025": 4,
         "3-2025": 4,
@@ -56,7 +57,7 @@ if __name__ == "__main__":
     selected_scenario.submit()  # Create the default-value scenario so charts are initialized
 
     scenario_date = f"{selected_scenario.creation_date.month}-{selected_scenario.creation_date.year}"
-    km_cost = kilometer_prices.get(scenario_date)
+    km_cost = km_prices.get(scenario_date)
     selected_scenario.price_per_km.write(km_cost)
 
     df_warehouses = selected_scenario.df_warehouses.read()
@@ -71,7 +72,7 @@ if __name__ == "__main__":
     total_cost_per_order = selected_scenario.total_cost_per_order.read()
     total_co2_per_order = selected_scenario.total_co2_per_order.read()
 
-    co2_per_kilometer = 2
+    co2_per_km = 2
     optimize = "price"
     country_list = []
     number_of_warehouses = "any"

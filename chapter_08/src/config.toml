@@ -23,9 +23,6 @@ default_data = "any"
 [DATA_NODE.country_list]
 default_data = []
 
-[DATA_NODE.no_country_list]
-default_data = []
-
 [DATA_NODE.price_per_km]
 default_data = "4:int"
 
@@ -47,19 +44,19 @@ storage_type = "csv"
 [DATA_NODE.total_co2_per_order]
 
 [TASK.compute_distance_matrix]
-function = "algorithmns.algos.calculate_distance_matrix:function"
+function = "algorithmns.distances.calculate_distance_matrix:function"
 inputs = [ "df_warehouses:SECTION", "df_customers:SECTION",]
 outputs = [ "distance_matrix:SECTION",]
 skippable = "True:bool"
 
 [TASK.pulp_model]
-function = "algorithmns.algos.create_pulp_model:function"
-inputs = [ "df_warehouses:SECTION", "df_customers:SECTION", "distance_matrix:SECTION", "optimization_target:SECTION", "number_of_warehouses:SECTION", "country_list:SECTION", "no_country_list:SECTION", "price_per_km:SECTION", "co2_per_km:SECTION",]
+function = "algorithmns.optimization.create_pulp_model:function"
+inputs = [ "df_warehouses:SECTION", "df_customers:SECTION", "distance_matrix:SECTION", "optimization_target:SECTION", "number_of_warehouses:SECTION", "country_list:SECTION", "price_per_km:SECTION", "co2_per_km:SECTION",]
 outputs = [ "df_selected_warehouses:SECTION", "df_assignments:SECTION",]
 skippable = "False:bool"
 
 [TASK.calculate_total_numbers]
-function = "algorithmns.algos.calculate_total_numbers:function"
+function = "algorithmns.calculate_total_numbers.calculate_total_numbers:function"
 inputs = [ "df_selected_warehouses:SECTION",]
 outputs = [ "total_price:SECTION", "total_co2:SECTION", "total_cost_per_order:SECTION", "total_co2_per_order:SECTION",]
 skippable = "False:bool"
