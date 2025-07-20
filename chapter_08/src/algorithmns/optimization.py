@@ -5,6 +5,9 @@ from .problem_data import ProblemData
 
 
 def _initialize_problem():
+    """
+    Initialize a PuLP minimization problem.
+    """
     return pulp.LpProblem("Warehouse_Selection", pulp.LpMinimize)
 
 
@@ -19,6 +22,12 @@ def _define_variables(data: ProblemData):
 
 
 def _compute_transport_cost_term(assignment_var, data: ProblemData):
+    """
+    Computes the total transport cost across all customer-warehouse assignments.
+
+    Cost is calculated as:
+    distance * price_per_km * yearly_orders
+    """
     return pulp.lpSum(
         assignment_var[(w, c)]
         * data.distance_matrix.at[w, c]
@@ -30,6 +39,12 @@ def _compute_transport_cost_term(assignment_var, data: ProblemData):
 
 
 def _compute_transport_co2_term(assignment_var, data: ProblemData):
+    """
+    Computes total CO₂ emissions from transport.
+
+    Emissions are calculated as:
+    distance * co2_per_km * yearly_orders
+    """
     return pulp.lpSum(
         assignment_var[(w, c)]
         * data.distance_matrix.at[w, c]
@@ -43,6 +58,18 @@ def _compute_transport_co2_term(assignment_var, data: ProblemData):
 def _compute_warehouse_cost_term(
     warehouse_var, data: ProblemData, column, multiplier=1
 ):
+    """
+    Computes fixed warehouse costs or emissions depending on the specified column.
+
+    Args:
+        warehouse_var: Decision variable dict for warehouses
+        data: ProblemData instance
+        column: Column name to read values from (e.g. 'yearly_cost', 'yearly_co2_tons')
+        multiplier: Optional multiplier (e.g. for unit conversions like tons -> kg)
+
+    Returns:
+        Total cost or emission expression for all selected warehouses
+    """
     return pulp.lpSum(
         warehouse_var[w] * data.df_warehouses.at[w, column] * multiplier
         for w in data.df_warehouses.index
@@ -52,6 +79,22 @@ def _compute_warehouse_cost_term(
 def _set_objective_function(
     prob, assignment_var, warehouse_var, data: ProblemData, optimize: str
 ):
+    """
+    Sets the minimization objective for the optimization problem.
+
+    Depending on 'optimize', the objective is either minimize total cost
+    or total CO₂ emissions.
+
+    - If optimize == "price": combines transport cost and warehouse rent
+    - If optimize == "co2": combines transport emissions and warehouse emissions
+
+    Args:
+        prob: The PuLP LpProblem object.
+        assignment_var: Dictionary of assignment decision variables (customer to warehouse).
+        warehouse_var: Dictionary of warehouse selection decision variables.
+        data: ProblemData instance containing input data and parameters.
+        optimize: Objective type ("price" or "co2").
+    """
     if optimize == "price":
         transport = _compute_transport_cost_term(assignment_var, data)
         warehouse = _compute_warehouse_cost_term(warehouse_var, data, "yearly_cost")
@@ -64,6 +107,9 @@ def _set_objective_function(
 
 
 def _add_customer_assignment_constraints(prob, assignment_var, data: ProblemData):
+    """
+    Adds a constraint to ensure each customer is assigned to exactly one warehouse.
+    """
     for c in data.df_customers.index:
         prob += (
             pulp.lpSum(assignment_var[(w, c)] for w in data.df_warehouses.index) == 1
@@ -73,6 +119,9 @@ def _add_customer_assignment_constraints(prob, assignment_var, data: ProblemData
 def _add_warehouse_selection_constraints(
     prob, assignment_var, warehouse_var, data: ProblemData
 ):
+    """
+    Adds a constraint to ensure customers are only assigned to warehouses that are selected (open).
+    """
     for w in data.df_warehouses.index:
         for c in data.df_customers.index:
             prob += assignment_var[(w, c)] <= warehouse_var[w]
@@ -81,16 +130,24 @@ def _add_warehouse_selection_constraints(
 def _add_number_of_warehouses_constraints(
     prob, warehouse_var, data: ProblemData, number_of_warehouses
 ):
+    """
+    Adds a constraint to control how many warehouses can be selected.
+
+    If a specific number is given, enforces that exact number.
+    If 'any' is passed, allows between 1 and 10 warehouses.
+    """
+    warehouse_sum = pulp.lpSum(warehouse_var[w] for w in data.df_warehouses.index)
     if number_of_warehouses != "any":
-        prob += pulp.lpSum(warehouse_var[w] for w in data.df_warehouses.index) == int(
-            number_of_warehouses
-        )
+        prob += warehouse_sum == int(number_of_warehouses)
     else:
-        prob += pulp.lpSum(warehouse_var[w] for w in data.df_warehouses.index) >= 1
-        prob += pulp.lpSum(warehouse_var[w] for w in data.df_warehouses.index) <= 10
+        prob += warehouse_sum >= 1
+        prob += warehouse_sum <= 10
 
 
 def _add_country_constraints(prob, warehouse_var, data: ProblemData, country_list):
+    """
+    Adds constraints to enforce that at least one warehouse is selected in each specified country.
+    """
     for country in country_list:
         wh_in_country = data.df_warehouses[
             data.df_warehouses["country"] == country
@@ -106,6 +163,15 @@ def _add_constraints(
     number_of_warehouses,
     country_list,
 ):
+    """
+    Central helper that applies all constraints to the optimization problem.
+
+    This includes:
+    - Assigning each customer to one warehouse
+    - Preventing assignments to unopened warehouses
+    - Enforcing total warehouse count
+    - Optional geographic requirements
+    """
     _add_customer_assignment_constraints(prob, assignment_var, data)
     _add_warehouse_selection_constraints(prob, assignment_var, warehouse_var, data)
     _add_number_of_warehouses_constraints(
@@ -116,6 +182,14 @@ def _add_constraints(
 
 
 def _interpret_solution(warehouse_var, assignment_var, data: ProblemData):
+    """
+    Interprets the optimized solution by extracting:
+    - Which warehouses are selected
+    - How customers are assigned to those warehouses
+    - Total transport and fixed costs, as well as CO₂ emissions
+
+    Returns structured data for formatting: selected warehouses, assignment details, and per-warehouse metrics.
+    """
     selected_warehouses = [
         w for w in data.df_warehouses.index if pulp.value(warehouse_var[w]) == 1
     ]
@@ -178,6 +252,14 @@ def _format_results(
     scenario_co2s,
     scenario_orders,
 ):
+    """
+    Takes structured solution data and converts it into two Pandas DataFrames:
+
+    - df_selected: warehouse-level results with cost, CO₂, and total orders
+    - df_assignments: detailed customer-to-warehouse assignment mapping
+
+    These outputs are used for downstream analysis and visualization.
+    """
     df_selected = data.df_warehouses.loc[selected_warehouses].copy()
     df_selected["scenario_cost"] = scenario_costs
     df_selected["scenario_co2_tons"] = scenario_co2s
@@ -196,6 +278,32 @@ def create_pulp_model(
     price_per_km=4,
     co2_per_km=2,
 ):
+    """
+    Builds and solves the warehouse optimization model using PuLP.
+
+    This is the main function that ties everything together:
+    - Prepares and encapsulates the input data
+    - Defines decision variables for warehouse selection and customer assignments
+    - Sets the objective function (optimize either total cost or total CO₂)
+    - Adds all business constraints (assignment rules, warehouse limits, country requirements)
+    - Solves the problem using the PuLP CBC solver
+    - Extracts and formats the results into Pandas DataFrames
+
+    Parameters:
+        df_warehouses (pd.DataFrame): Info about candidate warehouses (location, cost, emissions, etc.)
+        df_customers (pd.DataFrame): Info about customers (location, yearly orders, etc.)
+        distance_matrix (pd.DataFrame): Distances between each warehouse and customer (in km)
+        optimize (str): Whether to optimize for 'price' or 'co2' (default is 'price')
+        number_of_warehouses (int or str): Either an integer (e.g. 3) or "any" for flexible count
+        country_list (list or None): Optional list of countries to require at least one warehouse in each
+        price_per_km (float): Transport cost per kilometer per order (default = 4)
+        co2_per_km (float): Transport emissions per kilometer per order (default = 2)
+
+    Returns:
+        tuple:
+            - df_selected (pd.DataFrame): Warehouses selected, with costs, CO₂, and orders handled
+            - df_assignments (pd.DataFrame): Customer-to-warehouse assignments and their impact
+    """
     data = ProblemData(
         df_warehouses.copy(),
         df_customers.copy(),
