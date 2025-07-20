@@ -41,142 +41,175 @@ def calculate_distance_matrix(df_warehouses, df_customers):
     return distance_matrix
 
 
-def create_pulp_model(
-    df_warehouses,
-    df_customers,
-    distance_matrix,
-    optimize: str,  # "price" or "co2"
-    number_of_warehouses: int | str,  # e.g., 3 or "any"
-    country_list: list = None,
-    price_per_km: float = 4,
-    co2_per_km: float = 2,
-):
+#### Optimization functions ####
+
+
+def initialize_problem():
     """
-    Creates and solves the optimization model.
-    Returns:
-        - Selected warehouses (DataFrame)
-        - Assignments (DataFrame: warehouse, customer, distance, cost, co2)
+    Initialize a PuLP minimization problem.
     """
-    # Taipy selector turns int into str:
-    if number_of_warehouses != "any":
-        number_of_warehouses = int(number_of_warehouses)
+    return pulp.LpProblem("Warehouse_Selection", pulp.LpMinimize)
 
-    df_warehouses["id"] = df_warehouses.index
-    df_customers["id"] = df_customers.index  # 2 customers can have the same name
 
-    # Initialize problem
-    prob = pulp.LpProblem("Warehouse_Selection", pulp.LpMinimize)
+def define_variables(df_warehouses, df_customers):
+    """
+    Creates binary decision variables for warehouse selection and customer assignment.
+    """
+    warehouses = df_warehouses.index.tolist()
+    customers = df_customers.index.tolist()
 
-    # Decision variables
-    warehouses = df_warehouses["id"].tolist()
-    customers = df_customers["id"].tolist()
-
-    # x_w = 1 if warehouse w is selected
     warehouse_var = pulp.LpVariable.dicts("Warehouse", warehouses, cat="Binary")
-
-    # y_wc = 1 if customer c is assigned to warehouse w
     assignment_var = pulp.LpVariable.dicts(
         "Assignment", [(w, c) for w in warehouses for c in customers], cat="Binary"
     )
+    return warehouse_var, assignment_var
 
-    # Objective function
+
+def _objective_total(
+    assignment_var,
+    warehouse_var,
+    df_warehouses,
+    df_customers,
+    distance_matrix,
+    transport_unit_cost,
+    warehouse_cost_column,
+    warehouse_cost_multiplier=1,
+):
+    """
+    Generic objective builder for either price or CO₂.
+    """
+    warehouses = df_warehouses.index.tolist()
+    customers = df_customers.index.tolist()
+
+    transport_total = pulp.lpSum(
+        assignment_var[(w, c)]
+        * distance_matrix.at[w, c]
+        * transport_unit_cost
+        * df_customers.at[c, "yearly_orders"]
+        for w in warehouses
+        for c in customers
+    )
+
+    warehouse_total = pulp.lpSum(
+        warehouse_var[w]
+        * df_warehouses.at[w, warehouse_cost_column]
+        * warehouse_cost_multiplier
+        for w in warehouses
+    )
+
+    return transport_total + warehouse_total
+
+
+def set_objective_function(
+    prob,
+    assignment_var,
+    warehouse_var,
+    df_warehouses,
+    df_customers,
+    distance_matrix,
+    optimize,
+    price_per_km=4,
+    co2_per_km=2,
+):
+    """
+    Adds the selected objective (price or co2) to the optimization problem.
+    """
     if optimize == "price":
-        # Total cost = warehouse rent + transportation cost
-        transportation_cost = pulp.lpSum(
-            assignment_var[(w, c)]
-            * distance_matrix.at[w, c]
-            * price_per_km
-            * df_customers.at[c, "yearly_orders"]
-            for w in warehouses
-            for c in customers
+        prob += _objective_total(
+            assignment_var,
+            warehouse_var,
+            df_warehouses,
+            df_customers,
+            distance_matrix,
+            transport_unit_cost=price_per_km,
+            warehouse_cost_column="yearly_cost",
         )
-        total_cost = (
-            pulp.lpSum(
-                [
-                    warehouse_var[w] * df_warehouses.at[w, "yearly_cost"]
-                    for w in warehouses
-                ]
-            )
-            + transportation_cost
+    else:
+        prob += _objective_total(
+            assignment_var,
+            warehouse_var,
+            df_warehouses,
+            df_customers,
+            distance_matrix,
+            transport_unit_cost=co2_per_km,
+            warehouse_cost_column="yearly_co2_tons",
+            warehouse_cost_multiplier=1000,  # Convert tons to kg
         )
-        prob += total_cost
-    else:  # "co2"
-        # Total CO2 = warehouse emissions + transportation emissions
-        transportation_co2 = pulp.lpSum(
-            assignment_var[(w, c)]
-            * distance_matrix.at[w, c]
-            * co2_per_km
-            * df_customers.at[c, "yearly_orders"]
-            for w in warehouses
-            for c in customers
-        )
-        total_co2 = (
-            pulp.lpSum(
-                [
-                    warehouse_var[w] * df_warehouses.at[w, "yearly_co2_tons"] * 1000
-                    for w in warehouses
-                ]  # Convert tons to kg
-            )
-            + transportation_co2
-        )
-        prob += total_co2
 
-    # Constraints
-    ## 1. Each customer assigned to exactly one warehouse
+
+def add_constraints(
+    prob,
+    assignment_var,
+    warehouse_var,
+    df_warehouses,
+    df_customers,
+    number_of_warehouses,
+    country_list=None,
+):
+    """
+    Adds problem constraints.
+    """
+    warehouses = df_warehouses.index.tolist()
+    customers = df_customers.index.tolist()
+
+    # 1. Each customer is assigned to exactly one warehouse
     for c in customers:
         prob += pulp.lpSum(assignment_var[(w, c)] for w in warehouses) == 1
 
-    ## 2. Cannot assign to unopened warehouses
+    # 2. Customers can only be assigned to selected warehouses
     for w in warehouses:
         for c in customers:
             prob += assignment_var[(w, c)] <= warehouse_var[w]
 
-    ## 3. Number of warehouses
+    # 3. Limit number of warehouses
     if number_of_warehouses != "any":
-        prob += pulp.lpSum(warehouse_var[w] for w in warehouses) == number_of_warehouses
+        prob += pulp.lpSum(warehouse_var[w] for w in warehouses) == int(
+            number_of_warehouses
+        )
     else:
         prob += pulp.lpSum(warehouse_var[w] for w in warehouses) >= 1
         prob += pulp.lpSum(warehouse_var[w] for w in warehouses) <= 10
 
-    ## 4. Country constraints (if provided)
+    # 4. Country constraints (optional)
     if country_list:
-        # Ensure at least one warehouse per country in country_list
         for country in country_list:
-            wh_in_country = df_warehouses[df_warehouses["country"] == country][
-                "id"
-            ].tolist()
+            wh_in_country = df_warehouses[
+                df_warehouses["country"] == country
+            ].index.tolist()
             prob += pulp.lpSum(warehouse_var[w] for w in wh_in_country) >= 1
 
-    # Solve
-    prob.solve(pulp.PULP_CBC_CMD(msg=True))  # Use CBC solver
 
-    # Extract results
-    selected_warehouses = [w for w in warehouses if pulp.value(warehouse_var[w]) == 1]
+def extract_results(
+    warehouse_var,
+    assignment_var,
+    df_warehouses,
+    df_customers,
+    distance_matrix,
+    price_per_km=4,
+    co2_per_km=2,
+):
+    """
+    Extracts the results from the solved problem and formats them.
+    """
+    selected_warehouses = [
+        w for w in df_warehouses.index if pulp.value(warehouse_var[w]) == 1
+    ]
+    customers = df_customers.index.tolist()
 
     assignments = []
-    scenario_costs = []  # scenario per warehouse
-    scenario_co2s = []  # scenario per warehouse
+    scenario_costs = []
+    scenario_co2s = []
     scenario_orders = []
+
     for w in selected_warehouses:
         yearly_cost = df_warehouses.at[w, "yearly_cost"]
         yearly_co2_tons = df_warehouses.at[w, "yearly_co2_tons"]
-
-        # Calculate total transportation cost, CO2 and total trips for this warehouse
         total_transport_cost = 0
         total_transport_co2 = 0
         warehouse_orders = 0
+
         for c in customers:
             if pulp.value(assignment_var[(w, c)]) == 1:
-                # Get warehouse and customer coordinates
-                wh_wh = df_warehouses.at[w, "warehouse"]
-                wh_lat = df_warehouses.at[w, "latitude"]
-                wh_lon = df_warehouses.at[w, "longitude"]
-                cust_name = df_customers.at[c, "company_name"]
-                cust_lat = df_customers.at[c, "latitude"]
-                cust_lon = df_customers.at[c, "longitude"]
-
-                # Calculate distance, cost, and CO2
-
                 distance = distance_matrix.at[w, c]
                 orders = df_customers.at[c, "yearly_orders"]
 
@@ -186,40 +219,86 @@ def create_pulp_model(
 
                 assignments.append(
                     {
-                        "warehouse": wh_wh,
-                        "warehouse_lat": wh_lat,
-                        "warehouse_lon": wh_lon,
-                        "customer": cust_name,
-                        "customer_lat": cust_lat,
-                        "customer_lon": cust_lon,
+                        "warehouse": df_warehouses.at[w, "warehouse"],
+                        "warehouse_lat": df_warehouses.at[w, "latitude"],
+                        "warehouse_lon": df_warehouses.at[w, "longitude"],
+                        "customer": df_customers.at[c, "company_name"],
+                        "customer_lat": df_customers.at[c, "latitude"],
+                        "customer_lon": df_customers.at[c, "longitude"],
                         "distance_km": distance,
                         "orders": orders,
-                        "total_cost": int(
-                            distance * price_per_km * orders
-                        ),  # integer for better display
-                        "total_co2_kg": int(
-                            distance * co2_per_km * orders
-                        ),  # integer for better display
+                        "total_cost": int(distance * price_per_km * orders),
+                        "total_co2_kg": int(distance * co2_per_km * orders),
                     }
                 )
-        # Add scenario cost and CO2 to the lists, as integers for better display
+
         scenario_costs.append(int(yearly_cost + total_transport_cost))
-        scenario_co2s.append(
-            int((yearly_co2_tons) + total_transport_co2 / 1000)
-        )  # Retrieve CO2 emissions in metric tons
+        scenario_co2s.append(int(yearly_co2_tons + total_transport_co2 / 1000))
         scenario_orders.append(warehouse_orders)
 
-    # Convert to DataFrames
-    df_selected_warehouses = df_warehouses[
-        df_warehouses["id"].isin(selected_warehouses)
-    ].copy()
+    df_selected = df_warehouses.loc[selected_warehouses].copy()
+    df_selected["scenario_cost"] = scenario_costs
+    df_selected["scenario_co2_tons"] = scenario_co2s
+    df_selected["scenario_orders"] = scenario_orders
     df_assignments = pd.DataFrame(assignments)
 
-    df_selected_warehouses["scenario_cost"] = scenario_costs
-    df_selected_warehouses["scenario_co2_tons"] = scenario_co2s
-    df_selected_warehouses["scenario_orders"] = scenario_orders
+    return df_selected, df_assignments
 
-    return df_selected_warehouses, df_assignments
+
+def create_pulp_model(
+    df_warehouses,
+    df_customers,
+    distance_matrix,
+    optimize="price",
+    number_of_warehouses="any",
+    country_list=None,
+    price_per_km=4,
+    co2_per_km=2,
+):
+    """
+    Creates and solves the warehouse optimization problem using PuLP.
+    """
+    df_warehouses = df_warehouses.copy()
+    df_customers = df_customers.copy()
+    df_warehouses["id"] = df_warehouses.index
+    df_customers["id"] = df_customers.index
+
+    prob = initialize_problem()
+    warehouse_var, assignment_var = define_variables(df_warehouses, df_customers)
+    set_objective_function(
+        prob,
+        assignment_var,
+        warehouse_var,
+        df_warehouses,
+        df_customers,
+        distance_matrix,
+        optimize,
+        price_per_km,
+        co2_per_km,
+    )
+    add_constraints(
+        prob,
+        assignment_var,
+        warehouse_var,
+        df_warehouses,
+        df_customers,
+        number_of_warehouses,
+        country_list,
+    )
+    prob.solve(pulp.PULP_CBC_CMD(msg=False))
+
+    return extract_results(
+        warehouse_var,
+        assignment_var,
+        df_warehouses,
+        df_customers,
+        distance_matrix,
+        price_per_km,
+        co2_per_km,
+    )
+
+
+#### Optimization functions END ####
 
 
 def calculate_total_numbers(df_scenario):

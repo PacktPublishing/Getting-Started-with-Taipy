@@ -2,13 +2,16 @@ import pandas as pd
 import plotly.express as px
 
 
-def plot_customers_warehouses(df_customers, df_warehouses):
+def _prepare_data(df_customers, df_warehouses):
     df_cust = df_customers.copy()
     df_wh = df_warehouses.copy()
     df_cust["type"] = "Customer"
     df_wh["type"] = "Warehouse"
     data = pd.concat([df_cust, df_wh])
+    return data
 
+
+def _add_columns_to_data(data):
     data["hover_amount"] = data.apply(
         lambda row: (
             f"Yearly Orders: {row['yearly_orders']}"
@@ -27,9 +30,15 @@ def plot_customers_warehouses(df_customers, df_warehouses):
     )
     # Different marker size for Warehouses and customers
     data["size"] = data["type"].map({"Customer": 5, "Warehouse": 22})
+    return data
+
+
+def plot_customers_warehouses(df_customers, df_warehouses):
+    data = _prepare_data(df_customers, df_warehouses)
+    data = _add_columns_to_data(data)
 
     # Create the map
-    fig = px.scatter_mapbox(
+    fig = px.scatter_map(
         data,
         lat="latitude",
         lon="longitude",
@@ -42,7 +51,7 @@ def plot_customers_warehouses(df_customers, df_warehouses):
             "latitude": False,
             "longitude": False,
         },
-        mapbox_style="carto-positron",
+        map_style="carto-positron",
         zoom=3,
         center={"lat": 50, "lon": 10},  # Center on Europe
         size_max=10,
