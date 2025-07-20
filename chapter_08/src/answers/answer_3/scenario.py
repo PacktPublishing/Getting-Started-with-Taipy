@@ -41,12 +41,13 @@ def change_scenario(state):
 
 
 def submission_changed(state, submittable, details):
-    if details["submission_status"] == "COMPLETED":
-        print("Submission completed")
-        refresh_results_of_scenario(state)
-        notify(state, "s", "Submission completed")
-    elif details["submission_status"] == "FAILED":
-        notify(state, "error", "Submission failed")
+    with state as s:
+        if details["submission_status"] == "COMPLETED":
+            print("Submission completed")
+            refresh_results_of_scenario(s)
+            notify(s, "s", "Submission completed")
+        elif details["submission_status"] == "FAILED":
+            notify(s, "error", "Submission failed")
 
 
 def add_tags_to_scenario(

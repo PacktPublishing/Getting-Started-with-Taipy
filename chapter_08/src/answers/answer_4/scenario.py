@@ -40,12 +40,13 @@ def change_scenario(state):
 
 
 def submission_changed(state, submittable, details):
-    if details["submission_status"] == "COMPLETED":
-        print("Submission completed")
-        refresh_results_of_scenario(state)
-        notify(state, "s", "Submission completed")
-    elif details["submission_status"] == "FAILED":
-        notify(state, "error", "Submission failed")
+    with state as s:
+        if details["submission_status"] == "COMPLETED":
+            print("Submission completed")
+            refresh_results_of_scenario(s)
+            notify(s, "s", "Submission completed")
+        elif details["submission_status"] == "FAILED":
+            notify(s, "error", "Submission failed")
 
 
 def add_tags_to_scenario(
@@ -71,41 +72,28 @@ def add_tags_to_scenario(
 
 
 def change_settings(state):
-
-    if state.number_of_warehouses != "any":
-        if len(state.country_list) > int(state.number_of_warehouses):
-            with state as s:
+    with state as s:
+        if state.number_of_warehouses != "any":
+            if len(state.country_list) > int(state.number_of_warehouses):
                 s.active_scenario = False
                 notify(s, "e", "Don't select more countries than warehouses!")
                 return
-
-    scenario_date = f"{state.selected_scenario.creation_date.month}-{state.selected_scenario.creation_date.year}"  ### Add this for Answer 4
-    if scenario_date in state.kilometer_prices.keys():
-        km_cost = state.kilometer_prices.get(scenario_date)
-        state.selected_scenario.price_per_km.write(km_cost)
-    else:
-        # The data node has a default value, we don't need to write it, but we notify the user:
-        notify(
-            state,
-            "w",
-            "No Data for kilometer price for selected date - applying default",
-        )
-
     with state as s:
         s.selected_scenario.optimization_target.write(s.optimize)
         s.selected_scenario.number_of_warehouses.write(s.number_of_warehouses)
         s.selected_scenario.country_list.write(s.country_list)
-
+        s.selected_scenario.price_per_km.write(s.price_per_kilometer)
         s.selected_scenario.co2_per_km.write(s.co2_per_kilometer)
         s.selected_scenario = add_tags_to_scenario(
             s.selected_scenario,
             s.optimize,
             s.number_of_warehouses,
             s.country_list,
+            s.price_per_kilometer,
             s.co2_per_kilometer,
         )
         s.active_scenario = True
-        notify(s, "s", "Changed Scenario stettings")
+        notify(s, "s", "Changed Scenario settings")
 
 
 def deactivate_scenario(state):

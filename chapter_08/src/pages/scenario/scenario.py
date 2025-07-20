@@ -40,12 +40,13 @@ def change_scenario(state):
 
 
 def submission_changed(state, submittable, details):
-    if details["submission_status"] == "COMPLETED":
-        print("Submission completed")
-        refresh_results_of_scenario(state)
-        notify(state, "s", "Submission completed")
-    elif details["submission_status"] == "FAILED":
-        notify(state, "error", "Submission failed")
+    with state as s:
+        if details["submission_status"] == "COMPLETED":
+            print("Submission completed")
+            refresh_results_of_scenario(s)
+            notify(s, "s", "Submission completed")
+        elif details["submission_status"] == "FAILED":
+            notify(s, "error", "Submission failed")
 
 
 def add_tags_to_scenario(
@@ -72,10 +73,9 @@ def add_tags_to_scenario(
 
 
 def change_settings(state):
-
-    if state.number_of_warehouses != "any":
-        if len(state.country_list) > int(state.number_of_warehouses):
-            with state as s:
+    with state as s:
+        if state.number_of_warehouses != "any":
+            if len(state.country_list) > int(state.number_of_warehouses):
                 s.active_scenario = False
                 notify(s, "e", "Don't select more countries than warehouses!")
                 return
