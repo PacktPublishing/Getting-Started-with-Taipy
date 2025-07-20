@@ -5,15 +5,28 @@ from .scenario_charts import plot_assignments, plot_customer_by_warehouse
 
 
 def refresh_results_of_scenario(state):
+    """This function use getattr and setattr to avoid long repetitions
+    in the if/else statement"""
+    bound_variables_to_write = [
+        "df_selected_warehouses",
+        "df_assignments",
+        "total_price",
+        "total_co2",
+        "total_cost_per_order",
+        "total_co2_per_order",
+    ]
     with state as s:
         s.df_selected_warehouses_dn = s.selected_scenario.df_selected_warehouses
-        s.df_selected_warehouses = s.selected_scenario.df_selected_warehouses.read()
-        s.df_assignments = s.selected_scenario.df_assignments.read()
-
-        s.total_price = s.selected_scenario.total_price.read()
-        s.total_co2 = s.selected_scenario.total_co2.read()
-        s.total_cost_per_order = s.selected_scenario.total_cost_per_order.read()
-        s.total_co2_per_order = s.selected_scenario.total_co2_per_order.read()
+        if s.selected_scenario.total_price.is_ready_for_reading:
+            for bound_variable in bound_variables_to_write:
+                setattr(
+                    s,
+                    bound_variable,
+                    getattr(s.selected_scenario, bound_variable).read(),
+                )
+        else:
+            for bound_variable in bound_variables_to_write:
+                setattr(s, bound_variable, None)
 
 
 def change_scenario(state):
@@ -23,7 +36,6 @@ def change_scenario(state):
         s.country_list = s.selected_scenario.country_list.read()
         s.price_per_kilometer = s.selected_scenario.price_per_km.read()
         s.co2_per_kilometer = s.selected_scenario.co2_per_km.read()
-
         refresh_results_of_scenario(s)
 
 
