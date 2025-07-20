@@ -1,4 +1,4 @@
-""" Use this function for your configuration Task """
+"""Use this function for your configuration Task"""
 
 
 def say_hello(planet):

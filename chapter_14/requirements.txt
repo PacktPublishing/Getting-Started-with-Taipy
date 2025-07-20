@@ -1,6 +1,7 @@
-folium==0.19.6
+folium==0.20.0
 fpdf==1.7.2
-geopandas==1.0.1
+geopandas==1.1.1
 matplotlib==3.10.3
+plotly==6.1.1
 pydeck==0.9.1
-taipy==4.0.3
+taipy==4.1.0

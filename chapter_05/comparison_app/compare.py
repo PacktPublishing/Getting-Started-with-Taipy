@@ -1,7 +1,8 @@
 import datetime as dt
 
-import taipy as tp
 from configuration.config_comparison import scenario_config
+
+import taipy as tp
 from taipy import Orchestrator
 
 if __name__ == "__main__":
@@ -33,15 +34,15 @@ if __name__ == "__main__":
         name="Scenario 2 - January",
     )
 
-    scenario_december_1.margin_node.write(1.5)
+    scenario_december_1.markup_node.write(1.5)
     scenario_december_1.buying_price_node.write(2)
 
-    scenario_december_2.margin_node.write(1.6)
+    scenario_december_2.markup_node.write(1.6)
 
-    scenario_january_1.margin_node.write(1.5)
+    scenario_january_1.markup_node.write(1.5)
     scenario_january_1.buying_price_node.write(2.2)
 
-    scenario_january_1.margin_node.write(1.6)
+    scenario_january_1.markup_node.write(1.6)
 
     scenario_december_1.submit()
     scenario_december_2.submit()

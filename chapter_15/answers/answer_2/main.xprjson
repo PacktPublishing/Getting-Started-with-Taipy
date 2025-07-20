@@ -1,0 +1,356 @@
+{
+	"meta": {
+		"version": "2.992.8836",
+		"fileFormatVersion": "0.3",
+		"date": "2025-05-22T23:07:50.723+02:00",
+		"name": "main",
+		"description": "",
+		"groupName": "",
+		"tags": [],
+		"schedulerLogOff": true
+	},
+	"data": {
+		"datanodes": []
+	},
+	"libraries": {
+		"pyodideStandard": [],
+		"pyodideMicropip": []
+	},
+	"scaling": {
+		"widthPx": 2218,
+		"heightPx": 948,
+		"scrollWidthPx": 2218,
+		"scrollHeightPx": 948,
+		"widthVw": 89.72491909385113,
+		"heightVh": 65.24432209222299,
+		"scrollWidthVw": 89.72491909385113,
+		"scrollHeightVh": 65.24432209222299,
+		"scalingMethod": "scaleTwh",
+		"media": "large",
+		"colDims": null
+	},
+	"device": {
+		"cols": {
+			"valueRow": "none",
+			"valueCol": "1",
+			"maxCells": 0,
+			"maxCols": 0,
+			"classType": ""
+		},
+		"droppers": {},
+		"backgroundColor": "var(--widget-color-0)",
+		"inheritThemeBackgroundColor": true,
+		"theme": "pink"
+	},
+	"dashboard": {
+		"flatUiNumericInputA": {
+			"layout": {
+				"top": "21.4728vh",
+				"left": "3.72168vw",
+				"height": "5.3682vh",
+				"width": "20.4693vw",
+				"minHeight": "24px",
+				"minWidth": "150px",
+				"z-index": "2"
+			},
+			"container": {
+				"instanceId": "flatUiNumericInputA",
+				"modelJsonId": "flatUiNumericInput"
+			},
+			"modelParameters": {
+				"label": "Set Price",
+				"inheritLabelFromData": false,
+				"displayLabel": true,
+				"labelFontSize": 1,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"step": 1,
+				"labelTextAlign": "left",
+				"labelTextPosition": "left",
+				"valueWidthProportion": "70%",
+				"validationButton": false,
+				"validationBtnDefaultColor": "var(--widget-button-primary-color)",
+				"validationBtnActiveColor": "var(--widget-button-active-color)",
+				"validationBtnHoverColor": "var(--widget-button-hover-color)",
+				"validationOnFocusOut": true,
+				"valueFontSize": 0.5,
+				"valueColor": "var(--widget-input-text)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueTextAlign": "left",
+				"displayBorder": true,
+				"borderColor": "var(--widget-border-color)",
+				"backgroundColor": "var(--widget-input-color)",
+				"unit": "unitText",
+				"displayUnit": false,
+				"unitFontSize": 0.5,
+				"borderWidth": "2px",
+				"showWidget": true,
+				"enableWidget": true,
+				"listValueColor": "var(--widget-select-drop-text)",
+				"listBackgroundColor": "var(--widget-select-drop-color)",
+				"selectValueColor": "var(--widget-select-option-highlighted-text)",
+				"selectValueBackgroundColor": "var(--widget-select-option-highlighted-color)",
+				"textColor": "var(--widget-label-color)"
+			},
+			"modelHiddenParams": {
+				"value": ""
+			}
+		},
+		"annotationLabelA": {
+			"layout": {
+				"top": "2.75292vh",
+				"left": "2.42718vw",
+				"height": "5.02409vh",
+				"width": "32.3625vw",
+				"minHeight": "5px",
+				"minWidth": "5px",
+				"z-index": "4"
+			},
+			"container": {
+				"instanceId": "annotationLabelA",
+				"modelJsonId": "annotationLabel"
+			},
+			"modelParameters": {
+				"text": "Add Items",
+				"enableActuator": false,
+				"fontsize": 2,
+				"backgroundColor": "var(--widget-input-color)",
+				"textColor": "var(--widget-label-color)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"textAlign": "left",
+				"textBold": false,
+				"textUnderline": false,
+				"textItalic": false,
+				"displayBorder": false,
+				"borderColor": "var(--widget-border-color)",
+				"borderWidth": "2px",
+				"centerVertically": true,
+				"showWidget": true,
+				"enableWidget": true,
+				"listValueColor": "var(--widget-select-drop-text)",
+				"listBackgroundColor": "var(--widget-select-drop-color)",
+				"selectValueColor": "var(--widget-select-option-highlighted-text)",
+				"selectValueBackgroundColor": "var(--widget-select-option-highlighted-color)",
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"validationBtnDefaultColor": "var(--widget-button-primary-color)",
+				"validationBtnActiveColor": "var(--widget-button-active-color)",
+				"validationBtnHoverColor": "var(--widget-button-hover-color)",
+				"valueColor": "var(--widget-input-text)"
+			},
+			"modelHiddenParams": {}
+		},
+		"flatUiButtonA": {
+			"layout": {
+				"top": "45.6297vh",
+				"left": "3.72168vw",
+				"height": "10.7364vh",
+				"width": "20.4693vw",
+				"minHeight": "24px",
+				"minWidth": "55px",
+				"z-index": "6"
+			},
+			"container": {
+				"instanceId": "flatUiButtonA",
+				"modelJsonId": "flatUiButton"
+			},
+			"modelParameters": {
+				"text": "ADD ITEM",
+				"numberOfTriggers": 1,
+				"fileInput": false,
+				"binaryFileInput": false,
+				"buttonFontSize": 1,
+				"displayIcon": false,
+				"fontAwesomeIcon": "",
+				"buttonFontFamily": "var(--widget-font-family)",
+				"buttonTextColor": "var(--widget-button-primary-text)",
+				"buttonDefaultColor": "var(--widget-button-primary-color)",
+				"buttonActiveColor": "var(--widget-button-active-color)",
+				"buttonHoverColor": "var(--widget-button-hover-color)",
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {}
+		},
+		"flatUiTextInputA": {
+			"layout": {
+				"top": "32.2092vh",
+				"left": "3.72168vw",
+				"height": "5.3682vh",
+				"width": "20.4693vw",
+				"minHeight": "24px",
+				"minWidth": "150px",
+				"z-index": "7"
+			},
+			"container": {
+				"instanceId": "flatUiTextInputA",
+				"modelJsonId": "flatUiTextInput"
+			},
+			"modelParameters": {
+				"label": "description",
+				"inheritLabelFromData": true,
+				"displayLabel": true,
+				"labelFontSize": 0.5,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"labelTextAlign": "left",
+				"labelTextPosition": "left",
+				"valueWidthProportion": "70%",
+				"validationButton": false,
+				"validationBtnDefaultColor": "var(--widget-button-primary-color)",
+				"validationBtnActiveColor": "var(--widget-button-active-color)",
+				"validationBtnHoverColor": "var(--widget-button-hover-color)",
+				"validationOnFocusOut": true,
+				"isPassword": false,
+				"valueFontSize": 0.5,
+				"valueColor": "var(--widget-input-text)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueTextAlign": "left",
+				"displayBorder": true,
+				"borderColor": "var(--widget-border-color)",
+				"backgroundColor": "var(--widget-input-color)",
+				"borderWidth": "2px",
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {
+				"value": ""
+			}
+		},
+		"flatUiEditableTableA": {
+			"layout": {
+				"top": "4.12939vh",
+				"left": "37.8641vw",
+				"height": "36.1321vh",
+				"width": "47.7346vw",
+				"minHeight": "79px",
+				"minWidth": "88px",
+				"z-index": "8"
+			},
+			"container": {
+				"instanceId": "flatUiEditableTableA",
+				"modelJsonId": "flatUiEditableTable"
+			},
+			"modelParameters": {
+				"headerLine": true,
+				"indexColumn": false,
+				"showIndex": false,
+				"tableValueFontSize": 0.5,
+				"striped": true,
+				"valueColor": "var(--widget-table-value-color)",
+				"valueFontFamily": "var(--widget-font-family)",
+				"valueAlign": "left",
+				"bordered": true,
+				"noBorder": false,
+				"editableCols": "*",
+				"backgroundColor": {
+					"primary": "var(--widget-color-0)",
+					"secondary": "var(--widget-table-striped-odd)"
+				},
+				"paginationMinNbr": 10,
+				"paginationOptions": "[10, 50, 100, 500]",
+				"paginationDefaultValue": 10,
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {
+				"value": null,
+				"isDataFrame": false
+			}
+		},
+		"flatUiSelectA": {
+			"layout": {
+				"top": "10.7364vh",
+				"left": "3.72168vw",
+				"height": "5.3682vh",
+				"width": "20.4693vw",
+				"minHeight": "27px",
+				"minWidth": "40px",
+				"z-index": "9"
+			},
+			"container": {
+				"instanceId": "flatUiSelectA",
+				"modelJsonId": "flatUiSelect"
+			},
+			"modelParameters": {
+				"label": "selected_item",
+				"inheritLabelFromData": true,
+				"displayLabel": true,
+				"labelFontSize": 0.5,
+				"labelColor": "var(--widget-label-color)",
+				"labelFontFamily": "var(--widget-font-family)",
+				"selectWidthProportion": "70%",
+				"isNumber": false,
+				"isBoolean": false,
+				"selectValueFontFamily": "var(--widget-font-family)",
+				"selectValueFontSize": 0.5,
+				"selectedValueColor": "var(--widget-select-option-highlighted-text)",
+				"selectedItemDefaultColor": "var(--widget-select-option-highlighted-color)",
+				"selectedItemHoverColor": "var(--widget-select-option-highlighted-color)",
+				"isKeyValuePairs": false,
+				"showWidget": true,
+				"enableWidget": true
+			},
+			"modelHiddenParams": {
+				"keys": [],
+				"values": [],
+				"selectedValue": ""
+			}
+		}
+	},
+	"connections": {
+		"flatUiNumericInputA": {
+			"value": {
+				"name": "value",
+				"dataNode": "price",
+				"dataFields": []
+			}
+		},
+		"annotationLabelA": {},
+		"flatUiButtonA": {
+			"trigger1": {
+				"name": "trigger1",
+				"dataNode": "add_to_dataframe",
+				"dataFields": []
+			}
+		},
+		"flatUiTextInputA": {
+			"value": {
+				"name": "value",
+				"dataNode": "description",
+				"dataFields": []
+			}
+		},
+		"flatUiEditableTableA": {
+			"value": {
+				"name": "value",
+				"dataNode": "df_items",
+				"dataFields": []
+			}
+		},
+		"flatUiSelectA": {
+			"keys": {
+				"name": "keys",
+				"dataNode": "items",
+				"dataFields": []
+			},
+			"values": {
+				"name": "values",
+				"dataNode": "None",
+				"dataFields": []
+			},
+			"selectedValue": {
+				"name": "selectedValue",
+				"dataNode": "selected_item",
+				"dataFields": []
+			}
+		}
+	},
+	"exportOptions": "ajustToTargetWindow",
+	"pages": {
+		"pageNames": [],
+		"defaultPage": {}
+	},
+	"checkExportOptions": true,
+	"navBarNotification": false
+}

@@ -35,6 +35,8 @@ def get_monthly_price(scenario_ym, price_file="./data/buying_prices.csv"):
 
 def change_markup(state):
     state.selected_scenario.markup_node.write(state.markup)
+    # Refreshing the value ensures that value updates in the GUI
+    state.refresh("selected_scenario")
 
 
 def update_scenario(state, var_name, value):

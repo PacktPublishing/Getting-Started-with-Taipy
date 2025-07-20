@@ -9,6 +9,6 @@
 # an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
 
-from .root import root_page
 from .Page_1.Page_1 import Page_1
 from .Page_2.Page_2 import Page_2
+from .root import root_page

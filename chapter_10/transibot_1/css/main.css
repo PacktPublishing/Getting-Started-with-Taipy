@@ -1,0 +1,83 @@
+/* Generic Styling */
+strong, b {
+  font-weight: bold; 
+  color: #6495ED;
+}
+
+/* Colors for buttons */
+.color-start {
+  background-color: #A7F3D0 !important;
+  color: #333333 !important;
+}
+
+.color-clear {
+  background-color: #FCA5A5 !important;
+  color: #333333 !important;
+}
+
+.color-new {
+  background-color: #FDE68A !important;
+  color: #333333 !important;
+}
+
+
+/* Base Chat Container */
+.taipy-chat {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f9f9fb;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid #e0e0e0;
+  }
+  
+  /* Message Bubble Common */
+  .taipy-chat-sent .taipy-chat-received{
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+  
+  /* Sender (e.g., User) */
+  .taipy-chat-sent{
+    align-self: flex-end;
+    background-color: #6495ED;
+    color: white;
+    border-bottom-right-radius: 0;
+  }
+  
+  /* Receiver (e.g., Bot) */
+  .taipy-chat-received{
+    align-self: flex-start;
+    background-color: #e6e6e6;
+    color: #333;
+    border-bottom-left-radius: 0;
+  }
+  
+  pre {
+    background-color: #1e1e1e;
+    color: #dcdcdc;
+    padding: 12px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  
+
+  pre code {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    display: block;
+  }
+
+  
