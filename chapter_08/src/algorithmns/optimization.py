@@ -1,17 +1,15 @@
 import pandas as pd
 import pulp
 
-#### Optimization functions ####
 
-
-def initialize_problem():
+def _initialize_problem():
     """
     Initialize a PuLP minimization problem.
     """
     return pulp.LpProblem("Warehouse_Selection", pulp.LpMinimize)
 
 
-def define_variables(df_warehouses, df_customers):
+def _define_variables(df_warehouses, df_customers):
     """
     Creates binary decision variables for warehouse selection and customer assignment.
     """
@@ -60,7 +58,7 @@ def _objective_total(
     return transport_total + warehouse_total
 
 
-def set_objective_function(
+def _set_objective_function(
     prob,
     assignment_var,
     warehouse_var,
@@ -97,7 +95,7 @@ def set_objective_function(
         )
 
 
-def add_constraints(
+def _add_constraints(
     prob,
     assignment_var,
     warehouse_var,
@@ -139,7 +137,7 @@ def add_constraints(
             prob += pulp.lpSum(warehouse_var[w] for w in wh_in_country) >= 1
 
 
-def extract_results(
+def _extract_results(
     warehouse_var,
     assignment_var,
     df_warehouses,
@@ -223,9 +221,9 @@ def create_pulp_model(
     df_warehouses["id"] = df_warehouses.index
     df_customers["id"] = df_customers.index
 
-    prob = initialize_problem()
-    warehouse_var, assignment_var = define_variables(df_warehouses, df_customers)
-    set_objective_function(
+    prob = _initialize_problem()
+    warehouse_var, assignment_var = _define_variables(df_warehouses, df_customers)
+    _set_objective_function(
         prob,
         assignment_var,
         warehouse_var,
@@ -236,7 +234,7 @@ def create_pulp_model(
         price_per_km,
         co2_per_km,
     )
-    add_constraints(
+    _add_constraints(
         prob,
         assignment_var,
         warehouse_var,
@@ -247,7 +245,7 @@ def create_pulp_model(
     )
     prob.solve(pulp.PULP_CBC_CMD(msg=False))
 
-    return extract_results(
+    return _extract_results(
         warehouse_var,
         assignment_var,
         df_warehouses,
@@ -256,21 +254,3 @@ def create_pulp_model(
         price_per_km,
         co2_per_km,
     )
-
-
-#### Optimization functions END ####
-
-
-def calculate_total_numbers(df_scenario):
-    """
-    Returns the total price and CO2 emissions for a Scenario (for all warehouses).
-    Returns total amounts and total amount per truck order.
-    """
-    total_cost = df_scenario["scenario_cost"].sum()
-    total_co2 = df_scenario["scenario_co2_tons"].sum()
-
-    total_orders = df_scenario["scenario_orders"].sum()
-    price_per_order = total_cost / total_orders
-    co2_per_order = total_co2 * 1000 / total_orders
-
-    return int(total_cost), int(total_co2), int(price_per_order), int(co2_per_order)
