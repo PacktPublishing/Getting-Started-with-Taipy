@@ -62,31 +62,47 @@ def add_tags_to_scenario(
     return scenario
 
 
+def _deactivate_scenario_and_notify_error(state, message):
+    """Helper function for answer 3"""
+    with state as s:
+        s.active_scenario = False
+        notify(
+            s,
+            "e",
+            message,
+        )
+
+
 def change_settings(state):
-
-    if state.number_of_warehouses != "any":
-        if len(state.country_list) > int(state.number_of_warehouses):
-            with state as s:
-                s.active_scenario = False
-                notify(s, "e", "Don't select more countries than warehouses!")
-                return
-
-    #################################################### Add this for answer 3  ######################################
-    if len(state.no_country_list) > 0:
-        df_warehouses = state.df_warehouses.copy()
-        count_warehouses = df_warehouses[
-            ~df_warehouses["country"].isin(state.no_country_list)
-        ].shape[0]
-
-        if count_warehouses < int(state.number_of_warehouses):
-            with state as s:
-                s.active_scenario = False
-                notify(
+    with state as s:
+        no_country_list = s.no_country_list
+        country_list = s.country_list
+        ### For Answer 3: Compare both sets, if a single overlap, then impossible constraint
+        if set(no_country_list) & set(country_list):
+            notify(s, "e", "Don't select countries to include and exclude!")
+            return
+        if s.number_of_warehouses != "any":
+            number_of_warehouses = int(s.number_of_warehouses)
+            if len(s.country_list) > number_of_warehouses:
+                _deactivate_scenario_and_notify_error(
                     s,
-                    "e",
-                    "There are not enough warehouses for the Scenario! - try adding more countries",
+                    "Don't select more countries than warehouses!",
                 )
                 return
+            ##############  Add this for answer 3  #############################
+            if len(s.no_country_list) > 0:
+                df_warehouses = s.df_warehouses.copy()
+                count_warehouses = df_warehouses[
+                    ~df_warehouses["country"].isin(s.no_country_list)
+                ].shape[0]
+
+                if count_warehouses < number_of_warehouses:
+                    _deactivate_scenario_and_notify_error(
+                        s,
+                        "There are not enough warehouses for the Scenario! - try adding more countries",
+                    )
+
+                    return
     ###################################################################################################################
     with state as s:
         s.selected_scenario.optimization_target.write(s.optimize)
@@ -134,14 +150,13 @@ with tgb.Page() as scenario_page:
             with tgb.expandable("Instructions", expanded=False):
 
                 tgb.text(
-                    """Select scenario's **parameters** and constraints:
+                    """Select scenario **parameters** and constraints:
                             
-- **Number of warehouses**: the number of warehouses to select, must be between 1 and 10. If "any", then the applicatioons selects the optimal warehouses with no more than 10.
+- **Number of warehouses**: the number of warehouses to select, must be between 1 and 10. If "any", then the applications selects the optimal warehouses with no more than 10.
 - **Fix warehouses**: enable the ability to fix warehouses,
-- **Countries to Include**: If selected, the application will assign **at least** one warehouse to each selected country. The application won't let you select more copuntries than warehouses.
-- **Price per kilometer**: Total cost per kilometer between a warehouse and a customer. Includes all costs (gas, truck maintainance, wages...) for trips back and forth.
+- **Countries to include**: If selected, the application will assign **at least** one warehouse to each selected country. The application won't let you select more countries than warehouses.
+- **Price per kilometer**: Total cost per kilometer between a warehouse and a customer. Includes all costs (gas, truck maintenance, wages...) for trips back and forth.
 - **CO2 per kilometer**: Total CO2e emissions for transporation of goods between warehouse and customer, for trips back and forth.
-        
         """,
                     mode="md",
                 )
