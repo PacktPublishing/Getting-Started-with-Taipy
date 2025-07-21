@@ -69,5 +69,5 @@ if __name__ == "__main__":
         favicon="./img/favicon.png",
         dark_mode=False,
         stylekit=stylekit,
-        # use_reloader=True,
+        use_reloader=True,
     )

@@ -106,8 +106,8 @@ def deactivate_scenario(state):
 with tgb.Page() as scenario_page:
 
     with tgb.layout("1 4", columns__mobile="1"):
-        with tgb.part("sidebar"):
-            tgb.text("**Create** and select scenarios", mode="md")
+        with tgb.part("sidebar", class_name="side-bar"):
+            tgb.text("### **Create** and select scenarios", mode="md")
             tgb.scenario_selector(
                 "{selected_scenario}",
                 on_change=change_scenario,
@@ -117,125 +117,131 @@ with tgb.Page() as scenario_page:
         with tgb.part("main"):
             tgb.text("# **Create** Scenario", mode="md")
             tgb.html("hr")
+            with tgb.part(class_name="content-block"):
+                with tgb.expandable("Instructions", expanded=False):
 
-            with tgb.expandable("Instructions", expanded=False):
+                    tgb.text(
+                        """Select scenario's **parameters** and constraints:
+                                
+    - **Number of warehouses**: The number of warehouses to select; must be between 1 and 10. If "any", then the application selects the optimal warehouses with no more than 10.
+    - **Fix warehouses**: Enable the ability to fix warehouses.
+    - **Countries to include**: If selected, the application will assign **at least** one warehouse to each selected country. The application won't let you select more countries than warehouses.
+    - **Price per km**: Total cost per kilometer between a warehouse and a customer. Includes all costs (gas, truck maintenance, wages...) for trips back and forth.
+    - **CO2 per km**: Total CO2e emissions for transportation of goods between warehouse and customer, for trips back and forth.
+    """,
+                        mode="md",
+                    )
+                with tgb.layout("1 1 1 1 1"):
+                    tgb.toggle("{optimize}", label="Optimize", lov=["price", "co2"])
+                    tgb.selector(
+                        "{number_of_warehouses}",
+                        lov=["any", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                        dropdown=True,
+                        label="Number of warehouses",
+                    )
+                    tgb.selector(
+                        "{country_list}",
+                        lov="{all_countries}",
+                        label="Countries to Include",
+                        multiple=True,
+                        dropdown=True,
+                    )
+                    tgb.number(
+                        "{price_per_km}",
+                        label="price per km",
+                        min=1,
+                        max=10,
+                        step=0.1,
+                    )
+                    tgb.number(
+                        "{co2_per_km}",
+                        label="CO2e (Kg) per km",
+                        min=1,
+                        max=10,
+                        step=0.1,
+                    )
 
-                tgb.text(
-                    """Select scenario's **parameters** and constraints:
-                            
-- **Number of warehouses**: The number of warehouses to select; must be between 1 and 10. If "any", then the application selects the optimal warehouses with no more than 10.
-- **Fix warehouses**: Enable the ability to fix warehouses.
-- **Countries to include**: If selected, the application will assign **at least** one warehouse to each selected country. The application won't let you select more countries than warehouses.
-- **Price per km**: Total cost per kilometer between a warehouse and a customer. Includes all costs (gas, truck maintenance, wages...) for trips back and forth.
-- **CO2 per km**: Total CO2e emissions for transportation of goods between warehouse and customer, for trips back and forth.
-""",
-                    mode="md",
-                )
-            with tgb.layout("1 1 1 1 1"):
-                tgb.toggle("{optimize}", label="Optimize", lov=["price", "co2"])
-                tgb.selector(
-                    "{number_of_warehouses}",
-                    lov=["any", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                    dropdown=True,
-                    label="Number of warehouses",
-                )
-                tgb.selector(
-                    "{country_list}",
-                    lov="{all_countries}",
-                    label="Countries to Include",
-                    multiple=True,
-                    dropdown=True,
-                )
-                tgb.number(
-                    "{price_per_km}",
-                    label="price per km",
-                    min=1,
-                    max=10,
-                    step=0.1,
-                )
-                tgb.number(
-                    "{co2_per_km}",
-                    label="CO2e (Kg) per km",
-                    min=1,
-                    max=10,
-                    step=0.1,
-                )
-
-            tgb.button(
-                "Change Settings",
-                on_action=change_settings,
-                class_name="fullwidth",
-            )
-
-            tgb.scenario(
-                "{selected_scenario}",
-                show_sequences=False,
-                on_submission_change=submission_changed,
-                active="{active_scenario}",
-            )
-
-            tgb.text("### **Scenario** results", mode="md")
-            tgb.data_node(
-                "{df_selected_warehouses_dn}", show_history=False, expanded=False
-            )
-
-            with tgb.layout("1 1 1 1", columns__mobile="1"):
-                tgb.metric(
-                    value="{total_price}",
-                    title="Scenario's Total Price",
-                    format=" €",
-                    type="none",
-                    hover_text="Estimated total carbon footprint.",
-                    class_name="mb2 mt2",
-                )
-                tgb.metric(
-                    value="{total_co2}",
-                    title="Scenario's Total CO2e",
-                    format=" T",
-                    type="none",
-                    hover_text="Estimated total carbon footprint.",
-                    class_name="mb2 mt2",
-                )
-                tgb.metric(
-                    value="{total_cost_per_order}",
-                    max=6_000,
-                    threshold=2_000,
-                    format=" €",
-                    title="Avg cost/order",
-                    type="circular",  # default
-                    hover_text="Estimated average transportation cost per truck shipping.",
-                    class_name="mb2 mt2 pb1",
-                )
-                tgb.metric(
-                    value="{total_co2_per_order}",
-                    max=3_000,
-                    threshold=1_000,
-                    format=" Kg",
-                    title="Avg CO2e emissions/order",
-                    type="circular",  # default
-                    hover_text="Estimated average CO2e emissions per truck shipping.",
-                    class_name="mb2 mt2 pb1",
+                tgb.button(
+                    "Change Settings",
+                    on_action=change_settings,
+                    class_name="fullwidth",
                 )
 
-            tgb.chart(figure=lambda df_assignments: plot_assignments(df_assignments))
+                tgb.scenario(
+                    "{selected_scenario}",
+                    show_sequences=False,
+                    on_submission_change=submission_changed,
+                    active="{active_scenario}",
+                )
 
-            tgb.chart(
-                figure=lambda df_assignments: plot_customer_by_warehouse(df_assignments)
-            )
-            with tgb.layout("1 1"):
+            tgb.text("## **Scenario** results", mode="md")
+            tgb.html("hr")
+            with tgb.part(class_name="content-block"):
+                tgb.data_node(
+                    "{df_selected_warehouses_dn}", show_history=False, expanded=False
+                )
+
+                with tgb.layout("1 1 1 1", columns__mobile="1"):
+                    tgb.metric(
+                        value="{total_price}",
+                        title="Scenario's Total Price",
+                        format=" €",
+                        type="none",
+                        hover_text="Estimated total carbon footprint.",
+                        class_name="mb2 mt2",
+                    )
+                    tgb.metric(
+                        value="{total_co2}",
+                        title="Scenario's Total CO2e",
+                        format=" T",
+                        type="none",
+                        hover_text="Estimated total carbon footprint.",
+                        class_name="mb2 mt2",
+                    )
+                    tgb.metric(
+                        value="{total_cost_per_order}",
+                        max=6_000,
+                        threshold=2_000,
+                        format=" €",
+                        title="Avg cost/order",
+                        type="circular",  # default
+                        hover_text="Estimated average transportation cost per truck shipping.",
+                        class_name="mb2 mt2 pb1",
+                    )
+                    tgb.metric(
+                        value="{total_co2_per_order}",
+                        max=3_000,
+                        threshold=1_000,
+                        format=" Kg",
+                        title="Avg CO2e emissions/order",
+                        type="circular",  # default
+                        hover_text="Estimated average CO2e emissions per truck shipping.",
+                        class_name="mb2 mt2 pb1",
+                    )
+
                 tgb.chart(
-                    "{df_selected_warehouses}",
-                    type="bar",
-                    x="warehouse",
-                    y="scenario_cost",
-                    title="Total cost by selected warehouse",
-                    color="#003399",
+                    figure=lambda df_assignments: plot_assignments(df_assignments)
                 )
+
                 tgb.chart(
-                    "{df_selected_warehouses}",
-                    type="bar",
-                    x="warehouse",
-                    y="scenario_co2_tons",
-                    title="Total CO2e emissions by selected warehouse",
-                    color="#003399",
+                    figure=lambda df_assignments: plot_customer_by_warehouse(
+                        df_assignments
+                    )
                 )
+                with tgb.layout("1 1"):
+                    tgb.chart(
+                        "{df_selected_warehouses}",
+                        type="bar",
+                        x="warehouse",
+                        y="scenario_cost",
+                        title="Total cost by selected warehouse",
+                        color="#003399",
+                    )
+                    tgb.chart(
+                        "{df_selected_warehouses}",
+                        type="bar",
+                        x="warehouse",
+                        y="scenario_co2_tons",
+                        title="Total CO2e emissions by selected warehouse",
+                        color="#003399",
+                    )
