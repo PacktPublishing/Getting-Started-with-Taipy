@@ -56,6 +56,10 @@ if __name__ == "__main__":
 
     active_scenario = True
 
+    # Read file to display text:
+    with open("./pages/scenario/scenario_description.md") as sc_desc:
+        scenario_description_md = sc_desc.read()
+
     # For the admin page:
     admin_scenarios = tp.get_scenarios()
     admin_scenario = admin_scenarios[0]  # Get one to initialize
@@ -69,5 +73,5 @@ if __name__ == "__main__":
         favicon="./img/favicon.png",
         dark_mode=False,
         stylekit=stylekit,
-        # use_reloader=True,
+        use_reloader=True,
     )
