@@ -7,6 +7,11 @@ with tgb.Page() as dynamic_chart_page:
     )
 
     tgb.table(data="{df_parish_info}")
-    tgb.selector("{accommodation}", lov="{accommodation_type}", dropdown=True)
+    tgb.selector(
+        "{accommodation}",
+        lov="{accommodation_type}",
+        dropdown=True,
+        class_name="fullwidth",
+    )
 
     tgb.part(content="{JsChartClass(df_parish_info, accommodation)}", height="500px")
