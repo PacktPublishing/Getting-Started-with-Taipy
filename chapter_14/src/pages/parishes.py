@@ -22,7 +22,11 @@ with tgb.Page() as parishes_page:
         mode="md",
     )
 
-    tgb.button(label="CREATE REPORT!", on_action=create_report)
+    tgb.button(
+        label="CREATE REPORT!",
+        on_action=create_report,
+        class_name="fullwidth plain",
+    )
     with tgb.layout("1 1"):
         tgb.table(data="{df_parish_info}")
         tgb.chart(
@@ -43,5 +47,5 @@ with tgb.Page() as parishes_page:
                 dropdown=True,
                 class_name="fullwidth",
             )
-            tgb.part(page="{parishes_dict.get(parish)}", height="350px")
+            tgb.part(page="{parishes_dict.get(parish)}", height="340px")
         tgb.part(content="{FoliumMap(gdf_accommodations)}", height="350px")
