@@ -1,5 +1,6 @@
-import taipy.gui.builder as tgb
 from algorithms.create_report import create_pdf_report
+
+import taipy.gui.builder as tgb
 from taipy.gui import invoke_long_callback, notify
 
 
@@ -40,6 +41,7 @@ with tgb.Page() as parishes_page:
                 value="{parish}",
                 lov="{parishes}",
                 dropdown=True,
+                class_name="fullwidth",
             )
             tgb.part(page="{parishes_dict.get(parish)}", height="350px")
         tgb.part(content="{FoliumMap(gdf_accommodations)}", height="350px")
