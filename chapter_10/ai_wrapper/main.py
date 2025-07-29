@@ -1,5 +1,6 @@
 from langchain_core.messages import HumanMessage
 from langchain_mistralai.chat_models import ChatMistralAI
+
 from taipy.gui import Gui
 from taipy.gui import builder as tgb
 
@@ -50,6 +51,7 @@ if __name__ == "__main__":
     chat_name = "mistral-small"
     chat_bot = ChatMistralAI(
         model=chat_name,
+        # mistral_api_key = "Your-API-Key" # However, we recommend using an envionment variable!
     )
     message_history = []
 
