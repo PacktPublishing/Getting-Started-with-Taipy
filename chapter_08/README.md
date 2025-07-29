@@ -1,6 +1,6 @@
-# Chapter 8
+# Chapter 8: Taipy for Logistics: Creating Supply Chain Management Apps
 
-- [Chapter 8](#chapter-8)
+- [Chapter 8: Taipy for Logistics: Creating Supply Chain Management Apps](#chapter-8-taipy-for-logistics-creating-supply-chain-management-apps)
   - [Application overview](#application-overview)
   - [Scenario pipeline](#scenario-pipeline)
   - [Data](#data)
