@@ -1,13 +1,21 @@
 # Chapter 8
 
+- [Chapter 8](#chapter-8)
+  - [Application overview](#application-overview)
+  - [Scenario pipeline](#scenario-pipeline)
+  - [Data](#data)
+    - [Dataset descriptions](#dataset-descriptions)
+      - [customers.csv](#customerscsv)
+      - [warehouses.csv](#warehousescsv)
+
 This chapter covers the creation of an optimization app. This app allows users to visualize candidate warehouse and customer locations, so they can select the best warehouses to reduce supply cost and CO2e emissions.
 
 The app has 4 tabs:
 
-* `Analysis` : Shows the raw data
-* `Scenario`: Allows users to select parameters for the optimization Scenario, run it and see the results
-* `Comparison`: Allows users to compare two Scenarios, next to each other
-* `Admin`: Shows all the application's Scenario elements
+- `Analysis` : Shows the raw data
+- `Scenario`: Allows users to select parameters for the optimization Scenario, run it and see the results
+- `Comparison`: Allows users to compare two Scenarios, next to each other
+- `Admin`: Shows all the application's Scenario elements
 
 ## Application overview
 
@@ -29,13 +37,13 @@ To create our datasets, we asked Chat GPT to generate some JSON structures, with
 
 #### customers.csv
 
-* `id`: Unique identifier
-* `country`: Customer's country
-* `city`: Customer's city
-* `latitude`: Geographical information, for plotting and to calculate distances
-* `longitude`: Geographical information, for plotting and to calculate distances
-* `company_name`: Generated with `faker`, we concatenate the `id` number to avoid visualization problems in case of repeated names
-* `yearly_orders`: How many trucks filled with pipes EuroDuctPipes sends to the customer each year
+- `id`: Unique identifier
+- `country`: Customer's country
+- `city`: Customer's city
+- `latitude`: Geographical information, for plotting and to calculate distances
+- `longitude`: Geographical information, for plotting and to calculate distances
+- `company_name`: Generated with `faker`, we concatenate the `id` number to avoid visualization problems in case of repeated names
+- `yearly_orders`: How many trucks filled with pipes EuroDuctPipes sends to the customer each year
 
 **Example rows:**
 
@@ -46,13 +54,13 @@ To create our datasets, we asked Chat GPT to generate some JSON structures, with
 
 #### warehouses.csv
 
-* `warehouse`: Unique warehouse identifier
-* `country`: Warehouse's country
-* `city`: Warehouse's city
-* `latitude`: Geographical information, for plotting and to calculate distances
-* `longitude`: Geographical information, for plotting and to calculate distances
-* `yearly_costs`: How much it costs to operate the warehouse yearly (rend, wages, bills...)
-* `yearly_co2_tons`: Carbon emissions per year, expressed as CO2e, in metric tons
+- `warehouse`: Unique warehouse identifier
+- `country`: Warehouse's country
+- `city`: Warehouse's city
+- `latitude`: Geographical information, for plotting and to calculate distances
+- `longitude`: Geographical information, for plotting and to calculate distances
+- `yearly_costs`: How much it costs to operate the warehouse yearly (rend, wages, bills...)
+- `yearly_co2_tons`: Carbon emissions per year, expressed as CO2e, in metric tons
 
 **Example rows:**
 

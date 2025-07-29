@@ -1,9 +1,18 @@
-# Chapter 1
+# Chapter 1: Discovering Taipy
 
-- [Chapter 1](#chapter-1)
+- [Chapter 1: Discovering Taipy](#chapter-1-discovering-taipy)
+  - [Repo Structure](#repo-structure)
   - [Hello Worlds](#hello-worlds)
   - [Installing development version](#installing-development-version)
   - [Taipy CLI](#taipy-cli)
+
+## Repo Structure
+
+The repo contains the following directories:
+
+- `hello_worlds`: A set of Hello World types of app, coded with Taipy.
+- `my_first_app_from_cli`: This is how an initial app looks after creating it with Taipy CLI, as explained in the book.
+- - `my_first_scenario_from_cli`: This is how an initial Scneario Management app looks after creating it with Taipy CLI, as explained in the book.
 
 ## Hello Worlds
 
@@ -20,7 +29,8 @@ The directory `my_first_app_from_cli` shows the skeleton of a ultiple-page app:
 The book focuses on installing stables versions. You can also install the development version, even if it's not stable (you may want to contribute to the library or get a feature that is not available in the latest stable release). Most of the time, this is not recommended.
 You can retrieve it from GitHub using git:
 
-```bashgit clone git://github.com/avaiga/taipy
+```bash
+git clone git://github.com/avaiga/taipy
 ```
 
 Then, from the folder, install it with pip:

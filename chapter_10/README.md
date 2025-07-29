@@ -1,6 +1,6 @@
-# Chapter 10
+# Chapter 10: Building an LLM Chatbot with Taipy
 
-- [Chapter 10](#chapter-10)
+- [Chapter 10: Building an LLM Chatbot with Taipy](#chapter-10-building-an-llm-chatbot-with-taipy)
   - [Repo Structure](#repo-structure)
   - [Main Application](#main-application)
   - [API Keys](#api-keys)

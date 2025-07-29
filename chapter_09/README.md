@@ -1,6 +1,6 @@
-# Chapter 9
+# Chapter 9: Taipy for Logistics: Creating Supply Chain Management Apps
 
-- [Chapter 9](#chapter-9)
+- [Chapter 9: Taipy for Logistics: Creating Supply Chain Management Apps](#chapter-9-taipy-for-logistics-creating-supply-chain-management-apps)
   - [Notebook For Help](#notebook-for-help)
   - [Scenario's pipeline](#scenarios-pipeline)
   - [Create an account on Copernicus' website](#create-an-account-on-copernicus-website)
