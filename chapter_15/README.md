@@ -1,4 +1,10 @@
-# Chapter 15
+# Chapter 15: Exploring Taipy Designer (Enterprise Version)
+
+- [Chapter 15: Exploring Taipy Designer (Enterprise Version)](#chapter-15-exploring-taipy-designer-enterprise-version)
+  - [Taipy-Designer Installation](#taipy-designer-installation)
+  - [Unit converter app](#unit-converter-app)
+  - [Cities App](#cities-app)
+    - [Data](#data)
 
 In this chapter, we discover how to use Taipy Designer.
 
@@ -10,16 +16,16 @@ We cover the installation process in the book, you need to create a new environm
 
 We start creating a unit converter app, the goal is to discover the basic workflows of Taipy Designer:
 
-![](img/conver_app.gif)
+![GIF Screen record of Taipy converter app](img/conver_app.gif)
 
 ## Cities App
 
 We create a small demonstration app with world cities. The app displays the top 10 cities for a given country (or "All" countries, or all capitals). The app displays a table, a leaflet map and a matplotlib bar chart. The app also shows two metric cards:
 
-* The total city population for a given selection (the top 10 of a country, capitals, or whole world)
-* And the percentage of total population for that selection
+- The total city population for a given selection (the top 10 of a country, capitals, or whole world)
+- And the percentage of total population for that selection
 
-![](img/cities.gif)
+![GIF screen recording of Taipy Designer app](img/cities.gif)
 
 ### Data
 

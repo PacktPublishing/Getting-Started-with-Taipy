@@ -1,16 +1,21 @@
-# Chapter 4
+# Chapter 4: Orchestrating Taipy Applications
 
-This chapter explores Scenario Management.
+- [Chapter 4: Orchestrating Taipy Applications](#chapter-4-orchestrating-taipy-applications)
+  - [Repo Structure](#repo-structure)
+  - [Dataset](#dataset)
 
-The `minimal_pipeline` directory has a Scenario that prints `"I'm super minimal!"`.
+## Repo Structure
 
-The `select_subset` directory goes one step further and filters a pandas DataFrame.
+This chapter explores Scenario Management. The repo has the following directories:
 
-The `visual_elements` directory is an intermediate step for the final Auto-MPG app. The `auto_mpg` directory has the final AutoMPG add, that trains a regression model and lets users look for predictions with that model.
+- The `minimal_pipeline` directory has a Scenario that prints `"I'm super minimal!"`.
+- The `select_subset` directory goes one step further and filters a pandas DataFrame.
+- The `visual_elements` directory is an intermediate step for the final Auto-MPG app. 
+- The `auto_mpg` directory has the final AutoMPG add, that trains a regression model and lets users look for predictions with that model.
 
-![](./img/auto_mpg.gif)
+![GIF screen recording of Taipy application Auto MPG](./img/auto_mpg.gif)
 
-## Dataset 
+## Dataset
 
 The data for this application is the classic machine learning dataset [Auto MPG](https://archive.ics.uci.edu/dataset/9/auto+mpg).
 
