@@ -1,50 +1,88 @@
+"""
+IMPORTANT
+This file shows how to create consumer events before Taipy 4.1
+Since the simplified the process, I modified the code (and the chapter's section).
+However, if you wish to use older versions of Taipy, I'll leav this code here for reference
+THIS DOES NOT DO ANYTHING ELSE THAN add_1_2.py!!
+"""
+
 import time
 
 import taipy as tp
 from taipy import Config, Gui
-from taipy.core import SubmissionStatus
-from taipy.event.event_processor import EventEntityType, EventOperation, EventProcessor
+from taipy.core import Status
+from taipy.core.notification import (
+    CoreEventConsumerBase,
+    EventEntityType,
+    EventOperation,
+    Notifier,
+)
 from taipy.gui import builder as tgb
 from taipy.gui import notify
 
 
-def track_events(event, gui):
-    print(f"event: {event.entity_id}")
-    print(f"event type: {event.entity_type} - {event.creation_date}")
+def notify_first_add(state):
+    with state as s:
+        s.middle_number_1 = scenario_1.middle_node.read()
+        s.middle_number_2 = scenario_2.middle_node.read()
+        notify(s, "s", "Added 1 successfully!")
 
 
-def notify_add(state, event, gui):
-    if event.attribute_value in (SubmissionStatus.BLOCKED, SubmissionStatus.COMPLETED):
-        if "add_1_sleep_5" in event.metadata.get(
-            "job_triggered_submission_status_changed"
+def notify_second_add(state):
+    with state as s:
+        s.output_number_1 = scenario_1.output_node.read()
+        s.output_number_2 = scenario_2.output_node.read()
+        notify(s, "i", "Added 2 successfully!")
+
+
+class SpecificCoreConsumer(CoreEventConsumerBase):
+    def __init__(self, gui):
+        self.gui = gui
+        reg_id, queue = Notifier.register(
+            entity_type=EventEntityType.JOB
+            # entity_type=EventEntityType.SCENARIO ## If you comment JOB above and select SCENARIO, no updates will show
+        )
+        super().__init__(reg_id, queue)
+
+    def process_event(self, event):
+
+        # Uncomment this to see all events pop up in terminal:
+        # print(event)
+
+        if (
+            event.operation == EventOperation.UPDATE
+            and event.entity_type == EventEntityType.JOB
+            and event.attribute_value == Status.COMPLETED
+            and event.metadata.get("task_config_id") == "add_1_sleep_5"
         ):
-            with state as s:
-                s.middle_number_1 = scenario_1.middle_node.read()
-                s.middle_number_2 = scenario_2.middle_node.read()
-                notify(s, "w", "Added 1 successfully!")
-        elif "add_2_sleep_5" in event.metadata.get(
-            "job_triggered_submission_status_changed"
+            self.gui.broadcast_callback(notify_first_add)
+        if (
+            event.operation == EventOperation.UPDATE
+            and event.entity_type == EventEntityType.JOB
+            and event.attribute_value == Status.COMPLETED
+            and event.metadata.get("task_config_id") == "add_2_sleep_5"
         ):
-            with state as s:
-                s.output_number_1 = scenario_1.output_node.read()
-                s.output_number_2 = scenario_2.output_node.read()
-                notify(s, "s", "Added 2 successfully!")
+            self.gui.broadcast_callback(notify_second_add)
 
 
-def add_number(input, number):
+def add_2_sleep_5(input):
+    print("Adding 2")
     time.sleep(5)
-    print(f"Adding {number}")
-    result = input + number
+
+    result = input + 2
+
     print(f"result is {result}")
     return result
 
 
 def add_1_sleep_5(input):
-    return add_number(input, 1)
+    print("Adding 1")
+    time.sleep(5)
 
+    result = input + 1
 
-def add_2_sleep_5(input):
-    return add_number(input, 2)
+    print(f"result is {result}")
+    return result
 
 
 def add_numbers(state):
@@ -117,19 +155,7 @@ if __name__ == "__main__":
 
     gui = Gui(page=add_page)
     tp.Orchestrator().run()
-
-    event_processor = EventProcessor(gui)
-    event_processor.on_event(
-        callback=track_events,
-        operation=EventOperation.UPDATE,
-        entity_type=EventEntityType.SUBMISSION,
-    )
-    event_processor.broadcast_on_event(
-        callback=notify_add,
-        operation=EventOperation.UPDATE,
-        entity_type=EventEntityType.SUBMISSION,
-    )
-    event_processor.start()
+    SpecificCoreConsumer(gui).start()
 
     scenario_1 = tp.create_scenario(scenario_config)
     scenario_2 = tp.create_scenario(scenario_config)
