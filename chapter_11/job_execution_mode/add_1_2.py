@@ -10,7 +10,17 @@ from taipy.gui import notify
 
 def track_events(event, gui):
     print(f"event: {event.entity_id}")
+    print(f"operation: {event.operation}")
     print(f"event type: {event.entity_type} - {event.creation_date}")
+
+    scenario = tp.get(event.entity_id)
+    input_value = scenario.input_node.read()
+    print(f"The input value for the Scenario is: {input_value}")
+    if input_value >= 10:
+        scenario_tag = "value_over_10"
+    else:
+        scenario_tag = "value_under_10"
+    tp.tag(scenario, scenario_tag)
 
 
 def notify_add(state, event, gui):
@@ -75,7 +85,7 @@ with tgb.Page() as add_page:
         tgb.number("{number_2}", label="Input number 2", min=0, max=10)
         tgb.text("{middle_number_2}")
         tgb.text("{output_number_2}")
-
+    tgb.scenario("{scenario_1}", show_submit=False, show_delete=True)
 
 if __name__ == "__main__":
 
@@ -121,8 +131,8 @@ if __name__ == "__main__":
     event_processor = EventProcessor(gui)
     event_processor.on_event(
         callback=track_events,
-        operation=EventOperation.UPDATE,
-        entity_type=EventEntityType.SUBMISSION,
+        operation=EventOperation.SUBMISSION,
+        entity_type=EventEntityType.SCENARIO,
     )
     event_processor.broadcast_on_event(
         callback=notify_add,
@@ -131,8 +141,8 @@ if __name__ == "__main__":
     )
     event_processor.start()
 
-    scenario_1 = tp.create_scenario(scenario_config)
-    scenario_2 = tp.create_scenario(scenario_config)
+    scenario_1 = tp.create_scenario(scenario_config, name="scenario_1")
+    scenario_2 = tp.create_scenario(scenario_config, name="scenario_2")
 
     # Run to start a server
     gui.run(dark_mode=False, use_reloader=True)
