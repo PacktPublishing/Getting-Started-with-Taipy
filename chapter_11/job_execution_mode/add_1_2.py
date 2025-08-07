@@ -2,7 +2,6 @@ import time
 
 import taipy as tp
 from taipy import Config, Gui
-from taipy.core import SubmissionStatus
 from taipy.event.event_processor import EventEntityType, EventOperation, EventProcessor
 from taipy.gui import builder as tgb
 from taipy.gui import notify
