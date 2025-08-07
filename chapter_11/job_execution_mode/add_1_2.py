@@ -36,21 +36,23 @@ def track_output_data_node(event, gui):
 
 
 def notify_add(state, event, gui):
-    if event.attribute_value in (SubmissionStatus.BLOCKED, SubmissionStatus.COMPLETED):
-        if "add_1_sleep_5" in event.metadata.get(
-            "job_triggered_submission_status_changed"
-        ):
-            with state as s:
-                s.middle_number_1 = scenario_1.middle_node.read()
-                s.middle_number_2 = scenario_2.middle_node.read()
-                notify(s, "w", "Added 1 successfully!")
-        elif "add_2_sleep_5" in event.metadata.get(
-            "job_triggered_submission_status_changed"
-        ):
-            with state as s:
-                s.output_number_1 = scenario_1.output_node.read()
-                s.output_number_2 = scenario_2.output_node.read()
-                notify(s, "s", "Added 2 successfully!")
+    data_node_config_id = event.metadata.get("config_id")
+    data_node = tp.get(event.entity_id)
+    # get_parents return scenarios in a set, we se next(iter()) to the the value
+    scenario = next(iter(data_node.get_parents().get("scenario")))
+    with state as s:
+        if data_node_config_id == "middle_node":
+            if scenario.name == "scenario_1":
+                s.middle_number_1 = scenario.middle_node.read()
+            elif scenario.name == "scenario_2":
+                s.middle_number_2 = scenario.middle_node.read()
+            notify(s, "w", "Added 1 successfully!")
+        elif data_node_config_id == "output_node":
+            if scenario.name == "scenario_1":
+                s.output_number_1 = scenario.middle_node.read()
+            elif scenario.name == "scenario_2":
+                s.output_number_2 = scenario.middle_node.read()
+            notify(s, "s", "Added 2 successfully!")
 
 
 def add_number(input, number):
@@ -150,10 +152,8 @@ if __name__ == "__main__":
         entity_type=EventEntityType.DATA_NODE,
         attribute_name="edit_in_progress",
     )
-    event_processor.broadcast_on_event(
+    event_processor.broadcast_on_datanode_written(
         callback=notify_add,
-        operation=EventOperation.UPDATE,
-        entity_type=EventEntityType.SUBMISSION,
     )
     event_processor.start()
 
