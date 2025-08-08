@@ -2,17 +2,13 @@ import time
 
 import numpy as np
 import plotly.express as px
-import taipy as tp
 from PIL import Image
+
+import taipy as tp
 from taipy import Config, Gui
 from taipy.core import Status
 from taipy.core.config import Config
-from taipy.core.notification import (
-    CoreEventConsumerBase,
-    EventEntityType,
-    EventOperation,
-    Notifier,
-)
+from taipy.event.event_processor import EventEntityType, EventOperation, EventProcessor
 from taipy.gui import builder as tgb
 from taipy.gui import notify
 
@@ -28,21 +24,15 @@ def notify_color_matrix(state, id_name):
         notify(state, "i", f"Created {color} matrix!")
 
 
-class SpecificCoreConsumer(CoreEventConsumerBase):
-    def __init__(self, gui):
-        self.gui = gui
-        reg_id, queue = Notifier.register(entity_type=EventEntityType.JOB)
-        super().__init__(reg_id, queue)
-
-    def process_event(self, event):
-        if (
-            event.operation == EventOperation.UPDATE
-            and event.entity_type == EventEntityType.JOB
-            and event.attribute_value == Status.COMPLETED
-        ):
-            print(event)
-            id_name = event.metadata.get("task_config_id")
-            self.gui.broadcast_callback(notify_color_matrix, [id_name])
+def process_event(state, event):
+    if (
+        event.operation == EventOperation.UPDATE
+        and event.entity_type == EventEntityType.JOB
+        and event.attribute_value == Status.COMPLETED
+    ):
+        print(event)
+        id_name = event.metadata.get("task_config_id")
+        notify_color_matrix(state, id_name)
 
 
 def generate_random_matrix(rows, cols):
@@ -91,9 +81,6 @@ def create_imshow_fig_rgb(rgb_image):
 
 def generate_image(state):
     state.scenario_image.submit()
-    # image_matrix = scenario_image.image_node.read()
-
-    # state.image = create_imshow_fig_rgb(image_matrix)
 
 
 image = None
@@ -160,13 +147,16 @@ if __name__ == "__main__":
         ],
     )
     Config.export("config_image.toml")
-
+    gui = Gui(page=image_page)
     tp.Orchestrator().run()
+    event_processor = EventProcessor(gui)
+    event_processor.broadcast_on_event(
+        callback=process_event,
+    )
+    event_processor.start()
 
     scenario_image = tp.create_scenario(image_scenario_config)
 
-    gui = Gui(page=image_page)
-    SpecificCoreConsumer(gui).start()
     gui.run(
-        # use_reloader=True,
+        use_reloader=True,
     )
