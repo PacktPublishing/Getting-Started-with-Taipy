@@ -15,7 +15,9 @@ def analyze_tipping_patterns(
         raise ValueError("Missing Preprocess step")
 
     parquet_dirs = [os.path.join(address, d) for d in os.listdir(address)]
-    ddf_year = dd.concat([dd.read_parquet(f) for f in parquet_dirs])
+    ddf_year = dd.concat(
+        [dd.read_parquet(f) for f in parquet_dirs if f.endswith(".parquet")]
+    )
 
     # Calculate basic metrics
     results = dd.compute(
