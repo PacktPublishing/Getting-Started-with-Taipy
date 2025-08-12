@@ -2,7 +2,7 @@
 
 This chapter talks about how to use Taipy with tools such as Spark or AWS S3 buckets for cloud storage. These technologies are important for data specialists, but they require technical skills that are beyond the scope of this book.
 
-This section aims to help you install and use the tools we use in the chapter. It's not a comprehensive tutorial but a focused guide to help you install, configure, and use the specific tools needed to follow along with the examples in this chapter.
+This section aims to help you install and use the tools for this chapter. It's not a comprehensive tutorial, just the essential instructions you need to get set up and follow along.
 
 - [Help for Chapter 12](#help-for-chapter-12)
   - [Setting up Spark](#setting-up-spark)
