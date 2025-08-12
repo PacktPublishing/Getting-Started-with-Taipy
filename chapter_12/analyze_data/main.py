@@ -1,15 +1,15 @@
+from configuration.config import analyze_scenario_config
+
 import taipy as tp
 import taipy.gui.builder as tgb
-from configuration.config import analyze_scenario_config
 from taipy import Orchestrator
 from taipy.gui import Gui
 from taipy.gui.data.decimator import LTTB, RDP, MinMaxDecimator
 
-NOP = 5000
+NOP = 5_000
 # min_max_decimator = MinMaxDecimator(n_out=NOP)
 rdp_decimator = RDP(n_out=NOP)
 # lttb_decimator = LTTB(n_out=NOP)
-
 
 with tgb.Page() as cache_analyze_page:
     tgb.text("# Tip Analytic", mode="md")
@@ -52,8 +52,7 @@ with tgb.Page() as cache_analyze_page:
         y="tip_amount",
         type="scatter",
         mode="markers",
-        title="Daily tips between $20 and $100",
-        decimator="rdp_decimator",
+        decimator=rdp_decimator,
     )
 
 
