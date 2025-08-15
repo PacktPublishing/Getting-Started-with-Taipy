@@ -3,6 +3,36 @@ import subprocess
 from pathlib import Path
 
 
+def all_data_is_processed(
+    output_folder: Path, year: int, expected_count: int = 12
+) -> bool:
+    """
+    Checks if the output folder contains the expected number of processed monthly
+    .parquet folders for a given year.
+    """
+    # '*' is for the month number.
+    search_pattern = f"processed_yellow_tripdata_{year}_*.parquet"
+    matching_folders = list(output_folder.glob(search_pattern))
+
+    if len(matching_folders) == expected_count:
+        print("skipping Spark Task - All files exist")
+        return True
+    else:
+        return False
+
+
+def get_months_to_process(output_folder, year):
+    months_to_process = []
+    for month in range(1, 13):
+        month_str = str(month).zfill(2)
+        file_name = f"processed_yellow_tripdata_{year}_{month_str}.parquet"
+        local_path = Path(output_folder) / file_name
+        if not local_path.exists():
+            months_to_process.append(month)
+    months_str = ",".join(map(str, months_to_process))
+    return months_str
+
+
 def run_spark_processing(
     check_download,  # output of previous task
     year=2023,
@@ -34,22 +64,11 @@ def run_spark_processing(
     ########################################data_folder=f"./data/raw_data" #############/{year}"
     ########################################output_folder=f"./data/processed/{year}"
 
-    months_to_process = []
-    for month in range(1, 13):
-        month_str = str(month).zfill(2)
-        file_name = f"processed_yellow_tripdata_{year}_{month_str}.parquet"
-        local_path = Path(output_folder) / file_name
-        if not local_path.exists():
-            months_to_process.append(month)
-
-    if len(months_to_process) == 0:
-        print("All files are already processed")
-        return 0
-
-    months_str = ",".join(map(str, months_to_process))
-
     if check_download:
         os.makedirs(output_folder, exist_ok=True)
+        if all_data_is_processed(Path(output_folder), year):
+            return True
+        months_str = get_months_to_process(output_folder, year)
 
         cmd = [
             "spark-submit",
@@ -79,12 +98,11 @@ def run_spark_processing(
         try:
             result = subprocess.run(cmd, check=True, text=True, capture_output=True)
             print("Spark Job Output:\n", result.stdout)
-            return result.returncode
+            return True
         except subprocess.CalledProcessError as e:
             print("Spark Job Failed!\n")
             print("STDOUT:\n", e.stdout)
             print("STDERR:\n", e.stderr)
             print(e.returncode)  # We don't return if error, so we don't cache it
     else:
-        print("Download not checked")
-        return 1
+        return "Download not checked"
