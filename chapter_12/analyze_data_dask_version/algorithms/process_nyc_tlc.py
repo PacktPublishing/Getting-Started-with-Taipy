@@ -19,7 +19,11 @@ def _wrangle_nyc_tlc(df):
 def _filter_rows(df, year):
     df = df[(df.payment_type == 1) & (df.total_amount != 0)]
     df = df[(df.airport_fee >= 0) & (df.congestion_surcharge >= 0)]
-    df = df[df.tpep_pickup_datetime.dt.year == year]
+    start_date = f"{year}-01-01"
+    end_date = f"{year+1}-01-01"
+    df = df[
+        (df.tpep_pickup_datetime >= start_date) & (df.tpep_pickup_datetime < end_date)
+    ]
     return df
 
 
@@ -55,7 +59,6 @@ def process_nyc_tlc_df(df, year):
     df = _wrangle_nyc_tlc(df)
     df = _filter_rows(df, year)
     df = _create_features(df)
-
     df = df.drop("payment_type", axis=1)
     return df
 
@@ -124,7 +127,6 @@ def process_nyc_tlc(
     if all_data_is_processed(Path(output_folder), year):
         return True
 
-    # Start local Dask cluster with N workers
     client = Client(
         n_workers=max_workers,
         threads_per_worker=threads_per_worker,
