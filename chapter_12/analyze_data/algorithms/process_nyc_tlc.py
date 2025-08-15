@@ -3,24 +3,6 @@ import subprocess
 from pathlib import Path
 
 
-def all_data_is_processed(
-    output_folder: Path, year: int, expected_count: int = 12
-) -> bool:
-    """
-    Checks if the output folder contains the expected number of processed monthly
-    .parquet folders for a given year.
-    """
-    # '*' is for the month number.
-    search_pattern = f"processed_yellow_tripdata_{year}_*.parquet"
-    matching_folders = list(output_folder.glob(search_pattern))
-
-    if len(matching_folders) == expected_count:
-        print("skipping Spark Task - All files exist")
-        return True
-    else:
-        return False
-
-
 def run_spark_processing(
     check_download,  # output of previous task
     year=2023,
@@ -51,9 +33,6 @@ def run_spark_processing(
 
     if check_download:
         os.makedirs(output_folder, exist_ok=True)
-        if all_data_is_processed(Path(output_folder), year):
-            return True
-
         cmd = [
             "spark-submit",
             "--master",
