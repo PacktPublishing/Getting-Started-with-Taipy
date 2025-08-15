@@ -1,13 +1,10 @@
-import datetime as dt
-from io import BytesIO
-from pathlib import Path
-
 import pandas as pd
+from configuration.config import download_scenario_config
+
 import taipy as tp
 import taipy.gui.builder as tgb
-from configuration.config import download_scenario_config
 from taipy import Orchestrator
-from taipy.gui import Gui, State, hold_control, resume_control
+from taipy.gui import Gui
 
 
 def update_data(state):
