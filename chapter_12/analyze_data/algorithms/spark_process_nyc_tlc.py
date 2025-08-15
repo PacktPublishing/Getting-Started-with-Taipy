@@ -4,31 +4,49 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, dayofweek, hour, unix_timestamp, when, year
+from pyspark.sql.functions import col, dayofweek, hour, to_date, unix_timestamp, when
+from pyspark.sql.types import TimestampType
 
 
 def read_nyc_tlc_df(file_path: str, spark):
-    """Reads a Parquet file into a PySpark DataFrame."""
+    """Reads a Parquet file into a PySpark DataFrame.
+    It handles inconsisten column naming"""
     if file_path and os.path.exists(file_path):
-        return spark.read.parquet(file_path)
+        df = spark.read.parquet(file_path)
+        return df.toDF(*[c.lower() for c in df.columns])
     print(f"File not found: {file_path}")
     return None
 
 
-def process_nyc_tlc_df(df):
-    """Processes NYC TLC data for tipping analysis."""
+def _wrangle_nyc_tlc(df):
     df = df.withColumn(
-        "tpep_pickup_datetime", col("tpep_pickup_datetime").cast("timestamp")
+        "tpep_pickup_datetime", col("tpep_pickup_datetime").cast(TimestampType())
     ).withColumn(
-        "tpep_dropoff_datetime", col("tpep_dropoff_datetime").cast("timestamp")
+        "tpep_dropoff_datetime", col("tpep_dropoff_datetime").cast(TimestampType())
     )
 
+    df = df.fillna(0, subset=["airport_fee", "congestion_surcharge"])
+    return df
+
+
+def _filter_rows(df, year):
+    start_date = f"{year}-01-01"
+    end_date = f"{year}-12-31"
     return (
         df.filter((col("payment_type") == 1) & (col("total_amount") != 0))
         .filter((col("airport_fee") >= 0) & (col("congestion_surcharge") >= 0))
-        .fillna(0, subset=["airport_fee", "congestion_surcharge"])
-        .filter(year(col("tpep_pickup_datetime")) == 2023)
-        .withColumn("airport_fee_binary", when(col("airport_fee") > 0, 1).otherwise(0))
+        .filter(
+            (to_date(col("tpep_pickup_datetime")) >= start_date)
+            & (to_date(col("tpep_pickup_datetime")) <= end_date)
+        )
+    )
+
+
+def _create_features(df):
+    return (
+        df.withColumn(
+            "airport_fee_binary", when(col("airport_fee") > 0, 1).otherwise(0)
+        )
         .withColumn(
             "trip_duration",
             (
@@ -64,6 +82,14 @@ def process_nyc_tlc_df(df):
     )
 
 
+def process_nyc_tlc_df(df, year):
+    """Processes NYC TLC data for tipping analysis."""
+    df = _wrangle_nyc_tlc(df)
+    df = _filter_rows(df, year)
+    df = _create_features(df)
+    return df
+
+
 def process_month(spark, month, dataset_name, year, data_folder, output_folder):
     """Processes a single month of data from existing files."""
     file_path = os.path.join(data_folder, f"{dataset_name}_{year}-{month:02d}.parquet")
@@ -71,7 +97,7 @@ def process_month(spark, month, dataset_name, year, data_folder, output_folder):
     if df is None:
         return f"Failed to process month {month} - file not found"
 
-    processed_df = process_nyc_tlc_df(df)
+    processed_df = process_nyc_tlc_df(df, year)
     os.makedirs(output_folder, exist_ok=True)
     output_file = os.path.join(
         output_folder, f"processed_{dataset_name}_{year}_{month:02d}.parquet"
@@ -79,7 +105,6 @@ def process_month(spark, month, dataset_name, year, data_folder, output_folder):
     processed_df.write.mode("overwrite").option(
         "parquet.enable.summary-metadata", "true"
     ).option("compression", "snappy").parquet(output_file)
-
     return f"Processed data saved: {output_file}"
 
 
@@ -107,6 +132,7 @@ if __name__ == "__main__":
         .config("spark.default.parallelism", "8")
         .getOrCreate()
     )
+    spark.conf.set("spark.sql.session.timeZone", "UTC")
 
     parser = argparse.ArgumentParser(description="Process NYC TLC trip data.")
     parser.add_argument(
