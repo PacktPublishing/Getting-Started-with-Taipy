@@ -3,6 +3,7 @@ import datetime as dt
 from algorithms.create_statistics import analyze_tipping_patterns
 from algorithms.download_nyc_tlc import read_s3
 from algorithms.process_nyc_tlc import run_spark_processing
+
 from taipy import Config
 
 check_download_data_node_config = Config.configure_data_node(
@@ -21,9 +22,6 @@ avg_tip_data_node_config = Config.configure_data_node(
 percentage_no_tip_data_node_config = Config.configure_data_node(
     id="percentage_no_tip", validity_period=dt.timedelta(days=1)  # Set this for caching
 )
-df_location_data_node_config = Config.configure_data_node(
-    id="df_location", validity_period=dt.timedelta(days=1)  # Set this for caching
-)
 df_weekend_data_node_config = Config.configure_data_node(
     id="df_weekend", validity_period=dt.timedelta(days=1)  # Set this for caching
 )
@@ -39,7 +37,10 @@ df_from_airport_data_node_config = Config.configure_data_node(
 tip_and_pickup_data_node_config = Config.configure_data_node(
     id="tip_and_pickup", validity_period=dt.timedelta(days=1)  # Set this for caching
 )
-
+## For answer 3:
+df_location_data_node_config = Config.configure_data_node(
+    id="df_location", validity_period=dt.timedelta(days=1)  # Set this for caching
+)
 ########################################
 ###              Tasks               ###
 ########################################
@@ -66,8 +67,8 @@ analyze_task = Config.configure_task(
         df_night_data_node_config,
         df_hour_data_node_config,
         df_from_airport_data_node_config,
-        df_location_data_node_config,
         tip_and_pickup_data_node_config,
+        df_location_data_node_config,  # For Answer 3
     ],
 )
 
