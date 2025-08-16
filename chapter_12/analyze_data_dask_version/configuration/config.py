@@ -2,17 +2,16 @@ import datetime as dt
 
 from algorithms.create_statistics import analyze_tipping_patterns
 from algorithms.download_nyc_tlc import read_s3
-from algorithms.process_nyc_tlc import run_spark_processing
+from algorithms.process_nyc_tlc import process_nyc_tlc
 
 from taipy import Config
 
 check_download_data_node_config = Config.configure_data_node(
     id="current_date", validity_period=dt.timedelta(days=1)  # Set this for caching
 )
-check_spark_data_node_config = Config.configure_data_node(
-    id="cache_spark", validity_period=dt.timedelta(days=1)  # Set this for caching
+check_process_data_node_config = Config.configure_data_node(
+    id="cache_process", validity_period=dt.timedelta(days=1)  # Set this for caching
 )
-
 total_tips_data_node_config = Config.configure_data_node(
     id="total_tips", validity_period=dt.timedelta(days=1)  # Set this for caching
 )
@@ -37,10 +36,7 @@ df_from_airport_data_node_config = Config.configure_data_node(
 tip_and_pickup_data_node_config = Config.configure_data_node(
     id="tip_and_pickup", validity_period=dt.timedelta(days=1)  # Set this for caching
 )
-## For answer 3:
-df_location_data_node_config = Config.configure_data_node(
-    id="df_location", validity_period=dt.timedelta(days=1)  # Set this for caching
-)
+
 ########################################
 ###              Tasks               ###
 ########################################
@@ -49,16 +45,16 @@ download_task = Config.configure_task(
 )
 pre_process_task = Config.configure_task(
     "pre_process",
-    function=run_spark_processing,
+    function=process_nyc_tlc,
     skippable=True,
     input=check_download_data_node_config,
-    output=check_spark_data_node_config,
+    output=check_process_data_node_config,
 )
 analyze_task = Config.configure_task(
     "analyze",
     function=analyze_tipping_patterns,
     skippable=True,
-    input=check_spark_data_node_config,
+    input=check_process_data_node_config,
     output=[
         total_tips_data_node_config,
         avg_tip_data_node_config,
@@ -68,7 +64,6 @@ analyze_task = Config.configure_task(
         df_hour_data_node_config,
         df_from_airport_data_node_config,
         tip_and_pickup_data_node_config,
-        df_location_data_node_config,  # For Answer 3
     ],
 )
 

@@ -1,5 +1,6 @@
 import os
 import subprocess
+from pathlib import Path
 
 
 def run_spark_processing(
@@ -30,11 +31,8 @@ def run_spark_processing(
     - int: Exit code of the process (0 if successful, non-zero if error).
     """
 
-    ########################################data_folder=f"./data/raw_data" #############/{year}"
-    ########################################output_folder=f"./data/processed/{year}"
     if check_download:
         os.makedirs(output_folder, exist_ok=True)
-
         cmd = [
             "spark-submit",
             "--master",

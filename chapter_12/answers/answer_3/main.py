@@ -1,7 +1,9 @@
+from configuration.config import analyze_scenario_config
+
 import taipy as tp
 import taipy.gui.builder as tgb
-from configuration.config import analyze_scenario_config
 from taipy import Orchestrator
+from taipy.gui import Gui
 from taipy.gui.data.decimator import LTTB, RDP, MinMaxDecimator
 
 NOP = 5000
