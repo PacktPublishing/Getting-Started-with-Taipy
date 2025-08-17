@@ -2,8 +2,9 @@ import asyncio
 
 import numpy as np
 import pandas as pd
-import taipy.gui.builder as tgb
 import websockets
+
+import taipy.gui.builder as tgb
 from taipy import Gui
 from taipy.gui import Gui, invoke_long_callback
 
@@ -21,9 +22,9 @@ async def handler(websocket):
         print("Connection closed!")
 
 
-async def listen():
-    server = await websockets.serve(handler, "localhost", 8765)
-    print("Server is running on ws://localhost:8765")
+async def listen(address="localhost", port=8765):
+    server = await websockets.serve(handler, address, port)
+    print(f"Server is running on ws://{address}:{port}")
     await server.wait_closed()  # Keep the server running
 
 
@@ -68,7 +69,7 @@ with tgb.Page() as sinus_page:
 
 
 if __name__ == "__main__":
-    buffer_size = 150
+    buffer_size = 200
     sinus_buffer = np.zeros(buffer_size)
     data_queue = asyncio.Queue()
 

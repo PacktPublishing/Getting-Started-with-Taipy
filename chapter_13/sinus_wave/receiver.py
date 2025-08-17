@@ -17,16 +17,12 @@ async def handler(websocket):
 
     try:
         async for message in websocket:
-            # Convert the incoming message to a float
             new_value = float(message)
 
             # Store the new value in the buffer and update the index
             sinus_buffer[current_index] = new_value
-
             # Update index in a circular manner (when it reaches buffer_size, start overwriting)
             current_index = (current_index + 1) % buffer_size
-
-            # Print the current buffer (for debugging)
             print(f"Updated Buffer: {sinus_buffer}")
 
     except websockets.exceptions.ConnectionClosedError as e:
@@ -36,7 +32,6 @@ async def handler(websocket):
 
 
 async def main():
-    # Start the server
     server = await websockets.serve(handler, "localhost", 8765)
     print("Server is running on ws://localhost:8765")
     await server.wait_closed()

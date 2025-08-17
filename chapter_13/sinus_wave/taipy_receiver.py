@@ -2,8 +2,9 @@ import asyncio
 
 import numpy as np
 import pandas as pd
-import taipy.gui.builder as tgb
 import websockets
+
+import taipy.gui.builder as tgb
 from taipy import Gui
 from taipy.gui import invoke_long_callback
 
@@ -54,7 +55,7 @@ with tgb.Page() as sinus_page:
 
 
 if __name__ == "__main__":
-    buffer_size = 150
+    buffer_size = 200
     sinus_buffer = np.zeros(buffer_size)
 
     sinus_series = pd.Series(sinus_buffer)

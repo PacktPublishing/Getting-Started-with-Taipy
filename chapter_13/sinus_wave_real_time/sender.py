@@ -8,19 +8,18 @@ sampling_interval = 0.1  # Interval in seconds
 print(sampling_interval)
 
 
-async def send_sinus_wave():
-    uri = "ws://localhost:8765"
+async def send_sinus_wave(uri="ws://localhost:8765"):
     try:
         async with websockets.connect(uri) as websocket:
-            t = 0  # Start time
+            t = 0
             while True:
                 y = math.sin(2 * math.pi * t)
                 y = y * random.random()  # to add variability
 
                 await websocket.send(str(y))
                 print(f"Sending: {y}")
-                await asyncio.sleep(sampling_interval)  # Wait for 0.1 seconds
-                t += sampling_interval  # Increment time
+                await asyncio.sleep(sampling_interval)
+                t += sampling_interval
     except websockets.exceptions.ConnectionClosedError as e:
         print(f"Connection was closed with error: {e}")
     except Exception as e:
