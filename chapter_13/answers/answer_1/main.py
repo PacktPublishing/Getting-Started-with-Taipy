@@ -4,8 +4,9 @@ from datetime import datetime, timedelta, timezone
 import chime  # OPTIONAL
 import pandas as pd
 import requests
-import taipy.gui.builder as tgb
 from charts import create_earthquake_map
+
+import taipy.gui.builder as tgb
 from taipy import Gui
 from taipy.gui import Gui, invoke_long_callback, notify
 
@@ -144,7 +145,7 @@ def update_dataframe(new_data, df, state=None):
     return df
 
 
-def iddle():
+def idle():
     """
     An infinite loop
     """
@@ -158,7 +159,7 @@ def on_init(state):
     """
     Start the update loop
     """
-    invoke_long_callback(state, iddle, [], update_earthquake, [], 60_000)
+    invoke_long_callback(state, idle, [], update_earthquake, [], 60_000)
 
 
 def row_class(state, row_number, row):
