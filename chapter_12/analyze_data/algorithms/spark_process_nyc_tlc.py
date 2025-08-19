@@ -1,7 +1,6 @@
 import argparse
 import os
 import sys
-from concurrent.futures import ThreadPoolExecutor
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, dayofweek, hour, to_date, unix_timestamp, when
@@ -108,20 +107,14 @@ def process_month(spark, month, dataset_name, year, data_folder, output_folder):
     return f"Processed data saved: {output_file}"
 
 
-def process_all_data(
-    spark, dataset_name: str, year: int, data_folder: str, output_folder: str
-):
-    """Orchestrates processing of all specified months."""
-    months = list(range(1, 13))
-    with ThreadPoolExecutor(max_workers=6) as executor:
-        return list(
-            executor.map(
-                lambda m: process_month(
-                    spark, m, dataset_name, year, data_folder, output_folder
-                ),
-                months,
-            )
+def process_all_data(spark, dataset_name, year, data_folder, output_folder):
+    results = []
+    for month in range(1, 13):
+        result = process_month(
+            spark, month, dataset_name, year, data_folder, output_folder
         )
+        results.append(result)
+    return results
 
 
 if __name__ == "__main__":
