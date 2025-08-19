@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, dayofweek, hour, to_date, unix_timestamp, when
@@ -8,13 +9,12 @@ from pyspark.sql.types import TimestampType
 
 
 def read_nyc_tlc_df(file_path: str, spark):
-    """Reads a Parquet file into a PySpark DataFrame.
-    It handles inconsisten column naming"""
-    if file_path and os.path.exists(file_path):
+    try:
         df = spark.read.parquet(file_path)
         return df.toDF(*[c.lower() for c in df.columns])
-    print(f"File not found: {file_path}")
-    return None
+    except Exception as e:
+        print(f"File not found or error reading {file_path}: {e}")
+        return None
 
 
 def _wrangle_nyc_tlc(df):
@@ -107,14 +107,20 @@ def process_month(spark, month, dataset_name, year, data_folder, output_folder):
     return f"Processed data saved: {output_file}"
 
 
-def process_all_data(spark, dataset_name, year, data_folder, output_folder):
-    results = []
-    for month in range(1, 13):
-        result = process_month(
-            spark, month, dataset_name, year, data_folder, output_folder
+def process_all_data(
+    spark, dataset_name: str, year: int, data_folder: str, output_folder: str
+):
+    """Orchestrates processing of all specified months."""
+    months = list(range(1, 13))
+    with ThreadPoolExecutor(max_workers=6) as executor:
+        return list(
+            executor.map(
+                lambda m: process_month(
+                    spark, m, dataset_name, year, data_folder, output_folder
+                ),
+                months,
+            )
         )
-        results.append(result)
-    return results
 
 
 if __name__ == "__main__":
@@ -123,6 +129,12 @@ if __name__ == "__main__":
         SparkSession.builder.appName("NYC TLC Processing")
         .config("spark.sql.shuffle.partitions", "400")
         .config("spark.default.parallelism", "8")
+        # ADD THESE LINES for S3 configuration!
+        .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+        .config(
+            "spark.hadoop.fs.s3a.aws.credentials.provider",
+            "com.amazonaws.auth.EnvironmentVariableCredentialsProvider",
+        )
         .getOrCreate()
     )
     spark.conf.set("spark.sql.session.timeZone", "UTC")

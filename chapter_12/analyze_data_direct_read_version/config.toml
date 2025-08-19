@@ -1,0 +1,48 @@
+[TAIPY]
+
+[DATA_NODE.cache_spark]
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.total_tips]
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.avg_tip]
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.percentage_no_tip]
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.df_weekend]
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.df_night]
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.df_hour]
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.df_from_airport]
+validity_period = "1d0h0m0s:timedelta"
+
+[DATA_NODE.tip_and_pickup]
+validity_period = "1d0h0m0s:timedelta"
+
+[TASK.pre_process]
+function = "algorithms.process_nyc_tlc.run_spark_processing:function"
+inputs = []
+outputs = [ "cache_spark:SECTION",]
+skippable = "True:bool"
+
+[TASK.analyze]
+function = "algorithms.create_statistics.analyze_tipping_patterns:function"
+inputs = [ "cache_spark:SECTION",]
+outputs = [ "total_tips:SECTION", "avg_tip:SECTION", "percentage_no_tip:SECTION", "df_weekend:SECTION", "df_night:SECTION", "df_hour:SECTION", "df_from_airport:SECTION", "tip_and_pickup:SECTION",]
+skippable = "True:bool"
+
+[SCENARIO.download_files]
+tasks = [ "pre_process:SECTION", "analyze:SECTION",]
+additional_data_nodes = []
+
+[SCENARIO.download_files.comparators]
+
+[SCENARIO.download_files.sequences]
