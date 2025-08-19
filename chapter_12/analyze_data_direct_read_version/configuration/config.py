@@ -1,7 +1,6 @@
 import datetime as dt
 
 from algorithms.create_statistics import analyze_tipping_patterns
-from algorithms.download_nyc_tlc import read_s3
 from algorithms.process_nyc_tlc import run_spark_processing
 
 from taipy import Config
