@@ -180,7 +180,7 @@ with tgb.Page() as scenario_page:
                         title="Scenario's Total Price",
                         format=" €",
                         type="none",
-                        hover_text="Estimated total carbon footprint.",
+                        hover_text="Estimated total price.",
                         class_name="mb2 mt2",
                     )
                     tgb.metric(
