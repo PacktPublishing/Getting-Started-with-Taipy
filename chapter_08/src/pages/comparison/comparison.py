@@ -29,7 +29,7 @@ with tgb.Page() as comparison_page:
                         title="Scenario 1's Total Price",
                         format=" €",
                         type="none",
-                        hover_text="Scenario 1 - Total carbon footprint.",
+                        hover_text="Scenario 1 - Total price.",
                         class_name="mb2 mt2",
                     )
                     tgb.metric(
@@ -68,7 +68,7 @@ with tgb.Page() as comparison_page:
                         title="Scenario 2's Total Price",
                         format=" €",
                         type="none",
-                        hover_text="Scenario 2 - Total carbon footprint.",
+                        hover_text="Scenario 2 - Total price.",
                         class_name="mb2 mt2",
                     )
                     tgb.metric(
