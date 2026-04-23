@@ -1,4 +1,4 @@
 dask==2025.5.1
 plotly==6.1.1
-pyspark==3.2.0
+pyspark==3.3.2
 taipy==4.1.0
